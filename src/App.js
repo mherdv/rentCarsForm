@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Partner from "./componts/partner/Partner";
 import Cars from "./componts/cars/Cars";
 import SectionTitle from "./componts/sectionTitle/SectionTitle";
+import Prices from "./componts/prices/Prices";
 
 import { UserProvider } from './contextBigForm.jsx'
 
