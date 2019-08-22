@@ -48,7 +48,8 @@ function App() {
           {formObject.cars.map((car, key) => {
             return <Cars key={key} index={key} thisCarForm={car}/>
           })}
-
+           <SectionTitle number={3} title={"Գներ"} />
+          <Prices/>
         </form>
       </UserProvider>
     </div>

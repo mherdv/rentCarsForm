@@ -50,6 +50,10 @@ legend {
 .MuiRadio-colorPrimary.Mui-checked{
   color: #004270 !important;
 }
+.MuiButton-containedPrimary{
+  background-color: #004270 !important;
+  font-weight: bold;
+}
 .select-container{
   margin: auto !important;
   max-width:87% !important;
@@ -62,4 +66,8 @@ legend {
 }
 .custom-container div{
   width: 100%;
+}
+.MuiInputAdornment-positionEnd {
+  margin-left: 89% !important;
+
 }
