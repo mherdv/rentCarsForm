@@ -1,24 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Partner from "./componts/partner/Partner";
+import Cars from "./componts/cars/Cars";
+import SectionTitle from "./componts/sectionTitle/SectionTitle";
+
+import { UserProvider } from './contextBigForm.jsx'
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    textAlign: 'center'
+  }
+}));
+
+
 
 function App() {
+  const classes = useStyles();
+
+  const [formObject, changeFormObject] = useState({
+    partnerInfo: {
+
+    },
+    cars: [1, 2, 3, 4]
+  });
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="form">
+
+      <UserProvider value={[formObject, changeFormObject]}>
+        <form className={classes.container} Validate autoComplete="off">
+
+          <SectionTitle number={1} title={"Գործընկեր"} />
+          <Partner />
+          <SectionTitle number={2} title={"Ավտոմեքենա"} />
+
+          {formObject.cars.map((car, key) => {
+            return <Cars key={key} thisCarForm={car}/>
+          })}
+
+        </form>
+      </UserProvider>
     </div>
   );
 }

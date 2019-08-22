@@ -11,3 +11,55 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.form {
+  max-width: 800px;
+  padding: 10px 20px;
+  background: #fafafa;
+  margin: 10px auto;
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 8px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+legend {
+  font-size: 1.4em;
+  margin: 20px 0 0;
+  cursor: context-menu;
+}
+.number {
+  background: #004270;
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-right: 4px;
+  line-height: 30px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 15px 15px 15px 0px;
+}
+.radio-container {
+  padding-top: 20px;
+  margin-bottom: 8px;
+  width: 300px;
+  margin: auto;
+  text-align: left
+}
+.MuiRadio-colorPrimary.Mui-checked{
+  color: #004270 !important;
+}
+.select-container{
+  margin: auto !important;
+  max-width:87% !important;
+  text-align: left
+}
+.custom-container{
+  margin: 8px;
+  width: calc(100%);
+  margin: auto;
+}
+.custom-container div{
+  width: 100%;
+}
