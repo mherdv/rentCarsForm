@@ -53,7 +53,8 @@ export default function Cars(props) {
     let changeFormObject = useContext(UserContext)[1];
 
 
-    
+
+    let carsForm = props.thisCarForm;
 
 
     // setTimeout(function(){
@@ -70,45 +71,57 @@ export default function Cars(props) {
 
     const handleValueChange = input => event => {
         // changeHandler({ ...values, value: event.target.value });
-        input.value =  event.target.value 
-        console.log(input)
+        console.log(event)      
+        input.value += event.target.value
 
     };
 
-    const handleChange = elem => event=> console.log(event)
+    const handleChange = elem => event => console.log(event)
     function selectChange(event) {
         setValues(oldValues => ({
             ...oldValues,
             [event.target.name]: event.target.value,
         }));
     }
+    if (!carsForm.inputs) {
 
-    const inputs = [
-        {
-            label: "Մակնիշ *",
-            name: 'Brand'
-        },
-        {
-            label: "Մոդել *",
-            name: 'Model'
-        },
-        {
-            label: "Գույնը *",
-            name: 'Color'
-        },
-        {
-            label: "Արտադրման տարեթիվ *",
-            name: 'date of production:'
-        },
-        {
-            label: "Ուղևորների նստատեղերի քանակ *",
-            name: 'Number of passenger seats'
-        },
-        {
-            label: "Սրահի հավաքման որակ *",
-            name: 'Salon quality'
-        }
-    ];
+        carsForm.inputs = [
+            {
+                label: "Մակնիշ *",
+                name: 'Brand',
+                value:''
+            },
+            {
+                label: "Մոդել *",
+                name: 'Model',
+                value:''
+            },
+            {
+                label: "Գույնը *",
+                name: 'Color',
+                value:''
+            },
+            {
+                label: "Արտադրման տարեթիվ *",
+                name: 'date of production:',
+                value:''
+            },
+            {
+                label: "Ուղևորների նստատեղերի քանակ *",
+                name: 'Number of passenger seats',
+                value:''
+            },
+            {
+                label: "Սրահի հավաքման որակ *",
+                name: 'Salon quality',
+                value:''
+            }
+        ];
+
+    }
+
+
+
     const seats = [
 
         {
@@ -144,8 +157,18 @@ export default function Cars(props) {
     return (
         <div className="Cars" style={{ textAlign: "left" }}>
             <div>
+
+
+                <span onClick={function () {
+
+
+
+                    formObject.cars.splice(props.index, 1);
+                    changeFormObject({ ...formObject, cars: formObject.cars });
+
+                }}>remove</span>
                 <div className={classes.container}>
-                    {inputs.map((input, index) => {
+                    {carsForm.inputs.map((input, index) => {
 
 
                         return (

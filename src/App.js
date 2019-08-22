@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Partner from "./componts/partner/Partner";
 import Cars from "./componts/cars/Cars";
@@ -19,12 +19,17 @@ const useStyles = makeStyles(theme => ({
 function App() {
   const classes = useStyles();
 
+
+
   const [formObject, changeFormObject] = useState({
     partnerInfo: {
 
     },
-    cars: [1, 2, 3, 4]
+    cars: [{},{},{}]
   });
+
+
+
 
 
 
@@ -40,7 +45,7 @@ function App() {
           <SectionTitle number={2} title={"Ավտոմեքենա"} />
 
           {formObject.cars.map((car, key) => {
-            return <Cars key={key} thisCarForm={car}/>
+            return <Cars key={key} index={key} thisCarForm={car}/>
           })}
 
         </form>
