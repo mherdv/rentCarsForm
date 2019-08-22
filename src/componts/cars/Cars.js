@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -70,9 +70,11 @@ export default function Cars(props) {
 
 
     const handleValueChange = input => event => {
-        // changeHandler({ ...values, value: event.target.value });
-        console.log(event)      
-        input.value += event.target.value
+
+
+        input.value = event.target.value;
+
+        changeInputs([...inputs]);
 
     };
 
@@ -83,65 +85,87 @@ export default function Cars(props) {
             [event.target.name]: event.target.value,
         }));
     }
-    if (!carsForm.inputs) {
 
+
+
+    const [inputs, changeInputs] = useState([])
+    if (!carsForm.inputs) {
         carsForm.inputs = [
             {
                 label: "Մակնիշ *",
                 name: 'Brand',
-                value:''
+                value: ''
             },
             {
                 label: "Մոդել *",
                 name: 'Model',
-                value:''
+                value: ''
             },
             {
                 label: "Գույնը *",
                 name: 'Color',
-                value:''
+                value: ''
             },
             {
                 label: "Արտադրման տարեթիվ *",
                 name: 'date of production:',
-                value:''
+                value: ''
             },
             {
                 label: "Ուղևորների նստատեղերի քանակ *",
                 name: 'Number of passenger seats',
-                value:''
+                value: ''
             },
             {
                 label: "Սրահի հավաքման որակ *",
                 name: 'Salon quality',
-                value:''
+                value: ''
             }
-        ];
-
+        ]
+        
+        
+        
+        
     }
+    
+    
+    
+    
+    
+    
+    const [seats, changeSeats] = useState([])
 
+    if (!carsForm.seats) {
+        carsForm.seats = [
+            {
+                title: 'Նստատեղերը կաշվից են',
+                items: [
+                    { label: "Այո", value: 1 },
+                    { label: "Ոչ", value: 0 }
+                ],
+                name: 'leather',
+                value: ''
 
+            },
+            {
+                title: 'Նստատեղերը ծալվում են դեպի հետ',
+                items: [
+                    { label: "Այո", value: 1 },
+                    { label: "Ոչ", value: 0 }
+                ],
+                name: 'fold back',
+                value: ''
 
-    const seats = [
+            }
+        ]
+    }
+    useEffect(() => {
 
-        {
-            title: 'Նստատեղերը կաշվից են',
-            items: [
-                { label: "Syes", value: "Այո" },
-                { label: "Sno", value: "Ոչ" }
-            ]
-        },
-        {
-            title: 'Նստատեղերը ծալվում են դեպի հետ',
-            items: [
-                { label: "Fyes", value: "Այո" },
-                { label: "Fno", value: "Ոչ" }
-            ]
-        }
+        changeInputs(carsForm.inputs);
+        changeSeats(carsForm.seats);
+        
 
-
-    ]
-
+    }, [carsForm])
     // const onDrop = (files) => {
     //     // POST to a test endpoint for demo purposes
     //     const req = request.post('https://httpbin.org/post');
@@ -164,11 +188,13 @@ export default function Cars(props) {
 
 
                     formObject.cars.splice(props.index, 1);
+
                     changeFormObject({ ...formObject, cars: formObject.cars });
+
 
                 }}>remove</span>
                 <div className={classes.container}>
-                    {carsForm.inputs.map((input, index) => {
+                    {inputs.map((input, index) => {
 
 
                         return (
@@ -177,7 +203,7 @@ export default function Cars(props) {
                                     key={index}
                                     id="standard-name"
                                     label="Name"
-                                    value={input.value}
+                                    value={input.value||''}
                                     className={classes.textField}
                                     label={input.label}
                                     placeholder={input.label}
@@ -193,7 +219,14 @@ export default function Cars(props) {
                             <Grid item xs={6} key={index}>
                                 <div className="radio-container">
                                     <div>{seat.title}</div>
-                                    <RadioGroup >
+                                    <RadioGroup onChange={
+
+                                        function (event) {
+                                            seat.value = +event.target.value;
+
+                                            changeSeats([...seats])
+                                        }
+                                    } value={seat.value}>
                                         <Grid item xs={12} >
                                             <div>
                                                 {seat.items.map((option, index) => {
@@ -203,9 +236,9 @@ export default function Cars(props) {
 
                                                         <FormControlLabel
                                                             key={index}
-                                                            value={option.label}
+                                                            value={option.value}
                                                             control={<Radio color="primary" />}
-                                                            label={option.value}
+                                                            label={option.label}
                                                             labelPlacement="end"
                                                         />
 
