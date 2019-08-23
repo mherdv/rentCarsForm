@@ -117,11 +117,8 @@ export default function Cars(props) {
     }
 
     const handleValueChange = input => event => {
-
         input.value = event.target.value;
-
         changeInputs([...inputs]);
-
     };
 
     const [inputs, changeInputs] = useState([])
