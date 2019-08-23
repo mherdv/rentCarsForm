@@ -86,7 +86,13 @@ legend {
 .dropZone-wrapper{
   width: 100%;
 }
-.dropZone{
+.dzu-dropzone{
+  border: none!important;
+  flex-direction: row!important;
+  flex-wrap: wrap!important
+}
+.dropZone,
+.dzu-inputLabel{
   margin: auto;
   padding: 15px 20px;
   background-color: rgba(0,66,112,0.1);
@@ -98,7 +104,29 @@ legend {
   border: 2px dashed #004270;
   color: #004270;
   font-weight: 500;
-  width: 50%;
+  width: 50%!important;
+}
+
+.dzu-previewImage{
+  max-height: 500px!important;
+  margin: auto;
+}
+.dzu-previewContainer{
+  width: 33%!important;
+}
+.dzu-previewContainer progress{
+  display: none
+}
+.dzu-inputLabelWithFiles,
+.dzu-submitButtonContainer{
+  width: 100%;
+  padding: 0!important;
+  margin: 15px 0!important;
+}
+.dzu-previewButton{
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 .addCarFormContainer,
 .removeButtonContainer{

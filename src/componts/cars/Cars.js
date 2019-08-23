@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, Fragment } from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -9,10 +9,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import 'react-dropzone-uploader/dist/styles.css';
+import Dropzone from 'react-dropzone-uploader'
 
 
 import UserContext from '../../contextBigForm'
-import ReactDropzone from 'react-dropzone';
+
 // import request from "superagent";
 
 const useStyles = makeStyles(theme => ({
@@ -58,7 +60,7 @@ export default function Cars(props) {
     let carsForm = props.thisCarForm;
 
     const [files, setFiles] = useState([]);
-
+    // console.warn(files)
     //  init values
     useEffect(() => {
 
@@ -68,20 +70,40 @@ export default function Cars(props) {
         setWorking_volume(changeFormObject.working_volume);
 
         setFiles(carsForm.files);
-
     }, [carsForm])
 
 
     if (!carsForm.files) {
-        
         carsForm.files = [];
     }
 
     function onPreviewDrop(newFiles) {
+        
+
         setFiles(files.concat(newFiles))
 
         carsForm.files = files.concat(newFiles);
+
     };
+
+
+
+    ////
+ 
+        // specify upload params and url for your files
+        const getUploadParams = ({ meta }) => {return { url: 'https://httpbin.org/post' } }
+
+        // called every time a file's `status` changes
+        const handleChangeStatus = ({ meta }, status) => { if(status === 'done'){
+             onPreviewDrop(meta);
+             
+        }}
+
+        // receives array of files that are done uploading when submit button is clicked
+        // const handleSubmit = (files, allFiles) => {
+        //     console.log(files.map(f => f.meta))
+        //     allFiles.forEach(f => f.remove())
+        // }
 
 
     const [working_volume, setWorking_volume] = React.useState('');
@@ -89,7 +111,6 @@ export default function Cars(props) {
     if (!changeFormObject.working_volume) {
         changeFormObject.working_volume = '';
     }
-
 
     const handleChange = input => event => {
 
@@ -162,7 +183,6 @@ export default function Cars(props) {
     }
 
 
-
     const [seats, changeSeats] = useState([])
 
     if (!carsForm.seats) {
@@ -208,9 +228,9 @@ export default function Cars(props) {
                         <div className='removeButtonContainer'>
                             <span onClick={function (event) {
 
-                                
+
                                 formObject.cars.splice(props.index, 1);
-                                
+
 
                                 changeFormObject({ ...formObject });
 
@@ -321,47 +341,52 @@ export default function Cars(props) {
 
 
 
-                    <ReactDropzone
+                    {/* <ReactDropzone
                         accept="image/*"
                         onDrop={onPreviewDrop}
                     >
                         {({ getRootProps, getInputProps }) => (
                             <section className="dropZone-wrapper">
-                                     <div className="dropZone" {...getRootProps()}> 
-                                   <input {...getInputProps()} />
+                                <div className="dropZone" {...getRootProps()}>
+                                    <input {...getInputProps()} />
                                     <p>Drag 'n' drop some files here, or click to select files</p>
                                 </div>
                             </section>
                         )}
-                    </ReactDropzone>
+                    </ReactDropzone> */}
+                    <Dropzone
+                        getUploadParams={getUploadParams}
+                        onChangeStatus={handleChangeStatus}
+                        // onSubmit={handleSubmit}
+                        initialFiles={files || []}
+                        accept="image/*,audio/*,video/*"
+                    />
 
 
+                    {/* {files.length > 0 && (
+                        <div style={{ width: '100%' }}>
 
-
-                    {files.length > 0 && (
-                        <div style={{width:'100%'}}>
-                            
                             {files.map(file => {
 
-                                    return(
+                                return (
 
-                                        <img
-                                            alt="Preview"
-                                            key={file.preview}
-                                            src={ URL.createObjectURL(file)}
-                                            style={{
-                                                display: "inline",
-                                                width: 100,
-                                                height: 100,
-                                                marginRight:10,
-                                                marginTop:10
-                                            }}
-                                        />
-                                    )
+                                    <img
+                                        alt="Preview"
+                                        key={file.preview}
+                                        src={URL.createObjectURL(file)}
+                                        style={{
+                                            display: "inline",
+                                            width: 100,
+                                            height: 100,
+                                            marginRight: 10,
+                                            marginTop: 10
+                                        }}
+                                    />
+                                )
                             }
                             )}
                         </div>
-                    )}
+                    )} */}
 
                 </div>
 

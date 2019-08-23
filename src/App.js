@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Partner from "./componts/partner/Partner";
 import Cars from "./componts/cars/Cars";
@@ -28,6 +28,7 @@ function App() {
     },
     cars: [{}]
   });
+
 
   return (
     <div className="form">
