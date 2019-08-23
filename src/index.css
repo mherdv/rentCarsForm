@@ -71,3 +71,15 @@ legend {
   margin-left: 89% !important;
 
 }
+.addCarFormContainer {
+  text-align: right;
+  margin-top: -20px ;
+  color: #004270;
+}
+.addCarFormContainer span , .removeButtonContainer span{
+  cursor: pointer;
+}
+.removeButtonContainer{
+  text-align: right;
+  margin-top: 10px;
+}

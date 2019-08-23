@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -12,7 +12,7 @@ import Select from '@material-ui/core/Select';
 
 
 import UserContext from '../../contextBigForm'
-// import ReactDropzone from 'react-dropzone';
+import ReactDropzone from 'react-dropzone';
 // import request from "superagent";
 
 const useStyles = makeStyles(theme => ({
@@ -46,9 +46,12 @@ const useStyles = makeStyles(theme => ({
     selectEmpty: {
         marginTop: theme.spacing(2),
     },
+
+
 }));
 
 export default function Cars(props) {
+    const classes = useStyles();
     let formObject = useContext(UserContext)[0];
     let changeFormObject = useContext(UserContext)[1];
 
@@ -57,17 +60,76 @@ export default function Cars(props) {
     let carsForm = props.thisCarForm;
 
 
+
     // setTimeout(function(){
     //     if( formObject.cars!=12454)
     //         changeFormObject({...formObject, cars:[12454]})
     // },1000)
-    const classes = useStyles();
-    const [values, setValues] = React.useState({
-        name: '',
-        multiline: '',
-        currency: '',
-    });
 
+
+
+    const [files, setFiles] = useState([]);
+
+    //  init values
+    useEffect(() => {
+
+        changeInputs(carsForm.inputs);
+        changeSeats(carsForm.seats);
+        setFuelType(changeFormObject.fuelType);
+        setWorking_volume(changeFormObject.working_volume);
+
+        setFiles(carsForm.files);
+
+    }, [carsForm])
+
+
+    if (!carsForm.files) {
+        
+        carsForm.files = [];
+    }
+
+    function onPreviewDrop(newFiles) {
+        setFiles(files.concat(newFiles))
+
+        carsForm.files = files.concat(newFiles);
+    };
+
+
+
+
+
+
+    const [working_volume, setWorking_volume] = React.useState('');
+
+    if (!changeFormObject.working_volume) {
+        changeFormObject.working_volume = '';
+    }
+
+
+    const handleChange = input => event => {
+
+        setWorking_volume(event.target.value)
+
+    };
+
+    const [fuelType, setFuelType] = React.useState({});
+
+
+    if (!changeFormObject.fuelType) {
+        changeFormObject.fuelType = {
+            name: '',
+            multiline: '',
+            currency: '',
+        }
+    }
+
+
+    function selectChange(event) {
+        setFuelType(oldValues => ({
+            ...oldValues,
+            value: event.target.value,
+        }));
+    }
 
     const handleValueChange = input => event => {
 
@@ -78,13 +140,6 @@ export default function Cars(props) {
 
     };
 
-    const handleChange = elem => event => console.log(event)
-    function selectChange(event) {
-        setValues(oldValues => ({
-            ...oldValues,
-            [event.target.name]: event.target.value,
-        }));
-    }
 
 
 
@@ -122,17 +177,17 @@ export default function Cars(props) {
                 value: ''
             }
         ]
-        
-        
-        
-        
+
+
+
+
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     const [seats, changeSeats] = useState([])
 
     if (!carsForm.seats) {
@@ -159,13 +214,9 @@ export default function Cars(props) {
             }
         ]
     }
-    useEffect(() => {
 
-        changeInputs(carsForm.inputs);
-        changeSeats(carsForm.seats);
-        
 
-    }, [carsForm])
+
     // const onDrop = (files) => {
     //     // POST to a test endpoint for demo purposes
     //     const req = request.post('https://httpbin.org/post');
@@ -180,19 +231,36 @@ export default function Cars(props) {
 
     return (
         <div className="Cars" style={{ textAlign: "left" }}>
+
+            {props.index == 0 ? <div className='addCarFormContainer'><span onClick={
+
+                function () {
+                    formObject.cars.push({});
+
+                    changeFormObject({ ...formObject });
+                }
+            }>add car form</span></div> : null}
             <div>
+                {
+                    formObject.cars.length > 1 ?
+                        <div className='removeButtonContainer'>
+                            <span onClick={function (event) {
+
+                                
+                                formObject.cars.splice(props.index, 1);
+                                
+
+                                changeFormObject({ ...formObject });
 
 
-                <span onClick={function () {
+                            }}>remove</span>
+                        </div>
+                        : null
+                }
 
 
 
-                    formObject.cars.splice(props.index, 1);
 
-                    changeFormObject({ ...formObject, cars: formObject.cars });
-
-
-                }}>remove</span>
                 <div className={classes.container}>
                     {inputs.map((input, index) => {
 
@@ -203,7 +271,7 @@ export default function Cars(props) {
                                     key={index}
                                     id="standard-name"
                                     label="Name"
-                                    value={input.value||''}
+                                    value={input.value || ''}
                                     className={classes.textField}
                                     label={input.label}
                                     placeholder={input.label}
@@ -261,16 +329,16 @@ export default function Cars(props) {
 
                             <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
                             <Select
-                                value={values.fuel}
+                                value={fuelType.value}
                                 onChange={selectChange}
                                 inputProps={{
                                     name: 'fuel',
                                     id: 'fuel',
                                 }}
                             >
-                                <MenuItem value={10}>Բենզին</MenuItem>
-                                <MenuItem value={20}>Գազ</MenuItem>
-                                <MenuItem value={30}>Դիզվառելիք</MenuItem>
+                                <MenuItem value={1}>Բենզին</MenuItem>
+                                <MenuItem value={2}>Գազ</MenuItem>
+                                <MenuItem value={3}>Դիզվառելիք</MenuItem>
                             </Select>
 
                         </FormControl>
@@ -279,19 +347,60 @@ export default function Cars(props) {
                                 id="standard-name"
                                 label="Name"
 
-                                value=''
+                                value={working_volume}
                                 className="custom-container"
                                 label={"Շարժիչի աշխատանքային ծավալ *"}
                                 placeholder={"Շարժիչի աշխատանքային ծավալ *"}
-                                onChange={handleChange('name')}
+                                onChange={handleChange()}
                                 margin="normal" />
                         </div>
                     </Grid>
-                    {/* <ReactDropzone
-                        onDrop={onDrop}
+
+
+
+
+                    <ReactDropzone
+                        accept="image/*"
+                        onDrop={onPreviewDrop}
                     >
-                        Drop your best gator GIFs here!!
-                    </ReactDropzone> */}
+                        {({ getRootProps, getInputProps }) => (
+                            <section>
+                                     <div {...getRootProps()}> 
+                                   <input {...getInputProps()} />
+                                    <p>Drag 'n' drop some files here, or click to select files</p>
+                                </div>
+                            </section>
+                        )}
+                    </ReactDropzone>
+
+
+
+
+                    {files.length > 0 && (
+                        <div style={{width:'100%'}}>
+                            
+                            {files.map(file => {
+
+                                    return(
+
+                                        <img
+                                            alt="Preview"
+                                            key={file.preview}
+                                            src={ URL.createObjectURL(file)}
+                                            style={{
+                                                display: "inline",
+                                                width: 100,
+                                                height: 100,
+                                                marginRight:10,
+                                                marginTop:10
+                                            }}
+                                        />
+                                    )
+                            }
+                            )}
+                        </div>
+                    )}
+
                 </div>
 
             </div>

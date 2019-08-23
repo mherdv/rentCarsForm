@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 export default function Prices(props) {
     const classes = useStyles();
 
+    const [showPrices,ChangeShowPrices] = useState(false)
     let pricesForm;
 
     pricesForm = [
@@ -321,9 +322,7 @@ export default function Prices(props) {
         }
         
     ]
-    const showPriceList = () => {
-        console.log("show")
-    }
+  
 
     return (
         <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
@@ -344,12 +343,13 @@ export default function Prices(props) {
                     )
                 })}
                 <Grid item xs={12} >
-                <Button variant="contained" color="primary" className={classes.button} onClick={showPriceList}>
+                <Button variant="contained" color="primary" className={classes.button} onClick={()=>ChangeShowPrices(!showPrices)}>
                     Գին ըստ ֆիքսված երթուղու
                 </Button>
                 </Grid>
                 
-                    {routes.map((route, index) => {
+                    
+                    {showPrices?(routes.map((route, index) => {
                         return (
                             <Grid item xs={6} key={index} >
                                 <TextField
@@ -367,7 +367,7 @@ export default function Prices(props) {
                                     />
                             </Grid>
                         )
-                    })}
+                    })):null}
                 
             </div>
         </div>
