@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import { isRequirers } from '../../helper/valdators';
+
 
 import UserContext from '../../contextBigForm'
 import ReactDropzone from 'react-dropzone';
@@ -84,7 +86,7 @@ export default function Cars(props) {
 
 
     if (!carsForm.files) {
-        
+
         carsForm.files = [];
     }
 
@@ -120,21 +122,44 @@ export default function Cars(props) {
             name: '',
             multiline: '',
             currency: '',
+            isValid: false,
+            validators: [isRequirers]
         }
     }
 
 
     function selectChange(event) {
+
+
+
         setFuelType(oldValues => ({
             ...oldValues,
             value: event.target.value,
+            isValid: true
         }));
+
+
+
+
+
+
+
     }
 
     const handleValueChange = input => event => {
 
 
         input.value = event.target.value;
+
+        input.isValid = true;
+        input.validators.forEach(validator => {
+
+
+            if (!validator(input.value)) {
+                input.isValid = false
+            }
+        })
+
 
         changeInputs([...inputs]);
 
@@ -149,32 +174,39 @@ export default function Cars(props) {
             {
                 label: "Մակնիշ *",
                 name: 'Brand',
-                value: ''
+                value: '',
+
+                validators: [isRequirers]
             },
             {
                 label: "Մոդել *",
                 name: 'Model',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Գույնը *",
                 name: 'Color',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Արտադրման տարեթիվ *",
                 name: 'date of production:',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Ուղևորների նստատեղերի քանակ *",
                 name: 'Number of passenger seats',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Սրահի հավաքման որակ *",
                 name: 'Salon quality',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             }
         ]
 
@@ -199,7 +231,8 @@ export default function Cars(props) {
                     { label: "Ոչ", value: 0 }
                 ],
                 name: 'leather',
-                value: ''
+                value: 0,
+                valdators: [isRequirers]
 
             },
             {
@@ -209,24 +242,14 @@ export default function Cars(props) {
                     { label: "Ոչ", value: 0 }
                 ],
                 name: 'fold back',
-                value: ''
+                value: 0,
+                valdators: [isRequirers]
+
 
             }
         ]
     }
 
-
-
-    // const onDrop = (files) => {
-    //     // POST to a test endpoint for demo purposes
-    //     const req = request.post('https://httpbin.org/post');
-
-    //     files.forEach(file => {
-    //         req.attach(file.name, file);
-    //     });
-
-    //     req.end();
-    // }
 
 
     return (
@@ -246,9 +269,9 @@ export default function Cars(props) {
                         <div className='removeButtonContainer'>
                             <span onClick={function (event) {
 
-                                
+
                                 formObject.cars.splice(props.index, 1);
-                                
+
 
                                 changeFormObject({ ...formObject });
 
@@ -266,7 +289,7 @@ export default function Cars(props) {
 
 
                         return (
-                            <Grid item xs={6} key={index}>
+                            <Grid item xs={6} key={index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
                                 <TextField
                                     key={index}
                                     id="standard-name"
@@ -291,6 +314,8 @@ export default function Cars(props) {
 
                                         function (event) {
                                             seat.value = +event.target.value;
+
+
 
                                             changeSeats([...seats])
                                         }
@@ -322,27 +347,31 @@ export default function Cars(props) {
                     })}
 
 
-                    <Grid item xs={12} className="select-container">
+                    <Grid item xs={12} className={"select-container "} >
 
 
-                        <FormControl className={classes.formControl}>
 
-                            <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
-                            <Select
-                                value={fuelType.value}
-                                onChange={selectChange}
-                                inputProps={{
-                                    name: 'fuel',
-                                    id: 'fuel',
-                                }}
-                            >
-                                <MenuItem value={1}>Բենզին</MenuItem>
-                                <MenuItem value={2}>Գազ</MenuItem>
-                                <MenuItem value={3}>Դիզվառելիք</MenuItem>
-                            </Select>
+                        <div className={ (!fuelType.isValid && formObject.isAdded)?'invalid':''} >
 
-                        </FormControl>
-                        <div className="custom-container">
+                            <FormControl className={classes.formControl}  >
+
+                                <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
+                                <Select
+                                    value={fuelType.value}
+                                    onChange={selectChange}
+                                    inputProps={{
+                                        name: 'fuel',
+                                        id: 'fuel',
+                                    }}
+                                >
+                                    <MenuItem value={1}>Բենզին</MenuItem>
+                                    <MenuItem value={2}>Գազ</MenuItem>
+                                    <MenuItem value={3}>Դիզվառելիք</MenuItem>
+                                </Select>
+
+                            </FormControl>
+                        </div>
+                        <div className={"custom-container " +((!working_volume.trim() && formObject.isAdded)? 'invalid':'' )} >
                             <TextField
                                 id="standard-name"
                                 label="Name"
@@ -365,8 +394,8 @@ export default function Cars(props) {
                     >
                         {({ getRootProps, getInputProps }) => (
                             <section>
-                                     <div {...getRootProps()}> 
-                                   <input {...getInputProps()} />
+                                <div {...getRootProps()}>
+                                    <input {...getInputProps()} />
                                     <p>Drag 'n' drop some files here, or click to select files</p>
                                 </div>
                             </section>
@@ -377,25 +406,25 @@ export default function Cars(props) {
 
 
                     {files.length > 0 && (
-                        <div style={{width:'100%'}}>
-                            
+                        <div style={{ width: '100%' }}>
+
                             {files.map(file => {
 
-                                    return(
+                                return (
 
-                                        <img
-                                            alt="Preview"
-                                            key={file.preview}
-                                            src={ URL.createObjectURL(file)}
-                                            style={{
-                                                display: "inline",
-                                                width: 100,
-                                                height: 100,
-                                                marginRight:10,
-                                                marginTop:10
-                                            }}
-                                        />
-                                    )
+                                    <img
+                                        alt="Preview"
+                                        key={file.preview}
+                                        src={URL.createObjectURL(file)}
+                                        style={{
+                                            display: "inline",
+                                            width: 100,
+                                            height: 100,
+                                            marginRight: 10,
+                                            marginTop: 10
+                                        }}
+                                    />
+                                )
                             }
                             )}
                         </div>
