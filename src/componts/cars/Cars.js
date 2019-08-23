@@ -55,18 +55,7 @@ export default function Cars(props) {
     let formObject = useContext(UserContext)[0];
     let changeFormObject = useContext(UserContext)[1];
 
-
-
     let carsForm = props.thisCarForm;
-
-
-
-    // setTimeout(function(){
-    //     if( formObject.cars!=12454)
-    //         changeFormObject({...formObject, cars:[12454]})
-    // },1000)
-
-
 
     const [files, setFiles] = useState([]);
 
@@ -93,10 +82,6 @@ export default function Cars(props) {
 
         carsForm.files = files.concat(newFiles);
     };
-
-
-
-
 
 
     const [working_volume, setWorking_volume] = React.useState('');
@@ -133,15 +118,11 @@ export default function Cars(props) {
 
     const handleValueChange = input => event => {
 
-
         input.value = event.target.value;
 
         changeInputs([...inputs]);
 
     };
-
-
-
 
     const [inputs, changeInputs] = useState([])
     if (!carsForm.inputs) {
@@ -185,9 +166,6 @@ export default function Cars(props) {
 
 
 
-
-
-
     const [seats, changeSeats] = useState([])
 
     if (!carsForm.seats) {
@@ -216,19 +194,6 @@ export default function Cars(props) {
     }
 
 
-
-    // const onDrop = (files) => {
-    //     // POST to a test endpoint for demo purposes
-    //     const req = request.post('https://httpbin.org/post');
-
-    //     files.forEach(file => {
-    //         req.attach(file.name, file);
-    //     });
-
-    //     req.end();
-    // }
-
-
     return (
         <div className="Cars" style={{ textAlign: "left" }}>
 
@@ -239,7 +204,7 @@ export default function Cars(props) {
 
                     changeFormObject({ ...formObject });
                 }
-            }>add car form</span></div> : null}
+            }>+</span></div> : null}
             <div>
                 {
                     formObject.cars.length > 1 ?
@@ -253,7 +218,7 @@ export default function Cars(props) {
                                 changeFormObject({ ...formObject });
 
 
-                            }}>remove</span>
+                            }}>-</span>
                         </div>
                         : null
                 }
@@ -364,8 +329,8 @@ export default function Cars(props) {
                         onDrop={onPreviewDrop}
                     >
                         {({ getRootProps, getInputProps }) => (
-                            <section>
-                                     <div {...getRootProps()}> 
+                            <section className="dropZone-wrapper">
+                                     <div className="dropZone" {...getRootProps()}> 
                                    <input {...getInputProps()} />
                                     <p>Drag 'n' drop some files here, or click to select files</p>
                                 </div>

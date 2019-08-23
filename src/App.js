@@ -29,12 +29,6 @@ function App() {
     cars: [{}]
   });
 
-
-
-
-
-
-
   return (
     <div className="form">
 

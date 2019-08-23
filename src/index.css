@@ -83,3 +83,39 @@ legend {
   text-align: right;
   margin-top: 10px;
 }
+.dropZone-wrapper{
+  width: 100%;
+}
+.dropZone{
+  margin: auto;
+  padding: 15px 20px;
+  background-color: rgba(0,66,112,0.1);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border: 2px dashed #004270;
+  color: #004270;
+  font-weight: 500;
+  width: 50%;
+}
+.addCarFormContainer,
+.removeButtonContainer{
+  border-radius: 50%;
+  padding: 5px 10px;
+  color: white;
+  float: right;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  font-size: 20px;
+}
+.addCarFormContainer{
+  background-color: #004270;
+}
+.removeButtonContainer{
+  background-color: lightcoral;
+  padding: 5px 13px;
+}

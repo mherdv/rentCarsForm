@@ -356,7 +356,6 @@ export default function Prices(props) {
                                     key={index}
                                     id="standard-name"
                                     label="Name"
-                                    value={route.value}
                                     className={classes.textField}
                                     label={route.label}
                                     // placeholder={route.label}
