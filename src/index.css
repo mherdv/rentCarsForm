@@ -28,7 +28,7 @@ legend {
   cursor: context-menu;
 }
 .number {
-  background: #004270;
+  background: #2196F3;
   color: #fff;
   height: 30px;
   width: 30px;
@@ -48,10 +48,10 @@ legend {
   text-align: left
 }
 .MuiRadio-colorPrimary.Mui-checked{
-  color: #004270 !important;
+  color: #2196F3 !important;
 }
 .MuiButton-containedPrimary{
-  background-color: #004270 !important;
+  background-color: #2196F3 !important;
   font-weight: bold;
 }
 .select-container{
@@ -74,7 +74,7 @@ legend {
 .addCarFormContainer {
   text-align: right;
   margin-top: -20px ;
-  color: #004270;
+  color: #2196F3;
 }
 .addCarFormContainer span , .removeButtonContainer span{
   cursor: pointer;
@@ -89,24 +89,24 @@ legend {
 .dzu-dropzone{
   border: none!important;
   flex-direction: row!important;
-  flex-wrap: wrap!important
+  flex-wrap: wrap!important;
+  overflow: hidden!important;
 }
 .dropZone,
 .dzu-inputLabel{
   margin: auto;
   padding: 15px 20px;
   background-color: rgba(0,66,112,0.1);
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  border: 2px dashed #004270;
-  color: #004270;
+  /*border-radius: 10px;*/
+  -webkit-border-radius: 0px;
+  border: 2px dashed #2196F3;
+  color: #2196F3;
   font-weight: 500;
   width: 50%!important;
 }
-
+.dzu-inputLabel{
+  color: #2196F3!important;
+}
 .dzu-previewImage{
   max-height: 500px!important;
   margin: auto;
@@ -141,9 +141,9 @@ legend {
   font-size: 20px;
 }
 .addCarFormContainer{
-  background-color: #004270;
+  background-color: #2196F3;
 }
 .removeButtonContainer{
-  background-color: lightcoral;
+  background-color: #F44336;
   padding: 5px 13px;
 }

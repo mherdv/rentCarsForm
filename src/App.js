@@ -24,10 +24,26 @@ function App() {
 
   const [formObject, changeFormObject] = useState({
     partnerInfo: {
-
+      'Legal Name':'',
+      'Phone number':'',
+      'Email':'',
+      'AVC':''
     },
-    cars: [{}]
+    cars: [{}],
+
+    prices: {},
+    isFormValid: false,
+    isAdded:false
   });
+
+
+
+
+  function sendForm(){
+    changeFormObject({...formObject, isAdded: true})
+  }
+
+
 
 
   return (
@@ -45,6 +61,10 @@ function App() {
           })}
            <SectionTitle number={3} title={"Գներ"} />
           <Prices/>
+
+
+
+          <div  onClick={sendForm} style={{textAlign:'center', width:'100%', background:'gray', color:'#fff', cursor:'pointer'}}>finall add</div>
         </form>
       </UserProvider>
     </div>

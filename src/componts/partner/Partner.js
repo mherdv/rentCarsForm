@@ -1,11 +1,12 @@
-import React , {useContext}from 'react';
+import React , {useContext, useState}from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-
-
-
 import UserContext from '../../contextBigForm';
+
+import {isEmail,isRequirers} from '../../helper/valdators';
+
+
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -34,23 +35,35 @@ export default function Partner(props) {
   const classes = useStyles();
 
 
+  
+  const [inputs, changeInputs] = useState([
+    { label: "Իրավաբանական Անուն *", name: 'Legal Name' ,validators:[isRequirers]},
+    { label: "Հեռախոսահամար *", name: 'Phone number' ,validators:[isRequirers]},
+    { label: "Էլ հասցե *", name: 'Email' ,validators:[isEmail,isRequirers]},
+    { label: "ՀՎՀՀ *", name: 'AVC' ,validators:[isRequirers]},
+  ])
+
+
   const handleValueChange = input => event => {
     // changeHandler({ ...values, value: event.target.value });
     input.value = event.target.value;
+    input.isValid = true;
 
 
-    formObject.partnerInfo[input.name] = input.value 
-    console.log(formObject)
+    input.validators.forEach(validator=>{
+      if(!validator(input.value)){
+        input.isValid = false;
+        formObject.isValid = false;
+      }
+    })
+
+   
+    changeInputs([...inputs])
+    formObject.partnerInfo[input.name] = input.value ;
 
   };
 
 
-  const inputs = [
-    { label: "Իրավաբանական Անուն *", name: 'Legal Name' },
-    { label: "Հեռախոսահամար *", name: 'Phone number' },
-    { label: "Էլ հասցե *", name: 'Email' },
-    { label: "ՀՎՀՀ *", name: 'AVC' },
-  ]
 
 
 
@@ -58,14 +71,16 @@ export default function Partner(props) {
     <div className="Partner" style={{ textAlign: "left" }}>
       <div className={classes.container}>
         {inputs.map((input, index) => {
+          
           return (
-            <Grid item xs={6} key={index} >
+            <Grid item xs={6} key={index}  className={ !input.isValid && formObject.isAdded?'invalid':''}>
+            
               <TextField
                 key={index}
                 id="standard-name"
                 label="Name"
                 value={input.value}
-                className={classes.textField}
+                className={classes.textField } 
                 label={input.label}
                 placeholder={input.label}
 

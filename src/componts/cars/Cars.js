@@ -12,6 +12,8 @@ import Select from '@material-ui/core/Select';
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader'
 
+import { isRequirers } from '../../helper/valdators';
+
 
 import UserContext from '../../contextBigForm'
 
@@ -126,19 +128,43 @@ export default function Cars(props) {
             name: '',
             multiline: '',
             currency: '',
+            isValid: false,
+            validators: [isRequirers]
         }
     }
 
 
     function selectChange(event) {
+
+
+
         setFuelType(oldValues => ({
             ...oldValues,
             value: event.target.value,
+            isValid: true
         }));
+
+
+
+
+
+
+
     }
 
     const handleValueChange = input => event => {
         input.value = event.target.value;
+
+        input.isValid = true;
+        input.validators.forEach(validator => {
+
+
+            if (!validator(input.value)) {
+                input.isValid = false
+            }
+        })
+
+
         changeInputs([...inputs]);
     };
 
@@ -148,32 +174,39 @@ export default function Cars(props) {
             {
                 label: "Մակնիշ *",
                 name: 'Brand',
-                value: ''
+                value: '',
+
+                validators: [isRequirers]
             },
             {
                 label: "Մոդել *",
                 name: 'Model',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Գույնը *",
                 name: 'Color',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Արտադրման տարեթիվ *",
                 name: 'date of production:',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Ուղևորների նստատեղերի քանակ *",
                 name: 'Number of passenger seats',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             },
             {
                 label: "Սրահի հավաքման որակ *",
                 name: 'Salon quality',
-                value: ''
+                value: '',
+                validators: [isRequirers]
             }
         ]
 
@@ -194,7 +227,8 @@ export default function Cars(props) {
                     { label: "Ոչ", value: 0 }
                 ],
                 name: 'leather',
-                value: ''
+                value: 0,
+                valdators: [isRequirers]
 
             },
             {
@@ -204,7 +238,9 @@ export default function Cars(props) {
                     { label: "Ոչ", value: 0 }
                 ],
                 name: 'fold back',
-                value: ''
+                value: 0,
+                valdators: [isRequirers]
+
 
             }
         ]
@@ -248,7 +284,7 @@ export default function Cars(props) {
 
 
                         return (
-                            <Grid item xs={6} key={index}>
+                            <Grid item xs={6} key={index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
                                 <TextField
                                     key={index}
                                     id="standard-name"
@@ -273,6 +309,8 @@ export default function Cars(props) {
 
                                         function (event) {
                                             seat.value = +event.target.value;
+
+
 
                                             changeSeats([...seats])
                                         }
@@ -304,27 +342,31 @@ export default function Cars(props) {
                     })}
 
 
-                    <Grid item xs={12} className="select-container">
+                    <Grid item xs={12} className={"select-container "} >
 
 
-                        <FormControl className={classes.formControl}>
 
-                            <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
-                            <Select
-                                value={fuelType.value}
-                                onChange={selectChange}
-                                inputProps={{
-                                    name: 'fuel',
-                                    id: 'fuel',
-                                }}
-                            >
-                                <MenuItem value={1}>Բենզին</MenuItem>
-                                <MenuItem value={2}>Գազ</MenuItem>
-                                <MenuItem value={3}>Դիզվառելիք</MenuItem>
-                            </Select>
+                        <div className={ (!fuelType.isValid && formObject.isAdded)?'invalid':''} >
 
-                        </FormControl>
-                        <div className="custom-container">
+                            <FormControl className={classes.formControl}  >
+
+                                <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
+                                <Select
+                                    value={fuelType.value}
+                                    onChange={selectChange}
+                                    inputProps={{
+                                        name: 'fuel',
+                                        id: 'fuel',
+                                    }}
+                                >
+                                    <MenuItem value={1}>Բենզին</MenuItem>
+                                    <MenuItem value={2}>Գազ</MenuItem>
+                                    <MenuItem value={3}>Դիզվառելիք</MenuItem>
+                                </Select>
+
+                            </FormControl>
+                        </div>
+                        <div className={"custom-container " +((!working_volume.trim() && formObject.isAdded)? 'invalid':'' )} >
                             <TextField
                                 id="standard-name"
                                 label="Name"
@@ -366,6 +408,12 @@ export default function Cars(props) {
                     {/* {files.length > 0 && (
                         <div style={{ width: '100%' }}>
 
+<<<<<<< HEAD
+=======
+                    {files.length > 0 && (
+                        <div style={{ width: '100%' }}>
+
+>>>>>>> ac724a9c49fc1c1eebf48e9d876a2f95f9cf05a3
                             {files.map(file => {
 
                                 return (
