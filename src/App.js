@@ -31,7 +31,7 @@ function App() {
     },
     cars: [{}],
 
-
+    prices: {},
     isFormValid: false,
     isAdded:false
   });
