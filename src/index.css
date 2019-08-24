@@ -20,6 +20,7 @@ code {
   background: #fafafa;
   border-radius: 8px;
   font-family: Georgia, "Times New Roman", Times, serif;
+  position: relative;
 }
 
 legend {
@@ -27,109 +28,124 @@ legend {
   margin: 20px 0 0;
   cursor: context-menu;
 }
-.number {
-  background: #2196F3;
+
+.icon {
+  background: #0d47a1;
   color: #fff;
-  height: 30px;
-  width: 30px;
+  height: 50px;
+  width: 50px;
   display: inline-block;
   font-size: 0.8em;
   margin-right: 4px;
-  line-height: 30px;
+  line-height: 60px;
   text-align: center;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-  border-radius: 15px 15px 15px 0px;
+  border-radius: 50%;
 }
 .radio-container {
+  width: 90%;
+  margin-left: 20px;
+  margin-right: 20px;
   padding-top: 20px;
   margin-bottom: 8px;
-  width: 300px;
   margin: auto;
-  text-align: left
+  text-align: left;
 }
-.MuiRadio-colorPrimary.Mui-checked{
-  color: #2196F3 !important;
+.radio-title{
+  height: 22px!important;
 }
-.MuiButton-containedPrimary{
-  background-color: #2196F3 !important;
+.MuiRadio-colorPrimary.Mui-checked {
+  color: #0d47a1 !important;
+}
+.MuiButton-containedPrimary {
+  background-color: #0d47a1 !important;
   font-weight: bold;
 }
-.select-container{
+.select-container {
   margin: auto !important;
-  max-width:87% !important;
-  text-align: left
+  max-width: 87% !important;
+  text-align: left;
 }
-.custom-container{
+.custom-container {
   margin: 8px;
   width: calc(100%);
   margin: auto;
 }
-.custom-container div{
+.custom-container div {
   width: 100%;
 }
-.MuiInputAdornment-positionEnd {
-  margin-left: 89% !important;
-
+.Prices label {
+  text-align: left;
+  padding-bottom: 5px;
+  white-space: nowrap;
 }
 .addCarFormContainer {
+  position: absolute !important;
+  right: 10px;
   text-align: right;
-  margin-top: -20px ;
-  color: #2196F3;
+  margin-top: -50px !important;
+  /* color: #0d47a1; */
 }
-.addCarFormContainer span , .removeButtonContainer span{
+.addCarFormContainer span,
+.removeButtonContainer span {
   cursor: pointer;
 }
-.removeButtonContainer{
+.removeButtonContainer {
+  position: absolute !important;
+  right: 10px;
   text-align: right;
   margin-top: 10px;
 }
-.dropZone-wrapper{
+.car-inputs:not(:first-child) {
+  padding-top: 30px;
+}
+.dropZone-wrapper {
   width: 100%;
 }
-.dzu-dropzone{
-  border: none!important;
-  flex-direction: row!important;
-  flex-wrap: wrap!important;
-  overflow: hidden!important;
+.dzu-dropzone {
+  border: none !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  overflow: hidden !important;
 }
 .dropZone,
-.dzu-inputLabel{
+.dzu-inputLabel {
   margin: auto;
   padding: 15px 20px;
-  background-color: rgba(0,66,112,0.1);
+  background-color: rgba(0, 66, 112, 0.1);
   /*border-radius: 10px;*/
   -webkit-border-radius: 0px;
-  border: 2px dashed #2196F3;
-  color: #2196F3;
+  border: 2px dashed #0d47a1;
+  color: #0d47a1;
   font-weight: 500;
-  width: 50%!important;
+  width: 50% !important;
 }
-.dzu-inputLabel{
-  color: #2196F3!important;
+.dzu-inputLabel {
+  color: #0d47a1 !important;
 }
-.dzu-previewImage{
-  max-height: 500px!important;
+.dzu-previewImage {
+  max-height: 500px !important;
   margin: auto;
 }
-.dzu-previewContainer{
-  width: 33%!important;
+.dzu-previewContainer {
+  width: 33% !important;
 }
-.dzu-previewContainer progress{
-  display: none
+.dzu-previewContainer progress {
+  display: none;
 }
 .dzu-inputLabelWithFiles,
-.dzu-submitButtonContainer{
+.dzu-submitButtonContainer {
   width: 100%;
-  padding: 0!important;
-  margin: 15px 0!important;
+  padding: 0 !important;
+  margin: 15px 0 !important;
 }
-.dzu-previewButton{
+.dzu-previewButton {
   position: absolute;
   top: 20px;
   right: 20px;
 }
 .addCarFormContainer,
-.removeButtonContainer{
+.removeButtonContainer {
   border-radius: 50%;
   padding: 5px 10px;
   color: white;
@@ -140,10 +156,33 @@ legend {
   -o-border-radius: 50%;
   font-size: 20px;
 }
-.addCarFormContainer{
-  background-color: #2196F3;
+.addCarFormContainer {
+  background-color: #0d47a1;
 }
-.removeButtonContainer{
-  background-color: #F44336;
+.removeButtonContainer {
+  background-color: #f44336;
   padding: 5px 13px;
+}
+.send {
+  margin: 20px auto !important;
+}
+@media only screen and (max-width: 735px) {
+  .Prices label {
+    white-space: unset!important;
+  }
+}
+@media only screen and (max-width: 625px) {
+  .MuiInputLabel-formControl,
+  .radio-container {
+    font-size: 11px !important;
+    text-align: center;
+  }
+  ::placeholder {
+    font-size: 11px;
+  }
+}
+@media only screen and (max-width: 350px) {
+  .MuiFormControlLabel-root {
+    width: 100%;
+  }
 }

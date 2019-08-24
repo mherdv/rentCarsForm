@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -10,16 +10,21 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import 'react-dropzone-uploader/dist/styles.css';
-import Dropzone from 'react-dropzone-uploader'
+import Dropzone from 'react-dropzone-uploader';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import NavigationIcon from '@material-ui/icons/Navigation';
+
 
 import { isRequirers } from '../../helper/valdators';
 
 
-import UserContext from '../../contextBigForm'
+import UserContext from '../../contextBigForm';
 
-// import request from "superagent";
 
 const useStyles = makeStyles(theme => ({
+
     container: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -28,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
-        width: 300
+        width: "90%",
     },
     dense: {
         marginTop: 19,
@@ -53,6 +58,8 @@ const useStyles = makeStyles(theme => ({
 
 
 }));
+
+
 
 export default function Cars(props) {
     const classes = useStyles();
@@ -80,7 +87,7 @@ export default function Cars(props) {
     }
 
     function onPreviewDrop(newFiles) {
-        
+
 
         setFiles(files.concat(newFiles))
 
@@ -91,21 +98,23 @@ export default function Cars(props) {
 
 
     ////
- 
-        // specify upload params and url for your files
-        const getUploadParams = ({ meta }) => {return { url: 'https://httpbin.org/post' } }
 
-        // called every time a file's `status` changes
-        const handleChangeStatus = ({ meta }, status) => { if(status === 'done'){
-             onPreviewDrop(meta);
-             
-        }}
+    // specify upload params and url for your files
+    const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
 
-        // receives array of files that are done uploading when submit button is clicked
-        // const handleSubmit = (files, allFiles) => {
-        //     console.log(files.map(f => f.meta))
-        //     allFiles.forEach(f => f.remove())
-        // }
+    // called every time a file's `status` changes
+    const handleChangeStatus = ({ meta }, status) => {
+        if (status === 'done') {
+            onPreviewDrop(meta);
+
+        }
+    }
+
+    // receives array of files that are done uploading when submit button is clicked
+    // const handleSubmit = (files, allFiles) => {
+    //     console.log(files.map(f => f.meta))
+    //     allFiles.forEach(f => f.remove())
+    // }
 
 
     const [working_volume, setWorking_volume] = React.useState('');
@@ -143,10 +152,6 @@ export default function Cars(props) {
             value: event.target.value,
             isValid: true
         }));
-
-
-
-
 
 
 
@@ -248,47 +253,47 @@ export default function Cars(props) {
 
 
     return (
+        
         <div className="Cars" style={{ textAlign: "left" }}>
 
-            {props.index == 0 ? <div className='addCarFormContainer'><span onClick={
-
-                function () {
-                    formObject.cars.push({});
-
-                    changeFormObject({ ...formObject });
+            {props.index == 0 ? <Fab color="primary" aria-label="add"
+            className={classes.fab + " " + "addCarFormContainer"}
+                onClick={
+                    function () {
+                        formObject.cars.push({});
+                    
+                        changeFormObject({ ...formObject });
+                    }
                 }
-            }>+</span></div> : null}
+            >
+                <AddIcon  />
+            </Fab> : null}
             <div>
                 {
-                    formObject.cars.length > 1 ?
-                        <div className='removeButtonContainer'>
-                            <span onClick={function (event) {
+                    formObject.cars.length > 1 && props.index !== 0? 
+                    <Fab aria-label="delete" 
+                    className={classes.fab + " " + 'removeButtonContainer'}
+                    onClick={
+                        function () {
+                            formObject.cars.splice(props.index, 1);
 
+                            changeFormObject({ ...formObject });
 
-                                formObject.cars.splice(props.index, 1);
+                        }}>
+                                <DeleteIcon />
+                            </Fab>
 
-
-                                changeFormObject({ ...formObject });
-
-
-                            }}>-</span>
-                        </div>
                         : null
                 }
 
-
-
-
-                <div className={classes.container}>
+                <div className={classes.container + " "+ "car-inputs"}>
                     {inputs.map((input, index) => {
-
 
                         return (
                             <Grid item xs={6} key={index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
                                 <TextField
                                     key={index}
                                     id="standard-name"
-                                    label="Name"
                                     value={input.value || ''}
                                     className={classes.textField}
                                     label={input.label}
@@ -304,7 +309,7 @@ export default function Cars(props) {
                         return (
                             <Grid item xs={6} key={index}>
                                 <div className="radio-container">
-                                    <div>{seat.title}</div>
+                                    <div className="radio-title">{seat.title}</div>
                                     <RadioGroup onChange={
 
                                         function (event) {
@@ -346,7 +351,7 @@ export default function Cars(props) {
 
 
 
-                        <div className={ (!fuelType.isValid && formObject.isAdded)?'invalid':''} >
+                        <div className={(!fuelType.isValid && formObject.isAdded) ? 'invalid' : ''} >
 
                             <FormControl className={classes.formControl}  >
 
@@ -366,7 +371,7 @@ export default function Cars(props) {
 
                             </FormControl>
                         </div>
-                        <div className={"custom-container " +((!working_volume.trim() && formObject.isAdded)? 'invalid':'' )} >
+                        <div className={"custom-container " + ((!working_volume.trim() && formObject.isAdded) ? 'invalid' : '')} >
                             <TextField
                                 id="standard-name"
                                 label="Name"
@@ -408,12 +413,9 @@ export default function Cars(props) {
                     {/* {files.length > 0 && (
                         <div style={{ width: '100%' }}>
 
-<<<<<<< HEAD
-=======
                     {files.length > 0 && (
                         <div style={{ width: '100%' }}>
 
->>>>>>> ac724a9c49fc1c1eebf48e9d876a2f95f9cf05a3
                             {files.map(file => {
 
                                 return (

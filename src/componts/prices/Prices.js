@@ -16,10 +16,10 @@ const useStyles = makeStyles(theme => ({
     textField: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
-        width: 300
+        width: "90%",
     },
     button: {
-        margin: "15px auto"
+            margin: 35,
     },
     input: {
         display: 'none',
@@ -336,7 +336,17 @@ export default function Prices(props) {
 
     return (
         <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
-            <CustomizedSnackbars type='error' massage='it should be minimum one price exist'></CustomizedSnackbars>
+            
+            {formObject.cars.map((car, index) => {
+                console.log(car)
+                if(car.value >= 1 ){
+                    return <div>car available</div>
+                }else{
+                   return  null
+                }
+                  
+            })}
+            {/* <CustomizedSnackbars type='error' massage='it should be minimum one price exist'></CustomizedSnackbars> */}
             <div className={classes.container}>
                 {pricesForm.map((pricesForm, index) => {
                     return (
@@ -356,7 +366,8 @@ export default function Prices(props) {
                     )
                 })}
                 <Grid item xs={12} >
-                <Button variant="contained" color="primary" className={classes.button} onClick={()=>ChangeShowPrices(!showPrices)}>
+                 
+                <Button variant="outlined" color="primary" className={classes.button} onClick={()=>ChangeShowPrices(!showPrices)}>
                     Գին ըստ ֆիքսված երթուղու
                 </Button>
                 </Grid>
@@ -376,7 +387,7 @@ export default function Prices(props) {
 
                                     onChange={addingCarPrices(route)}
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="end">AMD</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
                                     }}
                                     />
                             </Grid>
