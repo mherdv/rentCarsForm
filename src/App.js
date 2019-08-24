@@ -6,6 +6,9 @@ import SectionTitle from "./componts/sectionTitle/SectionTitle";
 import Prices from "./componts/prices/Prices";
 
 import { UserProvider } from './contextBigForm.jsx'
+import CustomizedSnackbars from './componts/notification/Notification';
+
+
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -30,9 +33,10 @@ function App() {
       'AVC':''
     },
     cars: [{}],
-
     prices: {},
-    isFormValid: false,
+
+    errorTexts : '',
+    isFormValid: true,
     isAdded:false
   });
 
@@ -40,7 +44,14 @@ function App() {
 
 
   function sendForm(){
-    changeFormObject({...formObject, isAdded: true})
+    
+    changeFormObject({...formObject, isAdded: true});
+
+
+
+
+
+
   }
 
 
@@ -50,6 +61,9 @@ function App() {
     <div className="form">
 
       <UserProvider value={[formObject, changeFormObject]}>
+
+
+        
         <form className={classes.container} Validate autoComplete="off">
 
           <SectionTitle number={1} title={"Գործընկեր"} />
@@ -64,7 +78,10 @@ function App() {
 
 
 
-          <div  onClick={sendForm} style={{textAlign:'center', width:'100%', background:'gray', color:'#fff', cursor:'pointer'}}>finall add</div>
+        <div   style={{textAlign:'center', width:'100%'}}>
+            <CustomizedSnackbars type='error' massage={formObject} click={sendForm} buttonText ='finall add'/>
+        
+        </div>
         </form>
       </UserProvider>
     </div>

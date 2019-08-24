@@ -53,7 +53,6 @@ export default function Partner(props) {
     input.validators.forEach(validator=>{
       if(!validator(input.value)){
         input.isValid = false;
-        formObject.isValid = false;
       }
     })
 
@@ -72,6 +71,7 @@ export default function Partner(props) {
       <div className={classes.container}>
         {inputs.map((input, index) => {
           
+
           return (
             <Grid item xs={6} key={index}  className={ !input.isValid && formObject.isAdded?'invalid':''}>
             

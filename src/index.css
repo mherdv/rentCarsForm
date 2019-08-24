@@ -147,3 +147,18 @@ legend {
   background-color: #F44336;
   padding: 5px 13px;
 }
+
+.removeImage{
+  position: absolute;
+  top: 7px;
+  right: 0;
+  z-index: 999;
+  right: 13px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.invalid *{
+  color: red !important;
+
+}

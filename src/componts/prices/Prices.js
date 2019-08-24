@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import UserContext from '../../contextBigForm';
-import CustomizedSnackbars from '../notification/Notification'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -336,7 +335,6 @@ export default function Prices(props) {
 
     return (
         <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
-            <CustomizedSnackbars type='error' massage='it should be minimum one price exist'></CustomizedSnackbars>
             <div className={classes.container}>
                 {pricesForm.map((pricesForm, index) => {
                     return (

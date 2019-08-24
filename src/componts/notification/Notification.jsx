@@ -90,6 +90,7 @@ export default function CustomizedSnackbars(props) {
 
   function handleClick() {
     setOpen(true);
+    props.click()
   }
 
   function handleClose(event, reason) {
@@ -102,13 +103,44 @@ export default function CustomizedSnackbars(props) {
 
   return (
     <div>
-   
-      <MySnackbarContentWrapper
-        variant={props.type || "error"}
+      <Button variant="outlined" className={classes.margin} onClick={handleClick}>
+        {props.buttonText}
+      </Button>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <MySnackbarContentWrapper
+          onClose={handleClose}
+          variant={props.type}
+          message={props.massage.errorTexts}
+        />
+      </Snackbar>
+      {/* <MySnackbarContentWrapper
+        variant="error"
         className={classes.margin}
-        message={props.massage || "This is an error message!"}
+        message="This is an error message!"
       />
-     
+      <MySnackbarContentWrapper
+        variant="warning"
+        className={classes.margin}
+        message="This is a warning message!"
+      />
+      <MySnackbarContentWrapper
+        variant="info"
+        className={classes.margin}
+        message="This is an information message!"
+      />
+      <MySnackbarContentWrapper
+        variant="success"
+        className={classes.margin}
+        message="This is a success message!"
+      /> */}
     </div>
   );
 }

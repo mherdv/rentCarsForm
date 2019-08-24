@@ -10,7 +10,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import 'react-dropzone-uploader/dist/styles.css';
-import Dropzone from 'react-dropzone-uploader'
+
+import ReactDropzone from 'react-dropzone';
+
+
 
 import { isRequirers } from '../../helper/valdators';
 
@@ -61,6 +64,9 @@ export default function Cars(props) {
 
     let carsForm = props.thisCarForm;
 
+
+
+
     const [files, setFiles] = useState([]);
     // console.warn(files)
     //  init values
@@ -68,15 +74,65 @@ export default function Cars(props) {
 
         changeInputs(carsForm.inputs);
         changeSeats(carsForm.seats);
-        setFuelType(changeFormObject.fuelType);
-        setWorking_volume(changeFormObject.working_volume);
+        setFuelType(carsForm.fuelType);
+        setWorking_volume(carsForm.working_volume);
 
         setFiles(carsForm.files);
+
+        
+        
+       
+
     }, [carsForm])
+
+
+    useEffect(() => {
+
+
+
+        let areInputsValid = true;
+
+        try {
+            inputs.forEach(input=>{
+
+                if(!input.isValid ){
+    
+                    areInputsValid =  false;
+                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ' ;
+                    throw {};
+                }
+            })
+          } catch (e) {
+            
+          }
+
+        
+        carsForm.isValid = !!(carsForm.working_volume && carsForm.fuelType.value && areInputsValid);
+
+
+        if(!formObject.errorTexts && !carsForm.isValid ){
+
+            if(!carsForm.fuelType.value){
+                formObject.errorTexts =  'Շարժիչի վառելիք  դաշտը պարտադիր է';
+            }else{
+                formObject.errorTexts =  'Շարժիչի աշխատանքային ծավալ  պարտադիր դաշտը լրացված չե կամ լրացված է սխալ';
+            }
+
+        }
+        console.log(carsForm.fuelType)
+
+        // formObject.errorTexts.push()
+
+        //**************************************************************************************    */ carsForm has price  
+        
+
+        
+    })
 
 
     if (!carsForm.files) {
         carsForm.files = [];
+        
     }
 
     function onPreviewDrop(newFiles) {
@@ -93,13 +149,13 @@ export default function Cars(props) {
     ////
  
         // specify upload params and url for your files
-        const getUploadParams = ({ meta }) => {return { url: 'https://httpbin.org/post' } }
+        // const getUploadParams = ({ meta }) => {return { url: 'https://httpbin.org/post' } }
 
-        // called every time a file's `status` changes
-        const handleChangeStatus = ({ meta }, status) => { if(status === 'done'){
-             onPreviewDrop(meta);
+        // // called every time a file's `status` changes
+        // const handleChangeStatus = ({ meta }, status) => { if(status === 'done'){
+        //      onPreviewDrop(meta);
              
-        }}
+        // }}
 
         // receives array of files that are done uploading when submit button is clicked
         // const handleSubmit = (files, allFiles) => {
@@ -110,21 +166,22 @@ export default function Cars(props) {
 
     const [working_volume, setWorking_volume] = React.useState('');
 
-    if (!changeFormObject.working_volume) {
-        changeFormObject.working_volume = '';
+    if (!carsForm.working_volume) {
+        carsForm.working_volume = '';
     }
 
     const handleChange = input => event => {
 
         setWorking_volume(event.target.value)
+        carsForm.working_volume = event.target.value
 
     };
 
     const [fuelType, setFuelType] = React.useState({});
 
 
-    if (!changeFormObject.fuelType) {
-        changeFormObject.fuelType = {
+    if (!carsForm.fuelType) {
+        carsForm.fuelType = {
             name: '',
             multiline: '',
             currency: '',
@@ -144,6 +201,9 @@ export default function Cars(props) {
             isValid: true
         }));
 
+        carsForm.fuelType.value = event.target.value;
+
+
 
 
 
@@ -156,9 +216,10 @@ export default function Cars(props) {
         input.value = event.target.value;
 
         input.isValid = true;
+
         input.validators.forEach(validator => {
-
-
+            
+            
             if (!validator(input.value)) {
                 input.isValid = false
             }
@@ -282,7 +343,6 @@ export default function Cars(props) {
                 <div className={classes.container}>
                     {inputs.map((input, index) => {
 
-
                         return (
                             <Grid item xs={6} key={index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
                                 <TextField
@@ -345,7 +405,6 @@ export default function Cars(props) {
                     <Grid item xs={12} className={"select-container "} >
 
 
-
                         <div className={ (!fuelType.isValid && formObject.isAdded)?'invalid':''} >
 
                             <FormControl className={classes.formControl}  >
@@ -382,8 +441,7 @@ export default function Cars(props) {
 
 
 
-
-                    {/* <ReactDropzone
+                    <ReactDropzone
                         accept="image/*"
                         onDrop={onPreviewDrop}
                     >
@@ -395,46 +453,55 @@ export default function Cars(props) {
                                 </div>
                             </section>
                         )}
-                    </ReactDropzone> */}
-                    <Dropzone
+                    </ReactDropzone>
+                    {/* <Dropzone
                         getUploadParams={getUploadParams}
                         onChangeStatus={handleChangeStatus}
                         // onSubmit={handleSubmit}
-                        initialFiles={files || []}
-                        accept="image/*,audio/*,video/*"
-                    />
+
+                        initialFiles={[...files]}
+                        accept="image/*"
+                    /> */}
 
 
-                    {/* {files.length > 0 && (
-                        <div style={{ width: '100%' }}>
 
-<<<<<<< HEAD
-=======
                     {files.length > 0 && (
                         <div style={{ width: '100%' }}>
 
->>>>>>> ac724a9c49fc1c1eebf48e9d876a2f95f9cf05a3
-                            {files.map(file => {
+                            {files.map((file,index) => {
 
                                 return (
 
-                                    <img
-                                        alt="Preview"
-                                        key={file.preview}
-                                        src={URL.createObjectURL(file)}
-                                        style={{
-                                            display: "inline",
-                                            width: 100,
-                                            height: 100,
-                                            marginRight: 10,
-                                            marginTop: 10
-                                        }}
-                                    />
+
+
+                                    <div className={'imgContainer'}  style={{display:'inline-block', position:'relative'}}>
+
+
+                                        <img
+                                            alt="Preview"
+                                            key={file.preview}
+                                            src={URL.createObjectURL(file)}
+                                            style={{
+                                                display: "inline",
+                                                width: 100,
+                                                height: 100,
+                                                marginRight: 10,
+                                                marginTop: 10
+                                            }}
+    
+                                        />
+                                        <div className="removeImage" onClick= {function(event){
+                                            files.splice(index,1);
+                                            setFiles([...files]);
+                                            // event.target.closest('.imgContainer').remove()
+                                        }}>x</div>
+
+                                    </div>
                                 )
                             }
                             )}
                         </div>
-                    )} */}
+                    )}
 
                 </div>
 
