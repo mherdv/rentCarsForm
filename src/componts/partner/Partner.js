@@ -54,7 +54,7 @@ export default function Partner(props) {
         if (!!!input.isValid) {
           formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
 
-          throw new Object;
+          throw new Error();
         }
 
       })
@@ -96,7 +96,6 @@ export default function Partner(props) {
               <TextField
                 key={index}
                 id="standard-name"
-                label="Name"
                 value={input.value}
                 className={classes.textField}
                 label={input.label}

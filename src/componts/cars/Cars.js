@@ -13,17 +13,15 @@ import 'react-dropzone-uploader/dist/styles.css';
 
 import ReactDropzone from 'react-dropzone';
 
-// import Dropzone from 'react-dropzone-uploader';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-// import NavigationIcon from '@material-ui/icons/Navigation';
 
 
 import { isRequirers } from '../../helper/valdators';
 
 import UserContext from '../../contextBigForm';
-
+let inputDetector = null;
 
 const useStyles = makeStyles(theme => ({
 
@@ -88,26 +86,24 @@ export default function Cars(props) {
 
 
 
-
     }, [carForm])
 
 
     useEffect(() => {
 
 
-        if(!!formObject.errorTexts) return;
+        if (!!formObject.errorTexts) return;
         let areInputsValid = true;
 
- 
+
         try {
             inputs.forEach(input => {
 
-                
+
                 if (!!!input.isValid) {
-                    console.log(145856, input.isValid,inputs)
                     areInputsValid = false;
-                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չէ կամ սխալ է լրացված  ';
-                    throw new Object;
+                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
+                    throw new Error();
                 }
             })
         } catch (e) {
@@ -158,21 +154,11 @@ export default function Cars(props) {
     // const getUploadParams = ({ meta }) => {return { url: 'https://httpbin.org/post' } }
 
     // // called every time a file's `status` changes
-    // const handleChangeStatus = ({ meta }, status) => { if(status === 'done'){
+    // const handleChangeStatus = ({ meta }, status) => { if(status ==== 'done'){
     //      onPreviewDrop(meta);
 
     // }}
 
-    // specify upload params and url for your files
-    const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
-
-    // called every time a file's `status` changes
-    const handleChangeStatus = ({ meta }, status) => {
-        if (status === 'done') {
-            onPreviewDrop(meta);
-
-        }
-    }
 
     // receives array of files that are done uploading when submit button is clicked
     // const handleSubmit = (files, allFiles) => {
@@ -221,8 +207,15 @@ export default function Cars(props) {
         carForm.fuelType.value = event.target.value;
 
     }
-
+    
     const handleValueChange = input => event => {
+        clearTimeout(inputDetector)
+        inputDetector = null
+        inputDetector = setTimeout(() => {
+            console.log(inputDetector)
+            changeFormObject({ ...formObject, cars: formObject.cars })
+        }, 500)
+
         input.value = event.target.value;
 
         input.isValid = true;
@@ -237,6 +230,8 @@ export default function Cars(props) {
 
 
         changeInputs([...inputs]);
+
+
     };
 
     const [inputs, changeInputs] = useState([])
@@ -317,9 +312,9 @@ export default function Cars(props) {
     return (
 
         <div className="Cars" style={{ textAlign: "left" }}>
-            {/* {console.log("car"+ ' ' + formObject.cars[0])} */}
-            {props.index == 0 ? <Fab color="primary" aria-label="add"
-                className={classes.fab + " " + "addCarFormContainer"}
+
+            {props.index === 0 ? <Fab color="primary" aria-label="add"
+                className={classes.fab + " addCarFormContainer"}
                 onClick={
                     function () {
                         formObject.cars.push({});
@@ -334,7 +329,7 @@ export default function Cars(props) {
                 {
                     formObject.cars.length > 1 && props.index !== 0 ?
                         <Fab aria-label="delete"
-                            className={classes.fab + " " + 'removeButtonContainer'}
+                            className={classes.fab + ' removeButtonContainer'}
                             onClick={
                                 function () {
                                     formObject.cars.splice(props.index, 1);
@@ -348,7 +343,7 @@ export default function Cars(props) {
                         : null
                 }
 
-                <div className={classes.container + " " + "car-inputs"}>
+                <div className={classes.container + " car-inputs"}>
                     {inputs.map((input, index) => {
 
                         return (
@@ -381,7 +376,7 @@ export default function Cars(props) {
 
                                             changeSeats([...seats])
                                         }
-                                    } value={seat.value}>
+                                    } value={seat.value + ''}>
                                         <Grid item xs={12} >
                                             <div>
                                                 {seat.items.map((option, index) => {
@@ -418,7 +413,7 @@ export default function Cars(props) {
 
                                 <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
                                 <Select
-                                    value={fuelType.value}
+                                    value={fuelType.value || ''}
                                     onChange={selectChange}
                                     inputProps={{
                                         name: 'fuel',
@@ -435,7 +430,6 @@ export default function Cars(props) {
                         <div className={"custom-container " + ((!working_volume.trim() && formObject.isAdded) ? 'invalid' : '')} >
                             <TextField
                                 id="standard-name"
-                                label="Name"
 
                                 value={working_volume}
                                 className="custom-container"

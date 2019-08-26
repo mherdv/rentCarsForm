@@ -91,8 +91,10 @@ function App() {
     <div className="form">
 
       <UserProvider value={[formObject, changeFormObject]}>
-    
-        <form className={classes.container} Validate autoComplete="off">
+
+
+        
+        <form className={classes.container}  autoComplete="off">
 
           <SectionTitle number={<PeopleIcon/>} title={"Գործընկեր"} />
           <Partner />

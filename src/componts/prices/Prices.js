@@ -6,6 +6,14 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import UserContext from '../../contextBigForm';
 
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Favorite from '@material-ui/icons/Favorite';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+
 const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
@@ -23,6 +31,9 @@ const useStyles = makeStyles(theme => ({
     input: {
         display: 'none',
     },
+    marginLeft: {
+        marginLeft: theme.spacing(1),
+    }
 }));
 
 export default function Prices(props) {
@@ -37,19 +48,20 @@ export default function Prices(props) {
     let changeFormObject = useContext(UserContext)[1];
     let inputs = useContext(UserContext)[0];
 
-    let [cars,changeCars] = useState( formObject.cars)
+    let [cars, changeCars] = useState(formObject.cars)
 
-    
+
 
 
     // const [cars, changeCars] = useState(formObject.cars);
 
-    // useEffect(() => {
-    //     changeCars(formObject.cars)
-    // })
+    useEffect(() => {
 
+        // console.log(cars)
+        changeCars(formObject.cars)
+    })
 
-    const [showPrices, ChangeShowPrices] = useState(false)
+    const [showPrices, ChangeShowPrices] = useState(false);
     let pricesForm;
 
     pricesForm = [
@@ -348,14 +360,38 @@ export default function Prices(props) {
     const addingCarPrices = input => event => {
         formObject.prices[input.name] = event.target.value;
     }
+    const [state, setState] = React.useState({
+        checkedA: true,
+        checkedB: true,
+        checkedF: true,
+    });
 
+  
+    const handleChange = name => event => {
+        setState({ ...state, [name]: event.target.checked });
+    };
     return (
         <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
-            {console.log(inputs[0])}
+
             {cars.map((car, index) => {
-               
-                    return <div>{car.inputs[0].value}</div>
-                    
+
+                return (
+                    <div className={classes.marginLeft}>
+                        {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
+                            <FormControlLabel
+                            control={
+                                <Checkbox
+
+                                    onChange={handleChange(index)}
+                                    value={car.inputs[0].value}
+                                    color="primary"
+                                />
+                            }
+                            label={car.inputs[0].value}
+                        /></Grid> : null}
+                    </div>
+                )
+
             })}
 
             {/* {cars.map((car, index) => {
@@ -369,6 +405,7 @@ export default function Prices(props) {
 
             {/* <CustomizedSnackbars type='error' massage='it should be minimum one price exist'></CustomizedSnackbars> */}
             <div className={classes.container}>
+
                 {pricesForm.map((pricesForm, index) => {
                     return (
                         <Grid item xs={6} key={index} >
@@ -405,7 +442,7 @@ export default function Prices(props) {
                                 label={route.label}
                                 placeholder={route.label}
                                 margin="normal"
-
+                                value={route.value}
                                 onChange={addingCarPrices(route)}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
