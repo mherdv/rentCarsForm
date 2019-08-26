@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
@@ -88,17 +88,39 @@ export default function CustomizedSnackbars(props) {
   const classes = useStyles2();
   const [open, setOpen] = React.useState(false);
 
+  let [errorMassage , changeErrorMassage] =  React.useState(props.massage.errorTexts);
+  let [successMassage , changeSuccessMassage] =  React.useState(props.massage.successText);
+  let [type , changeType] =  React.useState(props.massage.notificationType);
+
+
+
+  useEffect(()=>{
+
+    changeErrorMassage(props.massage.errorTexts)
+
+    changeType(props.massage.notificationType)
+    // changeType(props.massage.type)
+    
+  },[props.massage.errorTexts,props.massage.notificationType])
   function handleClick() {
     setOpen(true);
-    props.click()
+    props.click();
+    changeErrorMassage(props.massage.errorTexts);
+    changeType(props.massage.notificationType);
+
+
   }
 
   function handleClose(event, reason) {
+
+    
     if (reason === 'clickaway') {
       return;
     }
 
     setOpen(false);
+    
+    changeErrorMassage(props.massage.errorTexts);
   }
 
   return (
@@ -112,13 +134,13 @@ export default function CustomizedSnackbars(props) {
           horizontal: 'center',
         }}
         open={open}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}
       >
         <MySnackbarContentWrapper
           onClose={handleClose}
-          variant={props.type}
-          message={props.massage.errorTexts}
+          variant={!!!errorMassage.trim()?'success':'error'}
+          message={!!!errorMassage.trim()? successMassage: errorMassage}
         />
       </Snackbar>
       {/* <MySnackbarContentWrapper

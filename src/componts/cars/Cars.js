@@ -86,9 +86,9 @@ export default function Cars(props) {
 
         setFiles(carsForm.files);
 
-        
-        
-       
+
+
+
 
     }, [carsForm])
 
@@ -97,49 +97,53 @@ export default function Cars(props) {
 
 
 
+        if(!!formObject.errorTexts) return;
         let areInputsValid = true;
 
-        try {
-            inputs.forEach(input=>{
 
-                if(!input.isValid ){
-    
-                    areInputsValid =  false;
-                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ' ;
-                    throw {};
+       
+        try {
+            inputs.forEach(input => {
+
+                
+
+                if (!!!input.isValid) {
+                    console.log(145856, input.isValid,inputs)
+                    areInputsValid = false;
+                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
+                    throw new Object;
                 }
             })
-          } catch (e) {
-            
-          }
+        } catch (e) {
 
-        
+        }
+
+
         carsForm.isValid = !!(carsForm.working_volume && carsForm.fuelType.value && areInputsValid);
 
 
-        if(!formObject.errorTexts && !carsForm.isValid ){
+        if (!carsForm.isValid && !formObject.errorTexts) {
 
-            if(!carsForm.fuelType.value){
-                formObject.errorTexts =  'Շարժիչի վառելիք  դաշտը պարտադիր է';
-            }else{
-                formObject.errorTexts =  'Շարժիչի աշխատանքային ծավալ  պարտադիր դաշտը լրացված չե կամ լրացված է սխալ';
+            if (!carsForm.fuelType.value) {
+                formObject.errorTexts = 'Շարժիչի վառելիք  դաշտը պարտադիր է';
+            } else {
+                formObject.errorTexts = 'Շարժիչի աշխատանքային ծավալ  պարտադիր դաշտը լրացված չե կամ լրացված է սխալ';
             }
 
         }
-        console.log(carsForm.fuelType)
 
         // formObject.errorTexts.push()
 
         //**************************************************************************************    */ carsForm has price  
-        
 
-        
+
+
     })
 
 
     if (!carsForm.files) {
         carsForm.files = [];
-        
+
     }
 
     function onPreviewDrop(newFiles) {
@@ -154,15 +158,15 @@ export default function Cars(props) {
 
 
     ////
- 
-        // specify upload params and url for your files
-        // const getUploadParams = ({ meta }) => {return { url: 'https://httpbin.org/post' } }
 
-        // // called every time a file's `status` changes
-        // const handleChangeStatus = ({ meta }, status) => { if(status === 'done'){
-        //      onPreviewDrop(meta);
-             
-        // }}
+    // specify upload params and url for your files
+    // const getUploadParams = ({ meta }) => {return { url: 'https://httpbin.org/post' } }
+
+    // // called every time a file's `status` changes
+    // const handleChangeStatus = ({ meta }, status) => { if(status === 'done'){
+    //      onPreviewDrop(meta);
+
+    // }}
 
     // specify upload params and url for your files
     const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
@@ -232,8 +236,8 @@ export default function Cars(props) {
         input.isValid = true;
 
         input.validators.forEach(validator => {
-            
-            
+
+
             if (!validator(input.value)) {
                 input.isValid = false
             }
@@ -323,40 +327,40 @@ export default function Cars(props) {
 
 
     return (
-        
+
         <div className="Cars" style={{ textAlign: "left" }}>
 
             {props.index == 0 ? <Fab color="primary" aria-label="add"
-            className={classes.fab + " " + "addCarFormContainer"}
+                className={classes.fab + " " + "addCarFormContainer"}
                 onClick={
                     function () {
                         formObject.cars.push({});
-                    
+
                         changeFormObject({ ...formObject });
                     }
                 }
             >
-                <AddIcon  />
+                <AddIcon />
             </Fab> : null}
             <div>
                 {
-                    formObject.cars.length > 1 && props.index !== 0? 
-                    <Fab aria-label="delete" 
-                    className={classes.fab + " " + 'removeButtonContainer'}
-                    onClick={
-                        function () {
-                            formObject.cars.splice(props.index, 1);
+                    formObject.cars.length > 1 && props.index !== 0 ?
+                        <Fab aria-label="delete"
+                            className={classes.fab + " " + 'removeButtonContainer'}
+                            onClick={
+                                function () {
+                                    formObject.cars.splice(props.index, 1);
 
-                            changeFormObject({ ...formObject });
+                                    changeFormObject({ ...formObject });
 
-                        }}>
-                                <DeleteIcon />
-                            </Fab>
+                                }}>
+                            <DeleteIcon />
+                        </Fab>
 
                         : null
                 }
 
-                <div className={classes.container + " "+ "car-inputs"}>
+                <div className={classes.container + " " + "car-inputs"}>
                     {inputs.map((input, index) => {
 
                         return (
@@ -420,7 +424,7 @@ export default function Cars(props) {
                     <Grid item xs={12} className={"select-container "} >
 
 
-                        <div className={ (!fuelType.isValid && formObject.isAdded)?'invalid':''} >
+                        <div className={(!fuelType.isValid && formObject.isAdded) ? 'invalid' : ''} >
 
                             <FormControl className={classes.formControl}  >
 
@@ -483,13 +487,13 @@ export default function Cars(props) {
                     {files.length > 0 && (
                         <div style={{ width: '100%' }}>
 
-                            {files.map((file , index) => {
+                            {files.map((file, index) => {
 
                                 return (
 
 
 
-                                    <div className={'imgContainer'}  style={{display:'inline-block', position:'relative'}}>
+                                    <div className={'imgContainer'} style={{ display: 'inline-block', position: 'relative' }}>
 
 
                                         <img
@@ -503,10 +507,10 @@ export default function Cars(props) {
                                                 marginRight: 10,
                                                 marginTop: 10
                                             }}
-    
+
                                         />
-                                        <div className="removeImage" onClick= {function(event){
-                                            files.splice(index,1);
+                                        <div className="removeImage" onClick={function (event) {
+                                            files.splice(index, 1);
                                             setFiles([...files]);
                                             // event.target.closest('.imgContainer').remove()
                                         }}>x</div>

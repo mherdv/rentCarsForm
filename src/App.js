@@ -61,8 +61,10 @@ function App() {
     prices: {},
 
     errorTexts : '',
+    successText: 'ձեր հայտն ընդունված Է',
     isFormValid: true,
-    isAdded:false
+    isAdded:false,
+    notificationType:'error'
   });
 
 
@@ -70,11 +72,12 @@ function App() {
 
   function sendForm(){
     
-    changeFormObject({...formObject, isAdded: true});
+    let hasError = !!formObject.errorTexts.trim();
 
+    
+    formObject.notificationType = hasError?'error':'success'
 
-
-
+    changeFormObject({...formObject, isAdded: true,errorTexts : '',notificationType:hasError?'error':'success'});
 
 
   }
@@ -104,7 +107,7 @@ function App() {
 
 
         <div   style={{textAlign:'center', width:'100%'}}>
-            <CustomizedSnackbars type='error' massage={formObject} click={sendForm} buttonText ='finall add'/>
+            <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText ='finall add'/>
         
         </div>
           <Button onClick={sendForm} variant="contained" color="primary" className={classes.button + " " + "send"}>
