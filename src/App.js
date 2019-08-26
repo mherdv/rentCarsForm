@@ -58,7 +58,7 @@ function App() {
       'AVC':''
     },
     cars: [{}],
-    prices: {},
+    prices: [{}],
 
     errorTexts : '',
     successText: 'ձեր հայտն ընդունված Է',
@@ -66,7 +66,6 @@ function App() {
     isAdded:false,
     notificationType:'error'
   });
-
 
 
 
@@ -86,13 +85,13 @@ function App() {
 
 
   return (
+    
     <MuiThemeProvider theme={theme}>
+      
     <div className="form">
 
       <UserProvider value={[formObject, changeFormObject]}>
-
-
-        
+    
         <form className={classes.container} Validate autoComplete="off">
 
           <SectionTitle number={<PeopleIcon/>} title={"Գործընկեր"} />
@@ -101,19 +100,18 @@ function App() {
 
           {formObject.cars.map((car, index) => {
             return <Cars key={index} index={index} thisCarForm={car}/>
+            
           })}
+
            <SectionTitle number={<AttachMoneyIcon/>} title={"Գներ"} />
-          <Prices />
+
+          {formObject.prices.map((price,index) => {
+            return <Prices key={index} index={index} thisPriceForm={price}/>
+          })}
 
 
-        <div   style={{textAlign:'center', width:'100%'}}>
-            <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText ='finall add'/>
-        
-        </div>
-          <Button onClick={sendForm} variant="contained" color="primary" className={classes.button + " " + "send"}>
-          Ուղարկել
-           <SendIcon className={classes.rightIcon}/>
-          </Button>
+            <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText ='Ուղարկել'/>
+          
           {/* <div   style={{textAlign:'center', width:'100%', background:'gray', color:'#fff', cursor:'pointer'}}>finall add</div> */}
         </form>
       </UserProvider>

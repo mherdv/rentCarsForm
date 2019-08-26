@@ -13,15 +13,14 @@ import 'react-dropzone-uploader/dist/styles.css';
 
 import ReactDropzone from 'react-dropzone';
 
-import Dropzone from 'react-dropzone-uploader';
+// import Dropzone from 'react-dropzone-uploader';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import NavigationIcon from '@material-ui/icons/Navigation';
+// import NavigationIcon from '@material-ui/icons/Navigation';
 
 
 import { isRequirers } from '../../helper/valdators';
-
 
 import UserContext from '../../contextBigForm';
 
@@ -69,7 +68,7 @@ export default function Cars(props) {
     let formObject = useContext(UserContext)[0];
     let changeFormObject = useContext(UserContext)[1];
 
-    let carsForm = props.thisCarForm;
+    let carForm = props.thisCarForm;
 
 
 
@@ -79,38 +78,35 @@ export default function Cars(props) {
     //  init values
     useEffect(() => {
 
-        changeInputs(carsForm.inputs);
-        changeSeats(carsForm.seats);
-        setFuelType(carsForm.fuelType);
-        setWorking_volume(carsForm.working_volume);
+        changeInputs(carForm.inputs);
+        changeSeats(carForm.seats);
+        setFuelType(carForm.fuelType);
+        setWorking_volume(carForm.working_volume);
 
-        setFiles(carsForm.files);
-
-
+        setFiles(carForm.files);
 
 
 
-    }, [carsForm])
+
+
+    }, [carForm])
 
 
     useEffect(() => {
 
 
-
         if(!!formObject.errorTexts) return;
         let areInputsValid = true;
 
-
-       
+ 
         try {
             inputs.forEach(input => {
 
                 
-
                 if (!!!input.isValid) {
                     console.log(145856, input.isValid,inputs)
                     areInputsValid = false;
-                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
+                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չէ կամ սխալ է լրացված  ';
                     throw new Object;
                 }
             })
@@ -119,12 +115,12 @@ export default function Cars(props) {
         }
 
 
-        carsForm.isValid = !!(carsForm.working_volume && carsForm.fuelType.value && areInputsValid);
+        carForm.isValid = !!(carForm.working_volume && carForm.fuelType.value && areInputsValid);
 
 
-        if (!carsForm.isValid && !formObject.errorTexts) {
+        if (!carForm.isValid && !formObject.errorTexts) {
 
-            if (!carsForm.fuelType.value) {
+            if (!carForm.fuelType.value) {
                 formObject.errorTexts = 'Շարժիչի վառելիք  դաշտը պարտադիր է';
             } else {
                 formObject.errorTexts = 'Շարժիչի աշխատանքային ծավալ  պարտադիր դաշտը լրացված չե կամ լրացված է սխալ';
@@ -134,15 +130,15 @@ export default function Cars(props) {
 
         // formObject.errorTexts.push()
 
-        //**************************************************************************************    */ carsForm has price  
+        //**************************************************************************************    */ carForm has price  
 
 
 
     })
 
 
-    if (!carsForm.files) {
-        carsForm.files = [];
+    if (!carForm.files) {
+        carForm.files = [];
 
     }
 
@@ -151,10 +147,9 @@ export default function Cars(props) {
 
         setFiles(files.concat(newFiles))
 
-        carsForm.files = files.concat(newFiles);
+        carForm.files = files.concat(newFiles);
 
     };
-
 
 
     ////
@@ -188,22 +183,22 @@ export default function Cars(props) {
 
     const [working_volume, setWorking_volume] = React.useState('');
 
-    if (!carsForm.working_volume) {
-        carsForm.working_volume = '';
+    if (!carForm.working_volume) {
+        carForm.working_volume = '';
     }
 
     const handleChange = input => event => {
 
         setWorking_volume(event.target.value)
-        carsForm.working_volume = event.target.value
+        carForm.working_volume = event.target.value
 
     };
 
     const [fuelType, setFuelType] = React.useState({});
 
 
-    if (!carsForm.fuelType) {
-        carsForm.fuelType = {
+    if (!carForm.fuelType) {
+        carForm.fuelType = {
             name: '',
             multiline: '',
             currency: '',
@@ -223,10 +218,7 @@ export default function Cars(props) {
             isValid: true
         }));
 
-        carsForm.fuelType.value = event.target.value;
-
-
-
+        carForm.fuelType.value = event.target.value;
 
     }
 
@@ -248,8 +240,8 @@ export default function Cars(props) {
     };
 
     const [inputs, changeInputs] = useState([])
-    if (!carsForm.inputs) {
-        carsForm.inputs = [
+    if (!carForm.inputs) {
+        carForm.inputs = [
             {
                 label: "Մակնիշ *",
                 name: 'Brand',
@@ -289,16 +281,13 @@ export default function Cars(props) {
             }
         ]
 
-
-
-
     }
 
 
     const [seats, changeSeats] = useState([])
 
-    if (!carsForm.seats) {
-        carsForm.seats = [
+    if (!carForm.seats) {
+        carForm.seats = [
             {
                 title: 'Նստատեղերը կաշվից են',
                 items: [
@@ -320,7 +309,6 @@ export default function Cars(props) {
                 value: 0,
                 valdators: [isRequirers]
 
-
             }
         ]
     }
@@ -329,7 +317,7 @@ export default function Cars(props) {
     return (
 
         <div className="Cars" style={{ textAlign: "left" }}>
-
+            {/* {console.log("car"+ ' ' + formObject.cars[0])} */}
             {props.index == 0 ? <Fab color="primary" aria-label="add"
                 className={classes.fab + " " + "addCarFormContainer"}
                 onClick={

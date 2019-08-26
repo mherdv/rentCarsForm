@@ -12,6 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
+import SendIcon from '@material-ui/icons/Send';
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -43,6 +44,12 @@ const useStyles1 = makeStyles(theme => ({
   message: {
     display: 'flex',
     alignItems: 'center',
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(1),
+  },
+  button: {
+    margin: theme.spacing(1),
   },
 }));
 
@@ -81,6 +88,9 @@ MySnackbarContentWrapper.propTypes = {
 const useStyles2 = makeStyles(theme => ({
   margin: {
     margin: theme.spacing(1),
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -124,9 +134,10 @@ export default function CustomizedSnackbars(props) {
   }
 
   return (
-    <div>
-      <Button variant="outlined" className={classes.margin} onClick={handleClick}>
-        {props.buttonText}
+    <React.Fragment>
+      <Button variant="contained" color="primary" className={classes.button + " " + "send"} onClick={handleClick}>
+          {props.buttonText}
+           <SendIcon className={classes.rightIcon}/>
       </Button>
       <Snackbar
         anchorOrigin={{
@@ -163,6 +174,6 @@ export default function CustomizedSnackbars(props) {
         className={classes.margin}
         message="This is a success message!"
       /> */}
-    </div>
+    </React.Fragment>
   );
 }
