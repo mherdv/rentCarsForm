@@ -31,7 +31,7 @@ export default function Prices(props) {
     let formObject = useContext(UserContext)[0];
     let changeFormObject = useContext(UserContext)[1];
 
-    const [showPrices,ChangeShowPrices] = useState(false)
+    const [showPrices,ChangeShowPrices] = useState(false);
     let pricesForm;
 
     pricesForm = [
@@ -330,7 +330,10 @@ export default function Prices(props) {
 
     
     const  addingCarPrices = input=> event=>{
-        formObject.prices[input.name] =  event.target.value;
+
+
+        input.value = event.target.value;
+        
     }
 
     return (
@@ -383,7 +386,7 @@ export default function Prices(props) {
                                     label={route.label}
                                     placeholder={route.label}
                                     margin="normal"
-
+                                    value = {route.value}
                                     onChange={addingCarPrices(route)}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">AMD</InputAdornment>,

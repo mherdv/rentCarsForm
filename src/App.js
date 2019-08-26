@@ -58,7 +58,7 @@ function App() {
       'AVC':''
     },
     cars: [{}],
-    prices: {},
+    prices: [{}],
 
     errorTexts : '',
     successText: 'ձեր հայտն ընդունված Է',
@@ -93,7 +93,7 @@ function App() {
 
 
         
-        <form className={classes.container} Validate autoComplete="off">
+        <form className={classes.container}  autoComplete="off">
 
           <SectionTitle number={<PeopleIcon/>} title={"Գործընկեր"} />
           <Partner />
@@ -110,7 +110,7 @@ function App() {
             <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText ='finall add'/>
         
         </div>
-          <Button onClick={sendForm} variant="contained" color="primary" className={classes.button + " " + "send"}>
+          <Button onClick={sendForm} variant="contained" color="primary" className={classes.button  + " send"}>
           Ուղարկել
            <SendIcon className={classes.rightIcon}/>
           </Button>
