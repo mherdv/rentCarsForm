@@ -1,4 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -6,13 +8,12 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import UserContext from '../../contextBigForm';
 
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import Favorite from '@material-ui/icons/Favorite';
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -38,27 +39,22 @@ const useStyles = makeStyles(theme => ({
 
 export default function Prices(props) {
 
-    let priceForm = props.thisPriceForm;
+    // let priceForm = props.thisPriceForm;
 
 
     const classes = useStyles();
 
 
-    let formObject = useContext(UserContext)[0];
-    let changeFormObject = useContext(UserContext)[1];
-    let inputs = useContext(UserContext)[0];
+    let formObject = useContext(UserContext)[0]       || props.fo;
+    let changeFormObject = useContext(UserContext)[1] || props.cfo ;
 
-    let [cars, changeCars] = useState(formObject.cars)
+    // let inputs = useContext(UserContext)[0];
 
-
-
-
-    // const [cars, changeCars] = useState(formObject.cars);
+    let [cars, changeCars] = useState(formObject.cars);
 
     useEffect(() => {
+        changeCars(formObject.cars);
 
-        // console.log(cars)
-        changeCars(formObject.cars)
     })
 
     const [showPrices, ChangeShowPrices] = useState(false);
@@ -366,92 +362,133 @@ export default function Prices(props) {
         checkedF: true,
     });
 
-  
+
     const handleChange = name => event => {
         setState({ ...state, [name]: event.target.checked });
     };
     return (
         <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
 
-            {cars.map((car, index) => {
+            {formObject.cars.length > 1 && props.index === 0 ? <Fab color="primary" aria-label="add"
+                className={classes.fab + " addCarFormContainer"}
+                onClick={
+                    function () {
 
-                return (
-                    <div className={classes.marginLeft}>
-                        {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
-                            <FormControlLabel
-                            control={
-                                <Checkbox
+                        let priceObj = {}
+                        formObject.prices.push(priceObj);
 
-                                    onChange={handleChange(index)}
-                                    value={car.inputs[0].value}
-                                    color="primary"
-                                />
-                            }
-                            label={car.inputs[0].value}
-                        /></Grid> : null}
-                    </div>
-                )
+                        changeFormObject({ ...formObject });
 
-            })}
+                        let div = document.createElement('div');
 
-            {/* {cars.map((car, index) => {
-                console.log(car.inputs[0].value)
-                if(car.inputs[0].value){
-                    return <div>{car.inputs[0].value}</div>
-                }else{
-                   return  null
-                }            
-            })} */}
+                        div.classList.add('priceFormContainer');
+                        let elem = <Prices index={formObject.prices.indexOf(priceObj)} fo ={formObject}  cfo={changeFormObject} thisPriceForm={priceObj} />
 
-            {/* <CustomizedSnackbars type='error' massage='it should be minimum one price exist'></CustomizedSnackbars> */}
-            <div className={classes.container}>
+                        ReactDOM.render(
+                            elem,
+                            div
+                        );
 
-                {pricesForm.map((pricesForm, index) => {
+                        document.querySelector('#pricesContainer').appendChild(div)
+                    }
+                }
+            >
+                <AddIcon />
+            </Fab> : null}
+            <div>
+                { formObject.prices.length > 1 && props.index !== 0 ?
+                        <Fab aria-label="delete"
+                            className={classes.fab + ' removeButtonContainer'}
+                            onClick={
+                                function (event) {
+                                    formObject.prices.splice(props.index, 1);
+
+                                    let container = event.target.closest('.priceFormContainer')
+
+                                    changeFormObject({ ...formObject, prices: [...formObject.cars] });
+
+                                    setTimeout(() => {
+
+                                        ReactDOM.unmountComponentAtNode(container);
+                                    })
+
+                                }}>
+                            <DeleteIcon />
+                        </Fab>
+
+                        : null
+                }
+
+                {cars.map((car, index) => {
+
                     return (
-                        <Grid item xs={6} key={index} >
-                            <TextField
-                                key={index}
-                                id="standard-name"
-                                label="Name"
-                                value={pricesForm.value}
-                                className={classes.textField}
-                                label={pricesForm.label}
+                        <div className={classes.marginLeft}>
+                            {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
 
-                                onChange={addingCarPrices(pricesForm)}
-                                placeholder={pricesForm.label}
-                                margin="normal" />
-                        </Grid>
+                                            onChange={handleChange(index)}
+                                            value={car.inputs[0].value}
+                                            color="primary"
+                                        />
+                                    }
+                                    label={car.inputs[0].value}
+                                /></Grid> : null}
+                        </div>
                     )
+
                 })}
-                <Grid item xs={12} >
 
-                    <Button variant="outlined" color="primary" className={classes.button} onClick={() => ChangeShowPrices(!showPrices)}>
-                        Գին ըստ ֆիքսված երթուղու
+                <div className={classes.container + ' price-inputs'}>
+
+                    {pricesForm.map((pricesForm, index) => {
+                        return (
+                            <Grid item xs={6} key={index} >
+                                <TextField
+                                    key={index}
+                                    id="standard-name"
+                                    label="Name"
+                                    value={pricesForm.value}
+                                    className={classes.textField}
+                                    label={pricesForm.label}
+
+                                    onChange={addingCarPrices(pricesForm)}
+                                    placeholder={pricesForm.label}
+                                    margin="normal" />
+                            </Grid>
+                        )
+                    })}
+                    <Grid item xs={12} >
+
+                        <Button variant="outlined" color="primary" className={classes.button} onClick={() => ChangeShowPrices(!showPrices)}>
+                            Գին ըստ ֆիքսված երթուղու
                 </Button>
-                </Grid>
+                    </Grid>
 
 
-                {showPrices ? (routes.map((route, index) => {
-                    return (
-                        <Grid item xs={6} key={index} >
-                            <TextField
+                    {showPrices ? (routes.map((route, index) => {
+                        return (
+                            <Grid item xs={6} key={index} >
+                                <TextField
 
-                                id="standard-name"
-                                label="Name"
-                                className={classes.textField}
-                                label={route.label}
-                                placeholder={route.label}
-                                margin="normal"
-                                value={route.value}
-                                onChange={addingCarPrices(route)}
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
-                                }}
-                            />
-                        </Grid>
-                    )
-                })) : null}
+                                    id="standard-name"
+                                    label="Name"
+                                    className={classes.textField}
+                                    label={route.label}
+                                    placeholder={route.label}
+                                    margin="normal"
+                                    value={route.value}
+                                    onChange={addingCarPrices(route)}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
+                                    }}
+                                />
+                            </Grid>
+                        )
+                    })) : null}
 
+                </div>
             </div>
         </div>
 

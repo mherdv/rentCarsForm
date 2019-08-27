@@ -83,7 +83,7 @@ legend {
   position: absolute !important;
   right: 10px;
   text-align: right;
-  margin-top: -50px !important;
+  margin-top: -56px !important;
   /* color: #0d47a1; */
 }
 .addCarFormContainer span,
@@ -96,54 +96,23 @@ legend {
   text-align: right;
   margin-top: 10px;
 }
-.car-inputs:not(:first-child) {
+.car-inputs:not(:first-child),
+.price-inputs:not(:first-child) {
   padding-top: 30px;
 }
 .dropZone-wrapper {
   width: 100%;
 }
-.dzu-dropzone {
-  border: none !important;
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-  overflow: hidden !important;
-}
-.dropZone,
-.dzu-inputLabel {
+.dropZone{
   margin: auto;
   padding: 15px 20px;
   background-color: rgba(0, 66, 112, 0.1);
-  /*border-radius: 10px;*/
-  -webkit-border-radius: 0px;
   border: 2px dashed #0d47a1;
   color: #0d47a1;
   font-weight: 500;
   width: 50% !important;
 }
-.dzu-inputLabel {
-  color: #0d47a1 !important;
-}
-.dzu-previewImage {
-  max-height: 500px !important;
-  margin: auto;
-}
-.dzu-previewContainer {
-  width: 33% !important;
-}
-.dzu-previewContainer progress {
-  display: none;
-}
-.dzu-inputLabelWithFiles,
-.dzu-submitButtonContainer {
-  width: 100%;
-  padding: 0 !important;
-  margin: 15px 0 !important;
-}
-.dzu-previewButton {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
+
 .addCarFormContainer,
 .removeButtonContainer {
   border-radius: 50%;
@@ -157,29 +126,42 @@ legend {
   font-size: 20px;
 }
 .addCarFormContainer {
-  background-color: #0d47a1;
+  background-color: #0d47a1!important;
 }
 .removeButtonContainer {
   background-color: #f44336;
   padding: 5px 13px;
 }
-
+.imgContainer img{
+  object-fit: cover;
+}
+.imgContainer:hover .removeImage{
+  display: flex;
+}
 .removeImage{
+  display: none;
+  background-color: rgba(13, 71, 161, 1);
+  width: 100px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
   position: absolute;
-  top: 7px;
-  right: 0;
+  top: 10px;
+  left: 0px;
   z-index: 999;
   right: 13px;
   cursor: pointer;
-  color: #fff;
+  color: #e1e8ec
 }
-
 .invalid *{
   color: red !important;
 
 }
 .send {
   margin: 20px auto !important;
+}
+#pricesContainer{
+  width: 100%!important;
 }
 @media only screen and (max-width: 735px) {
   .Prices label {

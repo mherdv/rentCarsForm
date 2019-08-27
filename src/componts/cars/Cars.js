@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-
 import ReactDOM from 'react-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -15,6 +14,7 @@ import Select from '@material-ui/core/Select';
 import 'react-dropzone-uploader/dist/styles.css';
 
 import ReactDropzone from 'react-dropzone';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
@@ -57,9 +57,7 @@ const useStyles = makeStyles(theme => ({
     },
     selectEmpty: {
         marginTop: theme.spacing(2),
-    },
-
-
+    }
 }));
 
 
@@ -479,6 +477,7 @@ export default function Cars(props) {
                                 <div className="dropZone" {...getRootProps()}>
                                     <input {...getInputProps()} />
                                     <p>Drag 'n' drop some files here, or click to select files</p>
+                                    <CloudUploadIcon style={{ fontSize: 30 }}></CloudUploadIcon>
                                 </div>
                             </section>
                         )}
@@ -523,7 +522,7 @@ export default function Cars(props) {
                                             files.splice(index, 1);
                                             setFiles([...files]);
                                             // event.target.closest('.imgContainer').remove()
-                                        }}>x</div>
+                                        }}><DeleteIcon /></div>
 
                                     </div>
                                 )

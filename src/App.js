@@ -82,8 +82,6 @@ function App() {
   }
 
 
-
-
   return (
     
     <MuiThemeProvider theme={theme}>
@@ -103,27 +101,21 @@ function App() {
 
 
           <div id='carsContainer'>
-             
-
               <div className='carFormContainer'> <Cars key={0} index={0} thisCarForm={formObject.cars[0]}/></div>
-
           </div>
-          {/* {formObject.cars.map((car, index) => {
-            return <Cars key={index} index={index} thisCarForm={car}/>
-            
-          })} */}
+          
 
 
            <SectionTitle number={<AttachMoneyIcon/>} title={"Գներ"} />
 
-          {formObject.prices.map((price,index) => {
-            return <Prices key={index} index={index} thisPriceForm={price}/>
-          })}
+          <div id='pricesContainer'>
+              <div className='priceFormContainer'><Prices key={0} index={0} thisPriceForm={formObject.prices[0]}/></div>
+          </div>
 
 
             <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText ='Ուղարկել'/>
           
-          {/* <div   style={{textAlign:'center', width:'100%', background:'gray', color:'#fff', cursor:'pointer'}}>finall add</div> */}
+
         </form>
       </UserProvider>
     </div>
