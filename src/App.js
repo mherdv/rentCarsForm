@@ -100,10 +100,19 @@ function App() {
           <Partner />
           <SectionTitle number={<DirectionsCarIcon/>} title={"Ավտոմեքենա"} />
 
-          {formObject.cars.map((car, index) => {
+
+
+          <div id='carsContainer'>
+             
+
+              <div className='carFormContainer'> <Cars key={0} index={0} thisCarForm={formObject.cars[0]}/></div>
+
+          </div>
+          {/* {formObject.cars.map((car, index) => {
             return <Cars key={index} index={index} thisCarForm={car}/>
             
-          })}
+          })} */}
+
 
            <SectionTitle number={<AttachMoneyIcon/>} title={"Գներ"} />
 

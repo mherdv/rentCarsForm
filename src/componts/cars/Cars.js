@@ -1,4 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
+
+
+import ReactDOM from 'react-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -63,8 +66,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function Cars(props) {
     const classes = useStyles();
-    let formObject = useContext(UserContext)[0];
-    let changeFormObject = useContext(UserContext)[1];
+    let formObject = useContext(UserContext)[0] || props.formObject;
+    let changeFormObject = useContext(UserContext)[1] || props.changeFormObject;
 
     let carForm = props.thisCarForm;
 
@@ -82,7 +85,6 @@ export default function Cars(props) {
         setWorking_volume(carForm.working_volume);
 
         setFiles(carForm.files);
-
 
 
 
@@ -207,7 +209,7 @@ export default function Cars(props) {
         carForm.fuelType.value = event.target.value;
 
     }
-    
+
     const handleValueChange = input => event => {
         clearTimeout(inputDetector)
         inputDetector = null
@@ -309,7 +311,10 @@ export default function Cars(props) {
     }
 
 
+    console.log(formObject)
+
     return (
+
 
         <div className="Cars" style={{ textAlign: "left" }}>
 
@@ -317,9 +322,24 @@ export default function Cars(props) {
                 className={classes.fab + " addCarFormContainer"}
                 onClick={
                     function () {
-                        formObject.cars.push({});
+
+                        let carObj = {}
+                        formObject.cars.push(carObj);
 
                         changeFormObject({ ...formObject });
+
+                        let div = document.createElement('div');
+
+                        div.classList.add('carFormContainer')
+                        let elem = <Cars index={formObject.cars.indexOf(carObj)} formObject={formObject} changeFormObject={changeFormObject} thisCarForm={carObj} />
+
+                        ReactDOM.render(
+                            elem,
+                            div
+                        );
+
+                        // ReactDOM.render(<Cars index ={formObject.cars.indexOf(carObj)} thisCarForm={carObj}/>,div);
+                        document.querySelector('#carsContainer').appendChild(div)
                     }
                 }
             >
@@ -331,10 +351,18 @@ export default function Cars(props) {
                         <Fab aria-label="delete"
                             className={classes.fab + ' removeButtonContainer'}
                             onClick={
-                                function () {
+                                function (event) {
                                     formObject.cars.splice(props.index, 1);
 
-                                    changeFormObject({ ...formObject });
+                                    let container = event.target.closest('.carFormContainer')
+
+                                    changeFormObject({ ...formObject , cars: [...formObject.cars]});
+                                    // event.target.closest('.carFormContainer').remove();a
+                                    
+                                    setTimeout(()=>{
+
+                                        ReactDOM.unmountComponentAtNode(container);
+                                    })
 
                                 }}>
                             <DeleteIcon />
@@ -376,7 +404,7 @@ export default function Cars(props) {
 
                                             changeSeats([...seats])
                                         }
-                                    } value={seat.value + ''}>
+                                    } value={seat.value}>
                                         <Grid item xs={12} >
                                             <div>
                                                 {seat.items.map((option, index) => {
