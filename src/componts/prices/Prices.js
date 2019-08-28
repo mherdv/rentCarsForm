@@ -6,7 +6,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import UserContext from '../../contextBigForm';
+
+import connect from 'react-watcher';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -37,25 +38,38 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Prices(props) {
+
+
+
+export default connect(function Prices(props) {
 
     // let priceForm = props.thisPriceForm;
 
-
+    let callB = [];
     const classes = useStyles();
 
 
-    let formObject = useContext(UserContext)[0]       || props.fo;
-    let changeFormObject = useContext(UserContext)[1] || props.cfo ;
+    let formObject       =      props.context[0];
+    let changeFormObject =      props.context[1];
 
+
+    let[ thisPrices,changeThisPrice] =  useState(props.thisPriceForm) ;
+    
     // let inputs = useContext(UserContext)[0];
+    
 
     let [cars, changeCars] = useState(formObject.cars);
-
+    
+      
     useEffect(() => {
-        changeCars(formObject.cars);
+        // changeCars(formObject.cars)
+        if(!~formObject.callBacks.indexOf(callB)){
+            callB.push([changeCars, formObject.cars])
+            
+            formObject.callBacks.push(callB )
+        }
 
-    })
+    },[])
 
     const [showPrices, ChangeShowPrices] = useState(false);
     let pricesForm;
@@ -64,11 +78,13 @@ export default function Prices(props) {
         {
             label: "Գին 1կմ ի համար",
             name: 'withoudivriver',
+            index:1
 
         },
         {
             label: "Գին 1կմ ի համար վարորդով",
             name: 'withDriver',
+            index:2
 
         }
     ];
@@ -78,283 +94,343 @@ export default function Prices(props) {
         {
             label: "City tour in Yerevan",
             name: '',
+            index:3
 
         },
         {
             label: "Khor Virap-Noravank-Selim-Sevan",
             name: '',
+            index:4
 
         },
         {
             label: "Echmiadzin",
             name: '',
+            index:5
 
         },
         {
             label: "Airport",
             name: '',
+            index:6
 
         },
         {
             label: "Khor Virap-Noravank-Tatev",
             name: '',
+            index:7
 
         },
         {
             label: "Stepanakert",
             name: '',
+            index:8
 
         },
         {
             label: "Sevan",
             name: '',
+            index:9
 
         },
         {
             label: "Tsaghkadzor",
             name: '',
+            index:10
 
         },
         {
             label: "Khor Virap",
             name: '',
+            index:11
 
         },
         {
             label: "Bagratashen",
             name: '',
+            index:12
 
         },
         {
             label: "Ejmiatsin-Sardarapat",
             name: '',
+            index:13
 
         },
         {
             label: "Garni-Geghart",
             name: '',
+            index:14
 
         },
         {
             label: "Ashtarak-Oshakan",
             name: '',
 
+            index:15
         },
         {
             label: "Ashtarak-Byurakan",
             name: '',
 
+            index:16
+
         },
         {
             label: "Ashtarak-Amberd",
             name: '',
+            index:17
 
         },
         {
             label: "Aghveran",
             name: '',
+            index:18
 
         },
         {
             label: "Hankavan",
             name: '',
+            index:19
 
         },
         {
             label: "Sevan-Tsaghkadzor",
             name: '',
+            index:20
 
         },
         {
             label: "Sevan-Ayrivank-Noratus",
             name: '',
+            index:21
 
         },
         {
             label: "Sevan-Haghartzin",
             name: '',
 
+            index:22
+
         },
         {
             label: "Sevan-Haghartzin-Goshavank",
             name: '',
+
+            index:23
 
         },
         {
             label: "Tsapatagh",
             name: '',
 
+            index:24
+
         },
         {
             label: "Khor Virap-Noravank",
             name: '',
+
+            index:25
 
         },
         {
             label: "Khor Virap-Noravank-Jermuk",
             name: '',
 
+            index:26
+
         },
         {
             label: "Sisian",
             name: '',
+            index:27
 
         },
         {
             label: "Goris-Khndzoresk",
             name: '',
+            index:28
 
         },
         {
             label: "Kapan",
             name: '',
-
+            index:29
         },
         {
             label: "Megri",
             name: '',
+            index:30
 
         },
         {
             label: "Vanadzor",
             name: '',
+            index:31
 
         },
         {
             label: "Sanahin-Haghpat",
             name: '',
+            index:32
 
         },
         {
             label: "Bavra",
             name: '',
+            index:33
 
         },
         {
             label: "Tbilisi",
             name: '',
+            index:34
 
         },
         {
             label: "Gyumri",
             name: '',
+            index:35
 
         },
         {
             label: "Yenokavan",
             name: '',
+            index:36
 
         },
         {
             label: "Ani",
             name: '',
+            index:37
 
         },
         {
             label: "Oshakan-Amberd",
             name: '',
+            index:38
 
         },
         {
             label: "Ashtaraki Dzor",
             name: '',
+            index:39
 
         },
         {
             label: "Ashtarak-Saghmosavank-Ohanavank",
             name: '',
+            index:40
 
         },
         {
             label: "Tsaghkadzor-Sevan",
             name: '',
+            index:41
 
         },
         {
             label: "Tsaghkadzor-Sevan-Haghartsin",
             name: '',
+            index:42
 
         },
         {
             label: "Sevan-Noraduz-Haghartsin",
             name: '',
+            index:43
 
         },
         {
             label: "Gavar",
             name: '',
+            index:44
 
         },
         {
             label: "Khor Virap-Noravank-Gladzor",
             name: '',
+            index:45
 
         },
         {
             label: "Stepanakert (2day/1night)",
             name: '',
+            index:46
 
         },
         {
             label: "Kharabagh (3day/2nights)",
             name: '',
+            index:47
 
         },
         {
             label: "Kharabagh+Jermuk(4day/3nights)",
             name: '',
+            index:48
 
         },
         {
             label: "Sanahin-Haghpat-Odzun",
             name: '',
+            index:49
 
         },
         {
             label: "Aruch-Talin-Mastara",
             name: '',
+            index:50
 
         },
         {
             label: "Gyumri-Marmashen",
             name: '',
+            index:51
 
         },
         {
             label: "Khndzoresk",
             name: '',
+            index:52
 
         },
         {
             label: "Tatev",
             name: '',
+            index:53
 
         },
         {
             label: "Tatev-Khndzoresk",
             name: '',
+            index:54
 
         },
         {
             label: "Haghartsin-Dilijan-Goshavank",
             name: '',
+            index:55
 
         },
         {
             label: "Sevan-Dilijan-Haghpat-Sanahin-Armenian-Georgian border",
             name: '',
+            index:56
 
         },
         {
             label: "Parking in Airport",
             name: '',
+            index:57
 
         }
 
     ]
 
     const addingCarPrices = input => event => {
-        formObject.prices[input.name] = event.target.value;
+        thisPrices[input.index] = event.target.value;
     }
     const [state, setState] = React.useState({
         checkedA: true,
@@ -363,10 +439,28 @@ export default function Prices(props) {
     });
 
 
-    const handleChange = name => event => {
+    const handleChange = (name,className) => event => {
+        
+        let thisClassElements  = [...document.querySelectorAll(className)];
+        thisClassElements.forEach(checkbox =>{
+            let input = checkbox.querySelector('input')
+            
+            if(input != event.target.closest('input') && input.checked && event.isTrusted){
+
+                input.click()
+                
+            }
+        })
+
+        // event.target.checked = true
         setState({ ...state, [name]: event.target.checked });
     };
     return (
+
+        // <UserProvider value={[formObject, changeFormObject]}>
+
+
+        // </UserProvider>
         <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
 
             {formObject.cars.length > 1 && props.index === 0 ? <Fab color="primary" aria-label="add"
@@ -382,7 +476,7 @@ export default function Prices(props) {
                         let div = document.createElement('div');
 
                         div.classList.add('priceFormContainer');
-                        let elem = <Prices index={formObject.prices.indexOf(priceObj)} fo ={formObject}  cfo={changeFormObject} thisPriceForm={priceObj} />
+                        let elem = <Prices {...props} index={formObject.prices.indexOf(priceObj)}   thisPriceForm={priceObj} />
 
                         ReactDOM.render(
                             elem,
@@ -405,7 +499,11 @@ export default function Prices(props) {
 
                                     let container = event.target.closest('.priceFormContainer')
 
-                                    changeFormObject({ ...formObject, prices: [...formObject.cars] });
+                                    changeFormObject({ ...formObject, prices: [...formObject.prices] });
+
+
+
+                                    formObject.callBacks.splice (formObject.callBacks.indexOf(callB),1 );
 
                                     setTimeout(() => {
 
@@ -420,15 +518,15 @@ export default function Prices(props) {
                 }
 
                 {cars.map((car, index) => {
-
+                    
                     return (
-                        <div className={classes.marginLeft}>
+                        <div className={classes.marginLeft+' checkBox_'+index}>
                             {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
                                 <FormControlLabel
                                     control={
                                         <Checkbox
 
-                                            onChange={handleChange(index)}
+                                            onChange={handleChange(index, '.checkBox_'+index)}
                                             value={car.inputs[0].value}
                                             color="primary"
                                         />
@@ -439,6 +537,7 @@ export default function Prices(props) {
                     )
 
                 })}
+
 
                 <div className={classes.container + ' price-inputs'}>
 
@@ -494,4 +593,4 @@ export default function Prices(props) {
 
 
     )
-}
+})

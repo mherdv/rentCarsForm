@@ -64,9 +64,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function Cars(props) {
     const classes = useStyles();
-    let formObject = useContext(UserContext)[0] || props.formObject;
-    let changeFormObject = useContext(UserContext)[1] || props.changeFormObject;
-
+    let formObject = useContext(UserContext)[0] ||       props.formObject      ;  //formObject, changeFormObject
+    let changeFormObject = useContext(UserContext)[1] || props.changeFormObject;  //formObject, changeFormObject
+    
     let carForm = props.thisCarForm;
 
 
@@ -212,8 +212,15 @@ export default function Cars(props) {
         clearTimeout(inputDetector)
         inputDetector = null
         inputDetector = setTimeout(() => {
-            console.log(inputDetector)
+            // console.log(inputDetector)
             changeFormObject({ ...formObject, cars: formObject.cars })
+
+
+
+            
+            formObject.callBacks.forEach(callB=>{
+                callB[0][0]([...callB[0][1]])
+            })
         }, 500)
 
         input.value = event.target.value;
@@ -228,8 +235,8 @@ export default function Cars(props) {
             }
         })
 
-
         changeInputs([...inputs]);
+        
 
 
     };
@@ -309,7 +316,7 @@ export default function Cars(props) {
     }
 
 
-    console.log(formObject)
+    // console.log(formObject)
 
     return (
 
@@ -335,6 +342,8 @@ export default function Cars(props) {
                             elem,
                             div
                         );
+
+
 
                         // ReactDOM.render(<Cars index ={formObject.cars.indexOf(carObj)} thisCarForm={carObj}/>,div);
                         document.querySelector('#carsContainer').appendChild(div)

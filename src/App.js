@@ -45,10 +45,11 @@ const theme = createMuiTheme({
     },
 });
 
+
+
+
 function App() {
   const classes = useStyles();
-
-
 
   const [formObject, changeFormObject] = useState({
     partnerInfo: {
@@ -64,7 +65,8 @@ function App() {
     successText: 'ձեր հայտն ընդունված Է',
     isFormValid: true,
     isAdded:false,
-    notificationType:'error'
+    notificationType:'error',
+    callBacks : []
   });
 
 
@@ -101,7 +103,8 @@ function App() {
 
 
           <div id='carsContainer'>
-              <div className='carFormContainer'> <Cars key={0} index={0} thisCarForm={formObject.cars[0]}/></div>
+
+              <div className='carFormContainer'> <Cars key={0} index={0} thisCarForm={formObject.cars[0]} /></div>
           </div>
           
 
@@ -109,7 +112,8 @@ function App() {
            <SectionTitle number={<AttachMoneyIcon/>} title={"Գներ"} />
 
           <div id='pricesContainer'>
-              <div className='priceFormContainer'><Prices key={0} index={0} thisPriceForm={formObject.prices[0]}/></div>
+              
+              <div className='priceFormContainer'><Prices key={0} index={0} thisPriceForm={formObject.prices[0]} cars ={formObject.cars}  context= {[formObject,  changeFormObject]} /></div>
           </div>
 
 
