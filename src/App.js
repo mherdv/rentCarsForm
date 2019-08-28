@@ -58,6 +58,15 @@ function App() {
       'Email':'',
       'AVC':''
     },
+
+
+
+
+
+    // todo adding cars checkboxes 
+
+    checkedCarsCount: 0,
+
     cars: [{}],
     prices: [{}],
 
@@ -76,9 +85,28 @@ function App() {
     let hasError = !!formObject.errorTexts.trim();
 
     
-    formObject.notificationType = hasError?'error':'success'
 
+
+    formObject.notificationType = hasError?'error':'success'
+    
     changeFormObject({...formObject, isAdded: true,errorTexts : '',notificationType:hasError?'error':'success'});
+    if(!hasError){
+      alert()
+      try {
+      
+        formObject.cars.forEach(car=>{
+          if(!car.priceForm) throw new Error;
+  
+        })
+      } catch (e) {
+        // hasError = true;
+        // formObject.errorTexts = car.inputs[0].label + ' ավտոմեքենայի համար գին նշած չէ';
+  
+  
+        alert()
+  
+      }
+    }
 
 
   }

@@ -69,6 +69,8 @@ export default connect(function Prices(props) {
             formObject.callBacks.push(callB )
         }
 
+        thisPrices.prices = {};
+
     },[])
 
     const [showPrices, ChangeShowPrices] = useState(false);
@@ -430,16 +432,27 @@ export default connect(function Prices(props) {
     ]
 
     const addingCarPrices = input => event => {
-        thisPrices[input.index] = event.target.value;
+        thisPrices.prices[input.index] = event.target.value;
+
+
+        if(!event.target.value)
+             delete thisPrices.prices[input.index];
+        
+
+             
+        if(!Object.keys(thisPrices.prices).length){
+            thisPrices.isValid = false;
+        }else{
+            thisPrices.isValid = true
+        }   
+        
+
     }
-    const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
-        checkedF: true,
-    });
+
+    
 
 
-    const handleChange = (name,className) => event => {
+    const handleChange = (name,className, carObj,index) => event => {
         
         let thisClassElements  = [...document.querySelectorAll(className)];
         thisClassElements.forEach(checkbox =>{
@@ -450,10 +463,43 @@ export default connect(function Prices(props) {
                 input.click()
                 
             }
+
+            
+
+            if(input.checked){
+
+                // formObject.checkedCarsCount++;
+
+                carObj.priceForm = thisPrices
+
+                // thisPrices.cars.push(index)
+
+            }else{
+
+
+                carObj.priceForm = null;
+                // formObject.checkedCarsCount--;
+                // thisPrices.cars.splice(thisPrices.cars.indexOf(index),1)
+
+
+            }
+            
+               
+
+                
+
+
+            
+
         })
 
+
+        
+
+
+
         // event.target.checked = true
-        setState({ ...state, [name]: event.target.checked });
+        // setState({ ...state, [name]: event.target.checked });
     };
     return (
 
@@ -526,7 +572,7 @@ export default connect(function Prices(props) {
                                     control={
                                         <Checkbox
 
-                                            onChange={handleChange(index, '.checkBox_'+index)}
+                                            onChange={handleChange(index, '.checkBox_'+index, car, index)}
                                             value={car.inputs[0].value}
                                             color="primary"
                                         />

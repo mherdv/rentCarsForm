@@ -219,7 +219,7 @@ export default function Cars(props) {
 
             
             formObject.callBacks.forEach(callB=>{
-                callB[0][0]([...callB[0][1]])
+                callB[0][0]([...formObject.cars])
             })
         }, 500)
 
@@ -369,6 +369,13 @@ export default function Cars(props) {
                                     setTimeout(()=>{
 
                                         ReactDOM.unmountComponentAtNode(container);
+
+                                        
+
+            
+                                        formObject.callBacks.forEach(callB=>{
+                                            callB[0][0]([...formObject.cars])
+                                        })
                                     })
 
                                 }}>

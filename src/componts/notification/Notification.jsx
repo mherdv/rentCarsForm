@@ -113,8 +113,8 @@ export default function CustomizedSnackbars(props) {
     
   },[props.massage.errorTexts,props.massage.notificationType])
   function handleClick() {
-    setOpen(true);
     props.click();
+    setOpen(true);
     changeErrorMassage(props.massage.errorTexts);
     changeType(props.massage.notificationType);
 
