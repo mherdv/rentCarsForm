@@ -46,21 +46,7 @@ export default function Partner(props) {
 
 
   useEffect(() => {
-    if (formObject.errorTexts) return;
-
-    try {
-
-      inputs.forEach(input => {
-        if (!!!input.isValid) {
-          formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
-
-          throw new Error();
-        }
-
-      })
-    } catch (e) {
-
-    }
+    formObject.partnerInfoValidArray  = inputs
   })
   const handleValueChange = input => event => {
     // changeHandler({ ...values, value: event.target.value });
@@ -78,6 +64,8 @@ export default function Partner(props) {
 
     changeInputs([...inputs])
     formObject.partnerInfo[input.name] = input.value;
+
+    
 
   };
 

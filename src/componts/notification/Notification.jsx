@@ -100,6 +100,8 @@ export default function CustomizedSnackbars(props) {
 
   let [errorMassage , changeErrorMassage] =  React.useState(props.massage.errorTexts);
   let [successMassage , changeSuccessMassage] =  React.useState(props.massage.successText);
+  let [infoMassage , changeInfoMassage] =  React.useState(props.massage.infoText);
+  
   let [type , changeType] =  React.useState(props.massage.notificationType);
 
 
@@ -114,11 +116,17 @@ export default function CustomizedSnackbars(props) {
   },[props.massage.errorTexts,props.massage.notificationType])
   function handleClick() {
     props.click();
-    setOpen(true);
+    
+
+
     changeErrorMassage(props.massage.errorTexts);
     changeType(props.massage.notificationType);
+    setTimeout(()=>{
 
+      setOpen(true);
+    })
 
+    
   }
 
   function handleClose(event, reason) {
@@ -130,7 +138,7 @@ export default function CustomizedSnackbars(props) {
 
     setOpen(false);
     
-    changeErrorMassage(props.massage.errorTexts);
+    // changeErrorMassage(props.massage.errorTexts);
   }
 
   return (
@@ -145,13 +153,15 @@ export default function CustomizedSnackbars(props) {
           horizontal: 'center',
         }}
         open={open}
-        autoHideDuration={3000}
+        autoHideDuration={6000}
         onClose={handleClose}
       >
         <MySnackbarContentWrapper
           onClose={handleClose}
-          variant={!!!errorMassage.trim()?'success':'error'}
-          message={!!!errorMassage.trim()? successMassage: errorMassage}
+          variant={type}
+
+          
+          message={type=='success'? successMassage:type=='info'?infoMassage: errorMassage}
         />
       </Snackbar>
       {/* <MySnackbarContentWrapper

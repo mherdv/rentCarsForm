@@ -13,6 +13,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import 'react-dropzone-uploader/dist/styles.css';
 
+
+
 import ReactDropzone from 'react-dropzone';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
@@ -64,7 +66,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Cars(props) {
     const classes = useStyles();
-    let formObject = useContext(UserContext)[0] ||       props.formObject      ;  //formObject, changeFormObject
+    let formObject =       useContext(UserContext)[0] ||       props.formObject      ;  //formObject, changeFormObject
     let changeFormObject = useContext(UserContext)[1] || props.changeFormObject;  //formObject, changeFormObject
     
     let carForm = props.thisCarForm;
@@ -89,48 +91,7 @@ export default function Cars(props) {
     }, [carForm])
 
 
-    useEffect(() => {
-
-
-        if (!!formObject.errorTexts) return;
-        let areInputsValid = true;
-
-
-        try {
-            inputs.forEach(input => {
-
-
-                if (!!!input.isValid) {
-                    areInputsValid = false;
-                    formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
-                    throw new Error();
-                }
-            })
-        } catch (e) {
-
-        }
-
-
-        carForm.isValid = !!(carForm.working_volume && carForm.fuelType.value && areInputsValid);
-
-
-        if (!carForm.isValid && !formObject.errorTexts) {
-
-            if (!carForm.fuelType.value) {
-                formObject.errorTexts = 'Շարժիչի վառելիք  դաշտը պարտադիր է';
-            } else {
-                formObject.errorTexts = 'Շարժիչի աշխատանքային ծավալ  պարտադիր դաշտը լրացված չե կամ լրացված է սխալ';
-            }
-
-        }
-
-        // formObject.errorTexts.push()
-
-        //**************************************************************************************    */ carForm has price  
-
-
-
-    })
+    
 
 
     if (!carForm.files) {
@@ -219,7 +180,9 @@ export default function Cars(props) {
 
             
             formObject.callBacks.forEach(callB=>{
-                callB[0][0]([...formObject.cars])
+
+                // console.log(callB[0][1])
+                callB[0][0]([...callB[0][1]])
             })
         }, 500)
 
