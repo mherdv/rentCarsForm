@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -17,6 +17,7 @@ import Prices from "./componts/prices/Prices";
 import { UserProvider } from './contextBigForm.jsx'
 import CustomizedSnackbars from './componts/notification/Notification';
 
+let stateOfApplication ={};
 
 
 const useStyles = makeStyles(theme => ({
@@ -81,6 +82,15 @@ function App() {
     isSended:false,
     callBacks: []
   });
+
+  stateOfApplication.formObject         =         formObject;
+  stateOfApplication.changeFormObject   =   changeFormObject;
+
+  useEffect(()=>{
+    stateOfApplication.formObject = formObject;
+    stateOfApplication.changeFormObject= changeFormObject;
+  })
+
 
 
 
@@ -193,10 +203,11 @@ function App() {
 
   function sendForm() {
     // if(formObject.isSended) return;
+    formObject.errorTexts = ''
     partnerValidationChecking();
     carsFormValidationChecking();
     setFormPrices();
-    // removeEmptyPriceForms()
+    removeEmptyPriceForms()
 
 
     
@@ -210,7 +221,7 @@ function App() {
 
 
 
-    changeFormObject({ ...formObject, isAdded: true, errorTexts: '', notificationType: hasError ? 'error' : 'info' });
+    changeFormObject({ ...formObject, isAdded: true, errorTexts:formObject.errorTexts, notificationType: hasError ? 'error' : 'info' });
 
 
 
@@ -274,4 +285,5 @@ function App() {
   );
 }
 
+export const appState = stateOfApplication ;
 export default App;

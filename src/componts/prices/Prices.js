@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
+import {appState} from '../../App';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -51,7 +53,7 @@ export default connect(function Prices(props) {
     // let priceForm = props.thisPriceForm;
 
 
-    
+    // console.log(appState)
 
 
 
@@ -60,8 +62,8 @@ export default connect(function Prices(props) {
     const classes = useStyles();
 
 
-    let formObject          =   useContext(UserContext)[0]  ||  props.formObject        ;
-    let changeFormObject    =   useContext(UserContext)[1]  ||  props.changeFormObject  ;
+    let formObject          =  appState.formObject;
+    let changeFormObject    =  appState.changeFormObject;
 
 
 
@@ -74,7 +76,7 @@ export default connect(function Prices(props) {
     // let inputs = useContext(UserContext)[0];
 
 
-    let [cars, changeCars] = useState(formObject.cars);
+    let [cars, changeCars] = useState(appState.formObject.cars);
 
 
     useEffect(() => {
@@ -90,13 +92,17 @@ export default connect(function Prices(props) {
         thisPrices.cars = [];
         callBacks = formObject.callBacks;
 
-        changeCars(formObject.cars);
+        changeCars(appState.formObject.cars);
 
 
-    }, [])
+    }, [appState.formObject,appState.formObject.cars])
 
 
-    // useEffect(()=>{})a
+    // useEffect(()=>{
+
+    //     formObject          =  App.formObject;
+    //     changeFormObject    =  App.changeFormObject;
+    // },[App.formObject])
 
     const [showPrices, ChangeShowPrices] = useState(false);
     let pricesForm;
@@ -481,10 +487,16 @@ export default connect(function Prices(props) {
 
         let thisClassElements = [...document.querySelectorAll(className)];
 
+        let carObject = appState.formObject.cars[index];
+
+        carObject.priceForm = null;
 
         thisClassElements.forEach(checkbox => {
             let input = checkbox.querySelector('input')
+            
 
+
+            // console.log(App.formObject===formObject)
             if (input != event.target.closest('input') && input.checked && event.isTrusted) {
 
                 input.click()
@@ -505,25 +517,27 @@ export default connect(function Prices(props) {
             // }
             // changeCars()
 
+
+            
+
+            // console.log( App.formObject)
+
             if (input.checked) {
 
-                // formObject.checkedCarsCount++;
+                carObject.priceForm = thisPrices;
 
 
-                carObj.priceForm = thisPrices;
+            } 
+            // else {
 
-                // thisPrices.cars.push(index)
-
-            } else {
-
-
-                carObj.priceForm = null;
-                // formObject.checkedCarsCount--;
-                // thisPrices.cars.splice(thisPrices.cars.indexOf(index),1)
+            //     console.log(456)
+            //     carObject.priceForm = null;
+            //     // formObject.checkedCarsCount--;
+            //     // thisPrices.cars.splice(thisPrices.cars.indexOf(index),1)
 
 
 
-            }
+            // }
 
 
             // changeCars([...fObj.cars])
