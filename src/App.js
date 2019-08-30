@@ -159,13 +159,13 @@ function App() {
 
   }
 
-
+  
   function   setFormPrices(){
-    if (!!!formObject.errorTexts.trim()) {
+    if (!formObject.errorTexts.trim()) {
 
       let c ;
       try {
- 
+        
         formObject.cars.forEach((car,index) => {
           c = car
           if (!car.priceForm ||!car.priceForm.isValid ) throw new Error;
