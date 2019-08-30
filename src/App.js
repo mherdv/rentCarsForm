@@ -6,18 +6,18 @@ import red from '@material-ui/core/colors/red';
 import PeopleIcon from '@material-ui/icons/People';
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import SendIcon from '@material-ui/icons/Send';
 
 import Partner from "./componts/partner/Partner";
 import Cars from "./componts/cars/Cars";
 import SectionTitle from "./componts/sectionTitle/SectionTitle";
-import Button from '@material-ui/core/Button';
 import Prices from "./componts/prices/Prices";
 
 import { UserProvider } from './contextBigForm.jsx'
 import CustomizedSnackbars from './componts/notification/Notification';
+import Paper from '@material-ui/core/Paper';
 
-let stateOfApplication ={};
+
+let stateOfApplication = {};
 
 
 const useStyles = makeStyles(theme => ({
@@ -63,7 +63,7 @@ function App() {
 
 
 
-    partnerInfoValidArray:[],
+    partnerInfoValidArray: [],
 
 
     // todo adding cars checkboxes 
@@ -79,22 +79,22 @@ function App() {
     isAdded: false,
     notificationType: 'error',
 
-    isSended:false,
+    isSended: false,
     callBacks: []
   });
 
-  stateOfApplication.formObject         =         formObject;
-  stateOfApplication.changeFormObject   =   changeFormObject;
+  stateOfApplication.formObject = formObject;
+  stateOfApplication.changeFormObject = changeFormObject;
 
-  useEffect(()=>{
+  useEffect(() => {
     stateOfApplication.formObject = formObject;
-    stateOfApplication.changeFormObject= changeFormObject;
+    stateOfApplication.changeFormObject = changeFormObject;
   })
 
 
 
 
-  function partnerValidationChecking(){
+  function partnerValidationChecking() {
 
 
     // if (formObject.errorTexts) return;
@@ -159,28 +159,28 @@ function App() {
 
   }
 
-  
-  function   setFormPrices(){
+
+  function setFormPrices() {
     if (!formObject.errorTexts.trim()) {
 
-      let c ;
+      let c;
       try {
-        
-        formObject.cars.forEach((car,index) => {
+
+        formObject.cars.forEach((car, index) => {
           c = car
-          if (!car.priceForm ||!car.priceForm.isValid ) throw new Error;
-          else{
+          if (!car.priceForm || !car.priceForm.isValid) throw new Error;
+          else {
             car.priceForm.cars.push(index)
           }
 
-          
+
 
         })
       } catch (e) {
         // hasError = true;
         formObject.errorTexts = c.inputs[0].value + ' ավտոմեքենայի համար գին նշած չէ';
 
-        formObject.prices.forEach(price=>{
+        formObject.prices.forEach(price => {
           price.cars = [];
         })
 
@@ -191,12 +191,12 @@ function App() {
     }
   }
 
-  function removeEmptyPriceForms(){
-    
-    if(!!formObject.errorTexts.trim()) return
-    for(let i = 0;i<formObject.prices.length;i++){
-      if(!formObject.prices[i].cars.length)
-        formObject.prices.splice(i,1)
+  function removeEmptyPriceForms() {
+
+    if (!!formObject.errorTexts.trim()) return
+    for (let i = 0; i < formObject.prices.length; i++) {
+      if (!formObject.prices[i].cars.length)
+        formObject.prices.splice(i, 1)
     }
   }
 
@@ -210,32 +210,32 @@ function App() {
     removeEmptyPriceForms()
 
 
-    
+
 
     let hasError = !!formObject.errorTexts.trim();
 
 
 
 
-    formObject.notificationType = hasError ? 'error' : 'info';   
+    formObject.notificationType = hasError ? 'error' : 'info';
 
 
 
-    changeFormObject({ ...formObject, isAdded: true, errorTexts:formObject.errorTexts, notificationType: hasError ? 'error' : 'info' });
+    changeFormObject({ ...formObject, isAdded: true, errorTexts: formObject.errorTexts, notificationType: hasError ? 'error' : 'info' });
 
 
 
 
-    if(!hasError){
+    if (!hasError) {
       formObject.isSended = true
       // console.log(123)
       // formObject.showButton = false;
-      
+
       // changeFormObject({ ...formObject, showButton:false})
 
-      setTimeout(()=>{
-        changeFormObject({ ...formObject,  notificationType: 'success' });
-      },3000)
+      setTimeout(() => {
+        changeFormObject({ ...formObject, notificationType: 'success' });
+      }, 3000)
     }
 
 
@@ -254,28 +254,33 @@ function App() {
 
           <form className={classes.container} autoComplete="off">
 
-            <SectionTitle number={<PeopleIcon />} title={"Գործընկեր"} />
-            <Partner />
+            <SectionTitle number={<PeopleIcon />} title={"Գործընկեր"}/>
+            <Paper>
+              <Partner />
+            </Paper>
             <SectionTitle number={<DirectionsCarIcon />} title={"Ավտոմեքենա"} />
 
 
 
             <div id='carsContainer'>
-
-              <div className='carFormContainer'> <Cars key={0} index={0} thisCarForm={formObject.cars[0]} /></div>
+              
+                <div className='carFormContainer'> <Cars key={0} index={0} thisCarForm={formObject.cars[0]} /></div>
+              
             </div>
+
 
 
 
             <SectionTitle number={<AttachMoneyIcon />} title={"Գներ"} />
 
             <div id='pricesContainer'>
-
-              <div className='priceFormContainer'><Prices key={0} index={0} thisPriceForm={formObject.prices[0]} cars={formObject.cars} context={[formObject, changeFormObject]} /></div>
-            </div>              
-              
-            <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText='Ուղարկել' />
             
+              <div className='priceFormContainer'><Prices key={0} index={0} thisPriceForm={formObject.prices[0]} cars={formObject.cars} context={[formObject, changeFormObject]} /></div>
+            
+            </div>
+
+            <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText='Ուղարկել' />
+
 
 
           </form>
@@ -285,5 +290,5 @@ function App() {
   );
 }
 
-export const appState = stateOfApplication ;
+export const appState = stateOfApplication;
 export default App;

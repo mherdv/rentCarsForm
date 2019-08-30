@@ -99,8 +99,8 @@ export default function CustomizedSnackbars(props) {
   const [open, setOpen] = React.useState(false);
 
   let [errorMassage , changeErrorMassage] =  React.useState(props.massage.errorTexts);
-  let [successMassage , changeSuccessMassage] =  React.useState(props.massage.successText);
-  let [infoMassage , changeInfoMassage] =  React.useState(props.massage.infoText);
+  let [successMassage ] =  React.useState(props.massage.successText);
+  let [infoMassage ] =  React.useState(props.massage.infoText);
   
   let [type , changeType] =  React.useState(props.massage.notificationType);
 
@@ -143,7 +143,7 @@ export default function CustomizedSnackbars(props) {
 
   return (
     <React.Fragment>
-      <Button variant="contained" color="primary" className={classes.button + " " + "send"} onClick={handleClick}>
+      <Button variant="contained" color="primary" className={classes.button + " send"} onClick={handleClick}>
           {props.buttonText}
            <SendIcon className={classes.rightIcon}/>
       </Button>
@@ -161,7 +161,7 @@ export default function CustomizedSnackbars(props) {
           variant={type}
 
           
-          message={type=='success'? successMassage:type=='info'?infoMassage: errorMassage}
+          message={type==='success'? successMassage:type==='info'?infoMassage: errorMassage}
         />
       </Snackbar>
       {/* <MySnackbarContentWrapper

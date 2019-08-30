@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
-import {appState} from '../../App';
+import { appState } from '../../App';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -13,13 +13,8 @@ import connect from 'react-watcher';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-
-
-import UserContext from '../../contextBigForm';
-
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Add, Delete } from '../addDelete/AddDelete';
+import { Paper } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -58,20 +53,16 @@ export default connect(function Prices(props) {
 
 
 
-    let callB = []; 
+    let callB = [];
     const classes = useStyles();
 
 
-    let formObject          =  appState.formObject;
-    let changeFormObject    =  appState.changeFormObject;
+    let formObject = appState.formObject;
+    let changeFormObject = appState.changeFormObject;
 
 
 
-
-
-
-
-    let [thisPrices, changeThisPrice] = useState(props.thisPriceForm);
+    let [thisPrices] = useState(props.thisPriceForm);
 
     // let inputs = useContext(UserContext)[0];
 
@@ -79,10 +70,11 @@ export default connect(function Prices(props) {
     let [cars, changeCars] = useState(appState.formObject.cars);
 
 
+
     useEffect(() => {
 
         if (!~formObject.callBacks.indexOf(callB)) {
-            callB.push([changeCars,formObject.cars])
+            callB.push([changeCars, formObject.cars])
 
             formObject.callBacks.push(callB)
         }
@@ -95,7 +87,7 @@ export default connect(function Prices(props) {
         changeCars(appState.formObject.cars);
 
 
-    }, [appState.formObject,appState.formObject.cars])
+    }, [appState.formObject, appState.formObject.cars])
 
 
     // useEffect(()=>{
@@ -123,7 +115,7 @@ export default connect(function Prices(props) {
     ];
 
 
-    let routes = [
+    let [routes] = useState([
         {
             label: "City tour in Yerevan",
             name: '',
@@ -460,15 +452,37 @@ export default connect(function Prices(props) {
 
         }
 
-    ]
-
+    ])
+    let lastValue;
     const addingCarPrices = input => event => {
-        thisPrices.prices[input.index] = event.target.value;
+        let target = event.target;
+        let value = target.value.replace(/\,/g, '');
+        if (event.target.value.length <= 9) {
+
+            thisPrices.prices[input.index] = event.target.value;
+
+            let newValue = new Intl.NumberFormat('ja-JP').format(value)
+
+            if (isNaN(value) || newValue === '0') {
+                newValue = "";
+            }
+
+            event.target.value = newValue;
+            lastValue = newValue;
+            input.value = event.target.value;
+        } else {
+            event.target.value = lastValue;
+            input.value = event.target.value
+        }
 
 
-        if (!event.target.value)
+
+
+
+
+        if (!event.target.value) {
             delete thisPrices.prices[input.index];
-
+        }
 
 
         if (!Object.keys(thisPrices.prices).length) {
@@ -476,6 +490,7 @@ export default connect(function Prices(props) {
         } else {
             thisPrices.isValid = true
         }
+
 
 
     }
@@ -493,11 +508,11 @@ export default connect(function Prices(props) {
 
         thisClassElements.forEach(checkbox => {
             let input = checkbox.querySelector('input')
-            
+
 
 
             // console.log(App.formObject===formObject)
-            if (input != event.target.closest('input') && input.checked && event.isTrusted) {
+            if (input !== event.target.closest('input') && input.checked && event.isTrusted) {
 
                 input.click()
 
@@ -518,7 +533,7 @@ export default connect(function Prices(props) {
             // changeCars()
 
 
-            
+
 
             // console.log( App.formObject)
 
@@ -527,7 +542,7 @@ export default connect(function Prices(props) {
                 carObject.priceForm = thisPrices;
 
 
-            } 
+            }
             // else {
 
             //     console.log(456)
@@ -543,15 +558,7 @@ export default connect(function Prices(props) {
             // changeCars([...fObj.cars])
 
 
-
-
-
-
-
-
         })
-
-
 
 
 
@@ -559,145 +566,140 @@ export default connect(function Prices(props) {
         // event.target.checked = true
         // setState({ ...state, [name]: event.target.checked });
     };
+    function addPrice() {
+        let priceObj = {}
+        formObject.prices.push(priceObj);
+        // fObj = formObject
+
+
+        changeFormObject({ ...formObject });
+
+
+        let div = document.createElement('div');
+
+        div.classList.add('priceFormContainer');
+        let elem = <Prices {...props} index={formObject.prices.indexOf(priceObj)} thisPriceForm={priceObj} formObject={formObject} changeFormObject={changeFormObject} />
+
+        ReactDOM.render(
+            elem,
+            div
+        );
+
+        document.querySelector('#pricesContainer').appendChild(div)
+    }
+    function deletePrice(event) {
+        formObject.prices.splice(props.index, 1);
+
+        let container = event.target.closest('.priceFormContainer')
+
+        changeFormObject({ ...formObject, prices: [...formObject.prices] });
+
+
+
+        formObject.callBacks.splice(formObject.callBacks.indexOf(callB), 1);
+
+        setTimeout(() => {
+
+            ReactDOM.unmountComponentAtNode(container);
+            container.remove()
+        })
+    }
     return (
 
         // <UserProvider value={[formObject, changeFormObject]}>
 
 
         // </UserProvider>
-        <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
+        <Paper>
+            <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
 
-            {formObject.cars.length > 1 && props.index === 0 ? <Fab color="primary" aria-label="add"
-                className={classes.fab + " addCarFormContainer"}
-                onClick={
-                    function () {
+                {formObject.cars.length > 1 && props.index === 0 ? <Add onClick={addPrice} /> : null}
+                <div>
+                    {formObject.prices.length > 1 && props.index !== 0 ?
+                        <Delete onClick={deletePrice} />
 
-                        let priceObj = {}
-                        formObject.prices.push(priceObj);
-                        // fObj = formObject
-
-
-                        changeFormObject({ ...formObject });
-
-
-                        let div = document.createElement('div');
-
-                        div.classList.add('priceFormContainer');
-                        let elem = <Prices {...props} index={formObject.prices.indexOf(priceObj)} thisPriceForm={priceObj}  formObject={formObject} changeFormObject={changeFormObject}/>
-
-                        ReactDOM.render(
-                            elem,
-                            div
-                        );
-
-                        document.querySelector('#pricesContainer').appendChild(div)
+                        : null
                     }
-                }
-            >
-                <AddIcon />
-            </Fab> : null}
-            <div>
-                {formObject.prices.length > 1 && props.index !== 0 ?
-                    <Fab aria-label="delete"
-                        className={classes.fab + ' removeButtonContainer'}
-                        onClick={
-                            function (event) {
-                                formObject.prices.splice(props.index, 1);
 
-                                let container = event.target.closest('.priceFormContainer')
+                    {cars.map((car, index) => {
 
-                                changeFormObject({ ...formObject, prices: [...formObject.prices] });
-
-
-
-                                formObject.callBacks.splice(formObject.callBacks.indexOf(callB), 1);
-
-                                setTimeout(() => {
-
-                                    ReactDOM.unmountComponentAtNode(container);
-                                })
-
-                            }}>
-                        <DeleteIcon />
-                    </Fab>
-
-                    : null
-                }
-
-                {cars.map((car, index) => {
-
-                    return (
-                        <div className={classes.marginLeft + ' checkBox_' + index}>
-                            {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-
-                                            onChange={handleChange(index, '.checkBox_' + index, car, index)}
-                                            value={car.inputs[0].value}
-                                            color="primary"
-                                        />
-                                    }
-                                    label={car.inputs[0].value}
-                                /></Grid> : null}
-                        </div>
-                    )
-
-                })}
-
-
-                <div className={classes.container + ' price-inputs'}>
-
-                    {pricesForm.map((pricesForm, index) => {
                         return (
-                            <Grid item xs={6} key={index} >
-                                <TextField
-                                    key={index}
-                                    id="standard-name"
-                                    label="Name"
-                                    value={pricesForm.value}
-                                    className={classes.textField}
-                                    label={pricesForm.label}
+                            <div className={classes.marginLeft + ' checkBox_' + index}>
+                                {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
 
-                                    onChange={addingCarPrices(pricesForm)}
-                                    placeholder={pricesForm.label}
-                                    margin="normal" />
-                            </Grid>
+                                                onChange={handleChange(index, '.checkBox_' + index, car, index)}
+                                                value={car.inputs[0].value}
+                                                color="primary"
+                                            />
+                                        }
+                                        label={car.inputs[0].value + " " + car.inputs[1].value}
+                                    /></Grid> : null}
+                            </div>
                         )
+
                     })}
-                    <Grid item xs={12} >
 
-                        <Button variant="outlined" color="primary" className={classes.button} onClick={() => ChangeShowPrices(!showPrices)}>
-                            Գին ըստ ֆիքսված երթուղու
+
+                    <div className={classes.container + ' price-inputs'}>
+
+                        {pricesForm.map((pricesForm, index) => {
+                            return (
+                                <Grid item xs={6} key={index} >
+                                    <TextField
+                                        key={index}
+
+                                        id="standard-name"
+                                        label="Name"
+                                        value={pricesForm.value}
+                                        className={classes.textField}
+                                        label={pricesForm.label}
+                                        onChange={addingCarPrices(pricesForm)}
+                                        placeholder={pricesForm.label}
+                                        margin="normal"
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
+                                        }}
+                                    />
+                                </Grid>
+                            )
+                        })}
+                        <Grid item xs={12} >
+
+                            <Button variant="outlined" color="primary" className={classes.button} onClick={() => ChangeShowPrices(!showPrices)}>
+                                Գին ըստ ֆիքսված երթուղու
                 </Button>
-                    </Grid>
+                        </Grid>
 
 
-                    {showPrices ? (routes.map((route, index) => {
-                        return (
-                            <Grid item xs={6} key={index} >
-                                <TextField
+                        {showPrices ? (routes.map((route, index) => {
+                            return (
+                                <Grid item xs={6} key={index} >
+                                    <TextField
+                                        key={index}
+                                        id="standard-name"
 
-                                    id="standard-name"
-                                    label="Name"
-                                    className={classes.textField}
-                                    label={route.label}
-                                    placeholder={route.label}
-                                    margin="normal"
-                                    value={route.value}
-                                    onChange={addingCarPrices(route)}
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
-                                    }}
-                                />
-                            </Grid>
-                        )
-                    })) : null}
+                                        label="Name"
+                                        className={classes.textField}
+                                        label={route.label}
+                                        placeholder={route.label}
+                                        margin="normal"
+                                        value={route.value}
+                                        onChange={addingCarPrices(route)}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
+                                        }}
+                                    />
+                                </Grid>
+                            )
+                        })) : null}
 
+                    </div>
                 </div>
             </div>
-        </div>
-
+        </Paper>
 
     )
 })

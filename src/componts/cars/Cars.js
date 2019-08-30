@@ -12,14 +12,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import 'react-dropzone-uploader/dist/styles.css';
-
+import Paper from '@material-ui/core/Paper';
 
 
 import ReactDropzone from 'react-dropzone';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import { Add, Delete } from '../addDelete/AddDelete';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 
@@ -66,9 +64,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function Cars(props) {
     const classes = useStyles();
-    let formObject =       useContext(UserContext)[0] ||       props.formObject      ;  //formObject, changeFormObject
+    let formObject = useContext(UserContext)[0] || props.formObject;  //formObject, changeFormObject
     let changeFormObject = useContext(UserContext)[1] || props.changeFormObject;  //formObject, changeFormObject
-    
+
     let carForm = props.thisCarForm;
 
 
@@ -91,7 +89,7 @@ export default function Cars(props) {
     }, [carForm])
 
 
-    
+
 
 
     if (!carForm.files) {
@@ -178,8 +176,8 @@ export default function Cars(props) {
 
 
 
-            
-            formObject.callBacks.forEach(callB=>{
+
+            formObject.callBacks.forEach(callB => {
 
                 // console.log(callB[0][1])
                 callB[0][0]([...callB[0][1]])
@@ -199,7 +197,7 @@ export default function Cars(props) {
         })
 
         changeInputs([...inputs]);
-        
+
 
 
     };
@@ -281,187 +279,182 @@ export default function Cars(props) {
 
     // console.log(formObject)
 
+    function addCar() {
+
+        let carObj = {}
+        formObject.cars.push(carObj);
+
+        changeFormObject({ ...formObject });
+
+        let div = document.createElement('div');
+
+        div.classList.add('carFormContainer')
+        let elem = <Cars index={formObject.cars.indexOf(carObj)} formObject={formObject} changeFormObject={changeFormObject} thisCarForm={carObj} />
+
+        ReactDOM.render(
+            elem,
+            div
+        );
+
+
+
+        // ReactDOM.render(<Cars index ={formObject.cars.indexOf(carObj)} thisCarForm={carObj}/>,div);
+        document.querySelector('#carsContainer').appendChild(div)
+    }
+
+
+    function deleteCar(event) {
+        formObject.cars.splice(props.index, 1);
+
+        let container = event.target.closest('.carFormContainer')
+
+        changeFormObject({ ...formObject, cars: [...formObject.cars] });
+        // event.target.closest('.carFormContainer').remove();a
+
+        setTimeout(() => {
+
+            ReactDOM.unmountComponentAtNode(container);
+            container.remove()
+
+
+
+            formObject.callBacks.forEach(callB => {
+                callB[0][0]([...formObject.cars])
+            })
+        })
+
+    }
+
+
     return (
 
 
         <div className="Cars" style={{ textAlign: "left" }}>
 
-            {props.index === 0 ? <Fab color="primary" aria-label="add"
-                className={classes.fab + " addCarFormContainer"}
-                onClick={
-                    function () {
+            {props.index === 0 ? <Add onClick={addCar} /> : null}
+            <Paper>
+                <div className="car-component">
+                    {
+                        formObject.cars.length > 1 && props.index !== 0 ?
+                            <Delete onClick={deleteCar} />
 
-                        let carObj = {}
-                        formObject.cars.push(carObj);
-
-                        changeFormObject({ ...formObject });
-
-                        let div = document.createElement('div');
-
-                        div.classList.add('carFormContainer')
-                        let elem = <Cars index={formObject.cars.indexOf(carObj)} formObject={formObject} changeFormObject={changeFormObject} thisCarForm={carObj} />
-
-                        ReactDOM.render(
-                            elem,
-                            div
-                        );
-
-
-
-                        // ReactDOM.render(<Cars index ={formObject.cars.indexOf(carObj)} thisCarForm={carObj}/>,div);
-                        document.querySelector('#carsContainer').appendChild(div)
+                            : null
                     }
-                }
-            >
-                <AddIcon />
-            </Fab> : null}
-            <div>
-                {
-                    formObject.cars.length > 1 && props.index !== 0 ?
-                        <Fab aria-label="delete"
-                            className={classes.fab + ' removeButtonContainer'}
-                            onClick={
-                                function (event) {
-                                    formObject.cars.splice(props.index, 1);
 
-                                    let container = event.target.closest('.carFormContainer')
+                    <div className={classes.container + " car-inputs"}>
+                        {inputs.map((input, index) => {
 
-                                    changeFormObject({ ...formObject , cars: [...formObject.cars]});
-                                    // event.target.closest('.carFormContainer').remove();a
-                                    
-                                    setTimeout(()=>{
+                            return (
+                                <Grid item xs={6} key={index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
+                                    <TextField
+                                        key={index}
+                                        id="standard-name"
+                                        value={input.value || ''}
+                                        className={classes.textField}
+                                        label={input.label}
+                                        placeholder={input.label}
 
-                                        ReactDOM.unmountComponentAtNode(container);
+                                        onChange={handleValueChange(input)}
+                                        margin="normal" />
+                                </Grid>
+                            )
+                        })}
 
-                                        
+                        {seats.map((seat, index) => {
+                            return (
+                                <Grid item xs={6} key={index}>
+                                    <div className="radio-container">
+                                        <div className="radio-title">{seat.title}</div>
+                                        <RadioGroup onChange={
 
-            
-                                        formObject.callBacks.forEach(callB=>{
-                                            callB[0][0]([...formObject.cars])
-                                        })
-                                    })
+                                            function (event) {
+                                                seat.value = +event.target.value;
 
-                                }}>
-                            <DeleteIcon />
-                        </Fab>
 
-                        : null
-                }
 
-                <div className={classes.container + " car-inputs"}>
-                    {inputs.map((input, index) => {
+                                                changeSeats([...seats])
+                                            }
+                                        } value={seat.value}>
+                                            <Grid item xs={12} >
+                                                <div>
+                                                    {seat.items.map((option, index) => {
 
-                        return (
-                            <Grid item xs={6} key={index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
+                                                        // console.log(option)
+                                                        return (
+
+                                                            <FormControlLabel
+                                                                key={index}
+                                                                value={option.value}
+                                                                control={<Radio color="primary" />}
+                                                                label={option.label}
+                                                                labelPlacement="end"
+                                                            />
+
+                                                        )
+
+                                                    })}
+                                                </div>
+                                            </Grid>
+                                        </RadioGroup>
+                                    </div>
+                                </Grid>
+                            )
+                        })}
+
+
+                        <Grid item xs={12} className={"select-container "} >
+
+
+                            <div className={(!fuelType.isValid && formObject.isAdded) ? 'invalid' : ''} >
+
+                                <FormControl className={classes.formControl}  >
+
+                                    <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
+                                    <Select
+                                        value={fuelType.value || ''}
+                                        onChange={selectChange}
+                                        inputProps={{
+                                            name: 'fuel',
+                                            id: 'fuel',
+                                        }}
+                                    >
+                                        <MenuItem value={1}>Բենզին</MenuItem>
+                                        <MenuItem value={2}>Գազ</MenuItem>
+                                        <MenuItem value={3}>Դիզվառելիք</MenuItem>
+                                    </Select>
+
+                                </FormControl>
+                            </div>
+                            <div className={"custom-container " + ((!working_volume.trim() && formObject.isAdded) ? 'invalid' : '')} >
                                 <TextField
-                                    key={index}
                                     id="standard-name"
-                                    value={input.value || ''}
-                                    className={classes.textField}
-                                    label={input.label}
-                                    placeholder={input.label}
 
-                                    onChange={handleValueChange(input)}
+                                    value={working_volume}
+                                    className="custom-container"
+                                    label={"Շարժիչի աշխատանքային ծավալ *"}
+                                    placeholder={"Շարժիչի աշխատանքային ծավալ *"}
+                                    onChange={handleChange()}
                                     margin="normal" />
-                            </Grid>
-                        )
-                    })}
-
-                    {seats.map((seat, index) => {
-                        return (
-                            <Grid item xs={6} key={index}>
-                                <div className="radio-container">
-                                    <div className="radio-title">{seat.title}</div>
-                                    <RadioGroup onChange={
-
-                                        function (event) {
-                                            seat.value = +event.target.value;
+                            </div>
+                        </Grid>
 
 
 
-                                            changeSeats([...seats])
-                                        }
-                                    } value={seat.value}>
-                                        <Grid item xs={12} >
-                                            <div>
-                                                {seat.items.map((option, index) => {
-
-                                                    // console.log(option)
-                                                    return (
-
-                                                        <FormControlLabel
-                                                            key={index}
-                                                            value={option.value}
-                                                            control={<Radio color="primary" />}
-                                                            label={option.label}
-                                                            labelPlacement="end"
-                                                        />
-
-                                                    )
-
-                                                })}
-                                            </div>
-                                        </Grid>
-                                    </RadioGroup>
-                                </div>
-                            </Grid>
-                        )
-                    })}
-
-
-                    <Grid item xs={12} className={"select-container "} >
-
-
-                        <div className={(!fuelType.isValid && formObject.isAdded) ? 'invalid' : ''} >
-
-                            <FormControl className={classes.formControl}  >
-
-                                <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
-                                <Select
-                                    value={fuelType.value || ''}
-                                    onChange={selectChange}
-                                    inputProps={{
-                                        name: 'fuel',
-                                        id: 'fuel',
-                                    }}
-                                >
-                                    <MenuItem value={1}>Բենզին</MenuItem>
-                                    <MenuItem value={2}>Գազ</MenuItem>
-                                    <MenuItem value={3}>Դիզվառելիք</MenuItem>
-                                </Select>
-
-                            </FormControl>
-                        </div>
-                        <div className={"custom-container " + ((!working_volume.trim() && formObject.isAdded) ? 'invalid' : '')} >
-                            <TextField
-                                id="standard-name"
-
-                                value={working_volume}
-                                className="custom-container"
-                                label={"Շարժիչի աշխատանքային ծավալ *"}
-                                placeholder={"Շարժիչի աշխատանքային ծավալ *"}
-                                onChange={handleChange()}
-                                margin="normal" />
-                        </div>
-                    </Grid>
-
-
-
-                    <ReactDropzone
-                        accept="image/*"
-                        onDrop={onPreviewDrop}
-                    >
-                        {({ getRootProps, getInputProps }) => (
-                            <section className="dropZone-wrapper">
-                                <div className="dropZone" {...getRootProps()}>
-                                    <input {...getInputProps()} />
-                                    <p>Drag 'n' drop some files here, or click to select files</p>
-                                    <CloudUploadIcon style={{ fontSize: 30 }}></CloudUploadIcon>
-                                </div>
-                            </section>
-                        )}
-                    </ReactDropzone>
-                    {/* <Dropzone
+                        <ReactDropzone
+                            accept="image/*"
+                            onDrop={onPreviewDrop}
+                        >
+                            {({ getRootProps, getInputProps }) => (
+                                <section className="dropZone-wrapper">
+                                    <div className="dropZone" {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        <p>Drag 'n' drop some files here, or click to select files</p>
+                                        <CloudUploadIcon style={{ fontSize: 30 }}></CloudUploadIcon>
+                                    </div>
+                                </section>
+                            )}
+                        </ReactDropzone>
+                        {/* <Dropzone
                         getUploadParams={getUploadParams}
                         onChangeStatus={handleChangeStatus}
                         // onSubmit={handleSubmit}
@@ -472,47 +465,48 @@ export default function Cars(props) {
 
 
 
-                    {files.length > 0 && (
-                        <div style={{ width: '100%' }}>
+                        {files.length > 0 && (
+                            <div style={{ width: '100%' }}>
 
-                            {files.map((file, index) => {
+                                {files.map((file, index) => {
 
-                                return (
-
-
-
-                                    <div className={'imgContainer'} style={{ display: 'inline-block', position: 'relative' }}>
+                                    return (
 
 
-                                        <img
-                                            alt="Preview"
-                                            key={file.preview}
-                                            src={URL.createObjectURL(file)}
-                                            style={{
-                                                display: "inline",
-                                                width: 100,
-                                                height: 100,
-                                                marginRight: 10,
-                                                marginTop: 10
-                                            }}
 
-                                        />
-                                        <div className="removeImage" onClick={function (event) {
-                                            files.splice(index, 1);
-                                            setFiles([...files]);
-                                            // event.target.closest('.imgContainer').remove()
-                                        }}><DeleteIcon /></div>
+                                        <div className={'imgContainer'} style={{ display: 'inline-block', position: 'relative' }}>
 
-                                    </div>
-                                )
-                            }
-                            )}
-                        </div>
-                    )}
+
+                                            <img
+                                                alt="Preview"
+                                                key={file.preview}
+                                                src={URL.createObjectURL(file)}
+                                                style={{
+                                                    display: "inline",
+                                                    width: 100,
+                                                    height: 100,
+                                                    marginRight: 10,
+                                                    marginTop: 10
+                                                }}
+
+                                            />
+                                            <div className="removeImage" onClick={function (event) {
+                                                files.splice(index, 1);
+                                                setFiles([...files]);
+                                                // event.target.closest('.imgContainer').remove()
+                                            }}><DeleteIcon /></div>
+
+                                        </div>
+                                    )
+                                }
+                                )}
+                            </div>
+                        )}
+
+                    </div>
 
                 </div>
-
-            </div>
+            </Paper>
         </div>
     )
 }
