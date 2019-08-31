@@ -64,10 +64,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function Cars(props) {
     const classes = useStyles();
-    let formObject = useContext(UserContext)[0] || props.formObject;  //formObject, changeFormObject
-    let changeFormObject = useContext(UserContext)[1] || props.changeFormObject;  //formObject, changeFormObject
+    let formObject = props.formObject;  //formObject, changeFormObject
+    let changeFormObject = props.changeFormObject;  //formObject, changeFormObject
 
     let carForm = props.thisCarForm;
+
+
+    let cars = props.cars;
+    let changeCars = props.changeCars;
 
 
 
@@ -169,19 +173,12 @@ export default function Cars(props) {
 
     const handleValueChange = input => event => {
         clearTimeout(inputDetector)
-        inputDetector = null
+        inputDetector = null;
         inputDetector = setTimeout(() => {
             // console.log(inputDetector)
-            changeFormObject({ ...formObject, cars: formObject.cars })
+            changeCars([ ...cars ])
 
 
-
-
-            formObject.callBacks.forEach(callB => {
-
-                // console.log(callB[0][1])
-                callB[0][0]([...callB[0][1]])
-            })
         }, 500)
 
         input.value = event.target.value;
@@ -282,46 +279,48 @@ export default function Cars(props) {
     function addCar() {
 
         let carObj = {}
-        formObject.cars.push(carObj);
+        cars.push(carObj);
 
-        changeFormObject({ ...formObject });
+        changeCars([ ...cars]);
 
-        let div = document.createElement('div');
+        // let div = document.createElement('div');
 
-        div.classList.add('carFormContainer')
-        let elem = <Cars index={formObject.cars.indexOf(carObj)} formObject={formObject} changeFormObject={changeFormObject} thisCarForm={carObj} />
+        // div.classList.add('carFormContainer')
+        // let elem = <Cars index={formObject.cars.indexOf(carObj)} formObject={formObject} changeFormObject={changeFormObject} thisCarForm={carObj} />
 
-        ReactDOM.render(
-            elem,
-            div
-        );
+        // ReactDOM.render(
+        //     elem,
+        //     div
+        // );
 
 
 
         // ReactDOM.render(<Cars index ={formObject.cars.indexOf(carObj)} thisCarForm={carObj}/>,div);
-        document.querySelector('#carsContainer').appendChild(div)
+        // document.querySelector('#carsContainer').appendChild(div)
     }
 
 
     function deleteCar(event) {
-        formObject.cars.splice(props.index, 1);
+        cars.splice(props.index, 1);
 
-        let container = event.target.closest('.carFormContainer')
+        // let container = event.target.closest('.carFormContainer')
 
-        changeFormObject({ ...formObject, cars: [...formObject.cars] });
+        changeCars([...cars]);
+
+        // console.log(formObject.cars)
         // event.target.closest('.carFormContainer').remove();a
 
-        setTimeout(() => {
+        // setTimeout(() => {
 
-            ReactDOM.unmountComponentAtNode(container);
-            container.remove()
+        //     ReactDOM.unmountComponentAtNode(container);
+        //     container.remove()
 
 
 
-            formObject.callBacks.forEach(callB => {
-                callB[0][0]([...formObject.cars])
-            })
-        })
+        //     formObject.callBacks.forEach(callB => {
+        //         callB[0][0]([...formObject.cars])
+        //     })
+        // })
 
     }
 
@@ -335,7 +334,7 @@ export default function Cars(props) {
             <Paper>
                 <div className="car-component">
                     {
-                        formObject.cars.length > 1 && props.index !== 0 ?
+                        cars.length > 1 && props.index !== 0 ?
                             <Delete onClick={deleteCar} />
 
                             : null
@@ -345,11 +344,11 @@ export default function Cars(props) {
                         {inputs.map((input, index) => {
 
                             return (
-                                <Grid item xs={6} key={index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
+                                <Grid item xs={6} key={index + '_inputs_' + props.index} className={(!input.isValid && formObject.isAdded) ? 'invalid' : ''}>
                                     <TextField
-                                        key={index}
+                                        // key={index}
                                         id="standard-name"
-                                        value={input.value || ''}
+                                        value={input.value}
                                         className={classes.textField}
                                         label={input.label}
                                         placeholder={input.label}
@@ -362,7 +361,7 @@ export default function Cars(props) {
 
                         {seats.map((seat, index) => {
                             return (
-                                <Grid item xs={6} key={index}>
+                                <Grid item xs={6} key={index + '_seats_' + props.index }>
                                     <div className="radio-container">
                                         <div className="radio-title">{seat.title}</div>
                                         <RadioGroup onChange={
@@ -383,7 +382,7 @@ export default function Cars(props) {
                                                         return (
 
                                                             <FormControlLabel
-                                                                key={index}
+                                                                key={index + 'seat' + props.index}
                                                                 value={option.value}
                                                                 control={<Radio color="primary" />}
                                                                 label={option.label}
@@ -474,7 +473,7 @@ export default function Cars(props) {
 
 
 
-                                        <div className={'imgContainer'} style={{ display: 'inline-block', position: 'relative' }}>
+                                        <div className={'imgContainer'}  key={index + 'file' + props.index} style={{ display: 'inline-block', position: 'relative' }}>
 
 
                                             <img

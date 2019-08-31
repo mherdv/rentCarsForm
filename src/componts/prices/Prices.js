@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
-import { appState } from '../../App';
+// import { appState } from '../../App';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -9,12 +9,14 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-import connect from 'react-watcher';
+// import connect from 'react-watcher';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Add, Delete } from '../addDelete/AddDelete';
 import { Paper } from '@material-ui/core';
+
+import {staticPrices, routsPrices}  from '../../helper/carRantePrices';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -39,11 +41,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-let callBacks
+// let callBacks
 
 // let fObj  
 
-export default connect(function Prices(props) {
+export default function Prices(props) {
 
     // let priceForm = props.thisPriceForm;
 
@@ -53,12 +55,12 @@ export default connect(function Prices(props) {
 
 
 
-    let callB = [];
+    // let callB = [];
     const classes = useStyles();
 
 
-    let formObject = appState.formObject;
-    let changeFormObject = appState.changeFormObject;
+    let formObject = props.formObject;
+    let changeFormObject = props.changeFormObject;
 
 
 
@@ -67,27 +69,45 @@ export default connect(function Prices(props) {
     // let inputs = useContext(UserContext)[0];
 
 
-    let [cars, changeCars] = useState(appState.formObject.cars);
+    let [cars, changeCars] = useState(props.cars);
+
+    let prices = props.prices;
+    let changePrices = props.changePrices;
 
 
 
     useEffect(() => {
 
-        if (!~formObject.callBacks.indexOf(callB)) {
-            callB.push([changeCars, formObject.cars])
 
-            formObject.callBacks.push(callB)
-        }
 
 
         thisPrices.prices = {};
         thisPrices.cars = [];
-        callBacks = formObject.callBacks;
+        // callBacks = formObject.callBacks;
 
-        changeCars(appState.formObject.cars);
+        changeCars(props.cars);
 
 
-    }, [appState.formObject, appState.formObject.cars])
+    }, [])
+
+
+    // formObject.cars
+
+
+
+    useEffect(() => {
+
+
+
+
+        // thisPrices.prices = {};
+        // thisPrices.cars = [];
+        // callBacks = formObject.callBacks;
+
+        changeCars(props.cars);
+
+
+    }, [props.cars])
 
 
     // useEffect(()=>{
@@ -97,367 +117,14 @@ export default connect(function Prices(props) {
     // },[App.formObject])
 
     const [showPrices, ChangeShowPrices] = useState(false);
-    let pricesForm;
-
-    pricesForm = [
-        {
-            label: "Գին 1կմ ի համար",
-            name: 'withoudivriver',
-            index: 1
-
-        },
-        {
-            label: "Գին 1կմ ի համար վարորդով",
-            name: 'withDriver',
-            index: 2
-
-        }
-    ];
-
-
-    let [routes] = useState([
-        {
-            label: "City tour in Yerevan",
-            name: '',
-            index: 3
-
-        },
-        {
-            label: "Khor Virap-Noravank-Selim-Sevan",
-            name: '',
-            index: 4
-
-        },
-        {
-            label: "Echmiadzin",
-            name: '',
-            index: 5
-
-        },
-        {
-            label: "Airport",
-            name: '',
-            index: 6
-
-        },
-        {
-            label: "Khor Virap-Noravank-Tatev",
-            name: '',
-            index: 7
-
-        },
-        {
-            label: "Stepanakert",
-            name: '',
-            index: 8
-
-        },
-        {
-            label: "Sevan",
-            name: '',
-            index: 9
-
-        },
-        {
-            label: "Tsaghkadzor",
-            name: '',
-            index: 10
-
-        },
-        {
-            label: "Khor Virap",
-            name: '',
-            index: 11
-
-        },
-        {
-            label: "Bagratashen",
-            name: '',
-            index: 12
-
-        },
-        {
-            label: "Ejmiatsin-Sardarapat",
-            name: '',
-            index: 13
-
-        },
-        {
-            label: "Garni-Geghart",
-            name: '',
-            index: 14
-
-        },
-        {
-            label: "Ashtarak-Oshakan",
-            name: '',
-
-            index: 15
-        },
-        {
-            label: "Ashtarak-Byurakan",
-            name: '',
-
-            index: 16
-
-        },
-        {
-            label: "Ashtarak-Amberd",
-            name: '',
-            index: 17
-
-        },
-        {
-            label: "Aghveran",
-            name: '',
-            index: 18
-
-        },
-        {
-            label: "Hankavan",
-            name: '',
-            index: 19
-
-        },
-        {
-            label: "Sevan-Tsaghkadzor",
-            name: '',
-            index: 20
-
-        },
-        {
-            label: "Sevan-Ayrivank-Noratus",
-            name: '',
-            index: 21
-
-        },
-        {
-            label: "Sevan-Haghartzin",
-            name: '',
-
-            index: 22
-
-        },
-        {
-            label: "Sevan-Haghartzin-Goshavank",
-            name: '',
-
-            index: 23
-
-        },
-        {
-            label: "Tsapatagh",
-            name: '',
-
-            index: 24
-
-        },
-        {
-            label: "Khor Virap-Noravank",
-            name: '',
-
-            index: 25
-
-        },
-        {
-            label: "Khor Virap-Noravank-Jermuk",
-            name: '',
-
-            index: 26
-
-        },
-        {
-            label: "Sisian",
-            name: '',
-            index: 27
-
-        },
-        {
-            label: "Goris-Khndzoresk",
-            name: '',
-            index: 28
-
-        },
-        {
-            label: "Kapan",
-            name: '',
-            index: 29
-        },
-        {
-            label: "Megri",
-            name: '',
-            index: 30
-
-        },
-        {
-            label: "Vanadzor",
-            name: '',
-            index: 31
-
-        },
-        {
-            label: "Sanahin-Haghpat",
-            name: '',
-            index: 32
-
-        },
-        {
-            label: "Bavra",
-            name: '',
-            index: 33
-
-        },
-        {
-            label: "Tbilisi",
-            name: '',
-            index: 34
-
-        },
-        {
-            label: "Gyumri",
-            name: '',
-            index: 35
-
-        },
-        {
-            label: "Yenokavan",
-            name: '',
-            index: 36
-
-        },
-        {
-            label: "Ani",
-            name: '',
-            index: 37
-
-        },
-        {
-            label: "Oshakan-Amberd",
-            name: '',
-            index: 38
-
-        },
-        {
-            label: "Ashtaraki Dzor",
-            name: '',
-            index: 39
-
-        },
-        {
-            label: "Ashtarak-Saghmosavank-Ohanavank",
-            name: '',
-            index: 40
-
-        },
-        {
-            label: "Tsaghkadzor-Sevan",
-            name: '',
-            index: 41
-
-        },
-        {
-            label: "Tsaghkadzor-Sevan-Haghartsin",
-            name: '',
-            index: 42
-
-        },
-        {
-            label: "Sevan-Noraduz-Haghartsin",
-            name: '',
-            index: 43
-
-        },
-        {
-            label: "Gavar",
-            name: '',
-            index: 44
-
-        },
-        {
-            label: "Khor Virap-Noravank-Gladzor",
-            name: '',
-            index: 45
-
-        },
-        {
-            label: "Stepanakert (2day/1night)",
-            name: '',
-            index: 46
-
-        },
-        {
-            label: "Kharabagh (3day/2nights)",
-            name: '',
-            index: 47
-
-        },
-        {
-            label: "Kharabagh+Jermuk(4day/3nights)",
-            name: '',
-            index: 48
-
-        },
-        {
-            label: "Sanahin-Haghpat-Odzun",
-            name: '',
-            index: 49
-
-        },
-        {
-            label: "Aruch-Talin-Mastara",
-            name: '',
-            index: 50
-
-        },
-        {
-            label: "Gyumri-Marmashen",
-            name: '',
-            index: 51
-
-        },
-        {
-            label: "Khndzoresk",
-            name: '',
-            index: 52
-
-        },
-        {
-            label: "Tatev",
-            name: '',
-            index: 53
-
-        },
-        {
-            label: "Tatev-Khndzoresk",
-            name: '',
-            index: 54
-
-        },
-        {
-            label: "Haghartsin-Dilijan-Goshavank",
-            name: '',
-            index: 55
-
-        },
-        {
-            label: "Sevan-Dilijan-Haghpat-Sanahin-Armenian-Georgian border",
-            name: '',
-            index: 56
-
-        },
-        {
-            label: "Parking in Airport",
-            name: '',
-            index: 57
-
-        }
-
-    ])
-    let lastValue;
-    const addingCarPrices = input => event => {
+    let [pricesForm, changePricesForm] = useState(staticPrices);
+    let [routes, changeRoutesPrices] = useState( routsPrices);
+
+    // let lastValue;
+    const addingCarPrices = (input, pricesState, changePriceState) => event => {
         let target = event.target;
         let value = target.value.replace(/\,/g, '');
-        if (event.target.value.length <= 9) {
+        // if (event.target.value.length <= 9) {
 
             thisPrices.prices[input.index] = event.target.value;
 
@@ -468,14 +135,12 @@ export default connect(function Prices(props) {
             }
 
             event.target.value = newValue;
-            lastValue = newValue;
-            input.value = event.target.value;
-        } else {
-            event.target.value = lastValue;
-            input.value = event.target.value
-        }
+            // lastValue = newValue;
+            input.value = event.target.value ;
 
-
+            
+            changePriceState(pricesState)
+            
 
 
 
@@ -493,6 +158,7 @@ export default connect(function Prices(props) {
 
 
 
+
     }
 
 
@@ -502,7 +168,7 @@ export default connect(function Prices(props) {
 
         let thisClassElements = [...document.querySelectorAll(className)];
 
-        let carObject = appState.formObject.cars[index];
+        let carObject = cars[index];
 
         carObject.priceForm = null;
 
@@ -568,42 +234,20 @@ export default connect(function Prices(props) {
     };
     function addPrice() {
         let priceObj = {}
-        formObject.prices.push(priceObj);
-        // fObj = formObject
+        prices.push(priceObj);
 
-
-        changeFormObject({ ...formObject });
-
-
-        let div = document.createElement('div');
-
-        div.classList.add('priceFormContainer');
-        let elem = <Prices {...props} index={formObject.prices.indexOf(priceObj)} thisPriceForm={priceObj} formObject={formObject} changeFormObject={changeFormObject} />
-
-        ReactDOM.render(
-            elem,
-            div
-        );
-
-        document.querySelector('#pricesContainer').appendChild(div)
+        changePrices([...prices]);
+        
     }
+
+
     function deletePrice(event) {
-        formObject.prices.splice(props.index, 1);
-
-        let container = event.target.closest('.priceFormContainer')
-
-        changeFormObject({ ...formObject, prices: [...formObject.prices] });
-
-
-
-        formObject.callBacks.splice(formObject.callBacks.indexOf(callB), 1);
-
-        setTimeout(() => {
-
-            ReactDOM.unmountComponentAtNode(container);
-            container.remove()
-        })
+        prices.splice(props.index, 1);
+        
+        
+        changePrices([...prices]);
     }
+
     return (
 
         // <UserProvider value={[formObject, changeFormObject]}>
@@ -613,9 +257,9 @@ export default connect(function Prices(props) {
         <Paper>
             <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
 
-                {formObject.cars.length > 1 && props.index === 0 ? <Add onClick={addPrice} /> : null}
+                {cars.length > 1 && props.index === 0 ? <Add onClick={addPrice} /> : null}
                 <div>
-                    {formObject.prices.length > 1 && props.index !== 0 ?
+                    {prices.length > 1 && props.index !== 0 ?
                         <Delete onClick={deletePrice} />
 
                         : null
@@ -645,7 +289,7 @@ export default connect(function Prices(props) {
 
                     <div className={classes.container + ' price-inputs'}>
 
-                        {pricesForm.map((pricesForm, index) => {
+                        {pricesForm.map((priceInput, index) => {
                             return (
                                 <Grid item xs={6} key={index} >
                                     <TextField
@@ -653,11 +297,11 @@ export default connect(function Prices(props) {
 
                                         id="standard-name"
                                         label="Name"
-                                        value={pricesForm.value}
+                                        value={priceInput.value}
                                         className={classes.textField}
-                                        label={pricesForm.label}
-                                        onChange={addingCarPrices(pricesForm)}
-                                        placeholder={pricesForm.label}
+                                        label={priceInput.label}
+                                        onChange={addingCarPrices(priceInput, pricesForm, changePricesForm)}
+                                        placeholder={priceInput.label}
                                         margin="normal"
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
@@ -687,7 +331,7 @@ export default connect(function Prices(props) {
                                         placeholder={route.label}
                                         margin="normal"
                                         value={route.value}
-                                        onChange={addingCarPrices(route)}
+                                        onChange={addingCarPrices(route,routes ,changeRoutesPrices)}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
                                         }}
@@ -702,4 +346,4 @@ export default connect(function Prices(props) {
         </Paper>
 
     )
-})
+}

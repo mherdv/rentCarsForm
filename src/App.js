@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , memo } from 'react';
 import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -15,6 +15,8 @@ import Prices from "./componts/prices/Prices";
 import { UserProvider } from './contextBigForm.jsx'
 import CustomizedSnackbars from './componts/notification/Notification';
 import Paper from '@material-ui/core/Paper';
+
+import {removeEmptyPriceForms,setFormPrices ,carsFormValidationChecking ,partnerValidationChecking} from './helper/validationChackers';
 
 
 let stateOfApplication = {};
@@ -59,19 +61,10 @@ function App() {
       'Email': '',
       'AVC': ''
     },
-
-
-
-
     partnerInfoValidArray: [],
-
-
     // todo adding cars checkboxes 
-
-
     cars: [{}],
     prices: [{}],
-
     errorTexts: '',
     successText: 'ձեր հայտն ընդունված Է շնորհակալություն',
     infoText: 'ձեր հարցումը մշակվում է խնդրում ենք սպասել ',
@@ -80,134 +73,40 @@ function App() {
     notificationType: 'error',
 
     isSended: false,
-    callBacks: []
+    callBacks: [],
+    // count:0
   });
 
-  stateOfApplication.formObject = formObject;
-  stateOfApplication.changeFormObject = changeFormObject;
-
-  useEffect(() => {
-    stateOfApplication.formObject = formObject;
-    stateOfApplication.changeFormObject = changeFormObject;
-  })
+  
 
 
+  const [cars , changeCars] = useState([{}]);
 
+  const [prices , changePrices] = useState([{}])
 
-  function partnerValidationChecking() {
+  // useEffect(() => {
 
-
-    // if (formObject.errorTexts) return;
-
-    try {
-      console.log(formObject.partnerInfo)
-      formObject.partnerInfoValidArray.forEach(input => {
-        if (!!!input.isValid) {
-          formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
-
-          throw new Error();
-        }
-
-      })
-    } catch (e) {
-
-    }
-  }
-
-  function carsFormValidationChecking() {
-
-    try {
-
-      formObject.cars.forEach(carForm => {
-        if (!!formObject.errorTexts) throw new Error();
-        let areInputsValid = true;
-
-
-        try {
-          carForm.inputs.forEach(input => {
-
-
-            if (!!!input.isValid) {
-              areInputsValid = false;
-              formObject.errorTexts = input.label + ' պարտադիր դաշտը լրացված չե կամ սխալ է լրացված  ';
-              throw new Error();
-            }
-          })
-        } catch (e) {
-          throw new Error();
-        }
-
-
-        carForm.isValid = !!(carForm.working_volume && carForm.fuelType.value && areInputsValid);
-
-
-        if (!carForm.isValid && !formObject.errorTexts) {
-
-          if (!carForm.fuelType.value) {
-            formObject.errorTexts = 'Շարժիչի վառելիք  դաշտը պարտադիր է';
-          } else {
-            formObject.errorTexts = 'Շարժիչի աշխատանքային ծավալ  պարտադիր դաշտը լրացված չե կամ լրացված է սխալ';
-          }
-
-          throw new Error();
-        }
-        else { formObject.errorTexts = '' }
-      })
-    } catch (e) {
-
-    }
-
-  }
-
-
-  function setFormPrices() {
-    if (!formObject.errorTexts.trim()) {
-
-      let c;
-      try {
-
-        formObject.cars.forEach((car, index) => {
-          c = car
-          if (!car.priceForm || !car.priceForm.isValid) throw new Error;
-          else {
-            car.priceForm.cars.push(index)
-          }
+  // },[formObject.cars])
 
 
 
-        })
-      } catch (e) {
-        // hasError = true;
-        formObject.errorTexts = c.inputs[0].value + ' ավտոմեքենայի համար գին նշած չէ';
-
-        formObject.prices.forEach(price => {
-          price.cars = [];
-        })
+  const carsContainer = memo(props => {
+    return <div>my memoized component</div>;
+  });
 
 
 
-
-      }
-    }
-  }
-
-  function removeEmptyPriceForms() {
-
-    if (!!formObject.errorTexts.trim()) return
-    for (let i = 0; i < formObject.prices.length; i++) {
-      if (!formObject.prices[i].cars.length)
-        formObject.prices.splice(i, 1)
-    }
-  }
 
 
   function sendForm() {
     // if(formObject.isSended) return;
+    formObject.cars = cars;
+    formObject.prices = prices;
     formObject.errorTexts = ''
-    partnerValidationChecking();
-    carsFormValidationChecking();
-    setFormPrices();
-    removeEmptyPriceForms()
+    partnerValidationChecking(formObject);
+    carsFormValidationChecking(formObject);
+    setFormPrices(formObject);
+    removeEmptyPriceForms(formObject)
 
 
 
@@ -262,11 +161,18 @@ function App() {
 
 
 
-            <div id='carsContainer'>
+            {/* <CarsContainer cars={cars} formObject={formObject} changeFormObject='/> */}
+
+
+        
+          <div id='carsContainer'>
               
-                <div className='carFormContainer'> <Cars key={0} index={0} thisCarForm={formObject.cars[0]} /></div>
-              
-            </div>
+              {cars.map((car, index)=>{
+
+                 return  <div className='carFormContainer'> <Cars key={index + '_car'} formObject={formObject} changeFormObject={changeFormObject} index={index} thisCarForm={car}  cars={cars}   changeCars={changeCars}/></div>
+              })}
+            
+          </div>
 
 
 
@@ -275,7 +181,11 @@ function App() {
 
             <div id='pricesContainer'>
             
-              <div className='priceFormContainer'><Prices key={0} index={0} thisPriceForm={formObject.prices[0]} cars={formObject.cars} context={[formObject, changeFormObject]} /></div>
+              {prices.map((price,index)=>{
+                return < div className='priceFormContainer'><Prices key={index + '_price'}  prices={prices}  changePrices={changePrices}  index={index} thisPriceForm={price} cars={cars} formObject={formObject} changeFormObject={changeFormObject} /></div>
+              })}
+
+
             
             </div>
 

@@ -45,9 +45,11 @@ export default function Partner(props) {
 
 
 
+
+  // _______________________________________________________________________________________ karoxa sxal ta 
   useEffect(() => {
     formObject.partnerInfoValidArray  = inputs
-  })
+  },[inputs])
   const handleValueChange = input => event => {
     // changeHandler({ ...values, value: event.target.value });
     input.value = event.target.value;
