@@ -2,10 +2,14 @@ import React, { useState, useEffect, useContext , memo} from 'react';
 import UserContext from '../../contextBigForm';
 
 import Cars from './Cars';
-
+let someIndex = 0;
 const CarsContainer = memo( ({cars}) => {
     
     // console.log(123456878)  
+
+
+
+
     return (
       
 
@@ -15,6 +19,8 @@ const CarsContainer = memo( ({cars}) => {
 
                 return  <Cars  key={index + '_car'}  index={index} thisCarForm={car} />
             })}
+
+
 
             {/* [...CarsArray] */}
         </div>

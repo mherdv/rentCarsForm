@@ -181,20 +181,9 @@ const App = React.memo(() => {
 
 
 
-            {/* <CarsContainer cars={cars} formObject={formObject} changeFormObject='/> */}
+
 
             {carsContainer()}
-
-            {/* <CarsContainer cars={cars} /> */}
-
-            {/* <div id='carsContainer'>
-              
-              {cars.map((car, index)=>{
-
-                 return  <div className='carFormContainer'> <Cars key={index + '_car'} formObject={formObject} changeFormObject={changeFormObject} index={index} thisCarForm={car}  cars={cars}   changeCars={changeCars}/></div>
-              })}
-            
-          </div> */}
 
 
 

@@ -12,6 +12,8 @@ const PricesContainer = memo(({prices}) => {
     return (
 
 
+
+
         <div id='pricesContainer'>
 
             {prices.map((price, index) => {

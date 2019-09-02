@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect, memo, useCallback } from 'react';
+import React, { useContext, useState, useEffect, memo } from 'react';
 
-import ReactDOM from 'react-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -135,12 +135,12 @@ const handleValueChange = (input, changeCars, changeInputs,cars,inputs) => event
 
 };
 
-const Cars = memo((props) => {
-    let { index, thisCarForm } = props;
+const Cars = memo(({index}) => {
+    // let { index, thisCarForm } = props;
     const classes = useStyles();
     const { formObject, cars, changeCars } = useContext(UserContext);
 
-    let carForm = thisCarForm;
+    let carForm = cars[index ];
 
 
 
@@ -165,7 +165,7 @@ const Cars = memo((props) => {
 
 
 
-    }, [])
+    }, [carForm])
 
 
 
@@ -180,7 +180,7 @@ const Cars = memo((props) => {
 
 
 
-    const [working_volume, setWorking_volume] = React.useState('');
+    const [working_volume, setWorking_volume] = useState('');
 
     if (!carForm.working_volume) {
         carForm.working_volume = '';
@@ -188,7 +188,7 @@ const Cars = memo((props) => {
 
 
 
-    const [fuelType, setFuelType] = React.useState({});
+    const [fuelType, setFuelType] = useState({});
 
 
     if (!carForm.fuelType) {
@@ -482,9 +482,7 @@ const Cars = memo((props) => {
 
         </div>
     )
-}, (prev, next) => {
-    return false
-})
+}, )
 
 
 

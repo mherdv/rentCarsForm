@@ -1,6 +1,9 @@
 import React, { useState, useEffect,useContext ,memo} from 'react';
 import ReactDOM from 'react-dom';
 
+
+import PricesInput from './pricesInput';
+
 // import { appState } from '../../App';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -52,6 +55,9 @@ export default memo(function Prices(props) {
     // let priceForm = props.thisPriceForm;
 
     
+
+
+    // console.log(staticPrices, routsPrices)
 
 
     let {prices,changePrices} = useContext(UserContext);
@@ -120,15 +126,25 @@ export default memo(function Prices(props) {
     // },[App.formObject])
 
     const [showPrices, ChangeShowPrices] = useState(false);
-    let [pricesForm, changePricesForm] = useState(staticPrices);
-    let [routes, changeRoutesPrices] = useState( routsPrices);
+
+
+
+    let [pricesForm, changePricesForm] = useState([...JSON.parse(JSON.stringify(staticPrices))]);
+    let [routes, changeRoutesPrices] = useState( [...JSON.parse(JSON.stringify(routsPrices))]);
 
     // let lastValue;
     const addingCarPrices = (input, pricesState, changePriceState) => event => {
+       
         let target = event.target;
         let value = target.value.replace(/\,/g, '');
-        // if (event.target.value.length <= 9) {
+        if (event.target.value.length >= 9) {
 
+
+            target.value =  target.value.slice(0,target.value.length-1);
+            return
+        };
+
+            
             thisPrices.prices[input.index] = event.target.value;
 
             let newValue = new Intl.NumberFormat('ja-JP').format(value)
@@ -141,6 +157,14 @@ export default memo(function Prices(props) {
             // lastValue = newValue;
             input.value = event.target.value ;
 
+            event.target.setAttribute('value', input.value);
+
+            // setTimeout(()=>{
+            //     // console.log(54678)
+            //     target.setAttribute('value',target.value)
+            //     target.value=target.value
+            
+            // },100)
             
             changePriceState(pricesState)
             
@@ -323,23 +347,26 @@ export default memo(function Prices(props) {
 
                         {showPrices ? (routes.map((route, index) => {
                             return (
-                                <Grid item xs={6} key={index} >
-                                    <TextField
-                                        key={index}
-                                        id="standard-name"
+                                // <Grid item xs={6} key={index} >
+                                //     <TextField
+                                    
+                                //         id="standard-name"
 
-                                        label="Name"
-                                        className={classes.textField}
-                                        label={route.label}
-                                        placeholder={route.label}
-                                        margin="normal"
-                                        value={route.value}
-                                        onChange={addingCarPrices(route,routes ,changeRoutesPrices)}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
-                                        }}
-                                    />
-                                </Grid>
+                                //         label="Name"
+                                //         className={classes.textField}
+                                //         label={route.label}
+                                //         placeholder={route.label}
+                                //         margin="normal"
+                                //         value={route.value}
+                                //         onChange={addingCarPrices(route,routes ,changeRoutesPrices)}
+                                //         InputProps={{
+                                //             startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
+                                //         }}
+                                //     />
+                                // </Grid>
+
+
+                                <PricesInput route={route} routes={routes} index={index} classes={classes} changeRoutesPrices={changeRoutesPrices} thisPrices={thisPrices}/>
                             )
                         })) : null}
 
