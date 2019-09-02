@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Partner(props) {
 
-  let formObject = useContext(UserContext)[0];
+  let {formObject} = useContext(UserContext);
   // let changeFormObject = useContext(UserContext)[1];
 
   const classes = useStyles();

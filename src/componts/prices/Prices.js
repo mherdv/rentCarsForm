@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext ,memo} from 'react';
 import ReactDOM from 'react-dom';
 
 // import { appState } from '../../App';
@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
+
+import UserContext from '../../contextBigForm';
 
 // import connect from 'react-watcher';
 
@@ -45,22 +47,25 @@ const useStyles = makeStyles(theme => ({
 
 // let fObj  
 
-export default function Prices(props) {
+export default memo(function Prices(props) {
 
     // let priceForm = props.thisPriceForm;
 
+    
 
+
+    let {prices,changePrices} = useContext(UserContext);
     // console.log(appState)
 
 
+
+    let carFromeOut = useContext(UserContext).cars;
 
 
     // let callB = [];
     const classes = useStyles();
 
 
-    let formObject = props.formObject;
-    let changeFormObject = props.changeFormObject;
 
 
 
@@ -69,10 +74,8 @@ export default function Prices(props) {
     // let inputs = useContext(UserContext)[0];
 
 
-    let [cars, changeCars] = useState(props.cars);
+    let [cars, changeCars] = useState(carFromeOut);
 
-    let prices = props.prices;
-    let changePrices = props.changePrices;
 
 
 
@@ -85,7 +88,7 @@ export default function Prices(props) {
         thisPrices.cars = [];
         // callBacks = formObject.callBacks;
 
-        changeCars(props.cars);
+        // changeCars(carFromeOut);
 
 
     }, [])
@@ -104,10 +107,10 @@ export default function Prices(props) {
         // thisPrices.cars = [];
         // callBacks = formObject.callBacks;
 
-        changeCars(props.cars);
+        changeCars(carFromeOut);
 
 
-    }, [props.cars])
+    }, [carFromeOut])
 
 
     // useEffect(()=>{
@@ -268,7 +271,7 @@ export default function Prices(props) {
                     {cars.map((car, index) => {
 
                         return (
-                            <div className={classes.marginLeft + ' checkBox_' + index}>
+                            <div key={props.index + '_' + 'checkBox_' + index } className={classes.marginLeft + ' checkBox_' + index}>
                                 {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
                                     <FormControlLabel
                                         control={
@@ -291,7 +294,7 @@ export default function Prices(props) {
 
                         {pricesForm.map((priceInput, index) => {
                             return (
-                                <Grid item xs={6} key={index} >
+                                <Grid item xs={6} key={index +' carsInput'+ props.index} >
                                     <TextField
                                         key={index}
 
@@ -346,4 +349,4 @@ export default function Prices(props) {
         </Paper>
 
     )
-}
+})

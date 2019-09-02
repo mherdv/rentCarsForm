@@ -1,32 +1,25 @@
-import React ,{useState, useEffect}from 'react';
+import React, { useState, useEffect, useContext , memo} from 'react';
+import UserContext from '../../contextBigForm';
 
 import Cars from './Cars';
 
-const CarsContainer = (props) => {
+const CarsContainer = memo( ({cars}) => {
     
-
-    // const formObject = props.formObject;
-    // const changeFormObject = props.changeFormObject;
-
-
-    // const [cars,changeCars] = useState(props.cars);
-
-
-    // useEffect(()=>{
-    //     props.formObject.cars = cars;
-    // },[cars])
-
-
+    // console.log(123456878)  
     return (
+      
+
         <div id='carsContainer'>
 
-            {props.cars.map((car, index) => {
+            {cars.map((car, index) => {
 
-                return <div className='carFormContainer'> <Cars key={index + '_car'}{...props}  thisCarForm={car}/></div>
+                return  <Cars  key={index + '_car'}  index={index} thisCarForm={car} />
             })}
 
+            {/* [...CarsArray] */}
         </div>
+
     );
-};
+});
 
 export default CarsContainer;

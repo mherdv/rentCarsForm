@@ -1,4 +1,4 @@
-import React, { useState, useEffect , memo } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 import { makeStyles, MuiThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
@@ -8,15 +8,17 @@ import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 import Partner from "./componts/partner/Partner";
-import Cars from "./componts/cars/Cars";
 import SectionTitle from "./componts/sectionTitle/SectionTitle";
-import Prices from "./componts/prices/Prices";
+import PricesContainer from "./componts/prices/PricesContainer";
 
 import { UserProvider } from './contextBigForm.jsx'
 import CustomizedSnackbars from './componts/notification/Notification';
 import Paper from '@material-ui/core/Paper';
 
-import {removeEmptyPriceForms,setFormPrices ,carsFormValidationChecking ,partnerValidationChecking} from './helper/validationChackers';
+
+import CarsContainer from './componts/cars/CarsContainer';
+
+import { removeEmptyPriceForms, setFormPrices, carsFormValidationChecking, partnerValidationChecking } from './helper/validationChackers';
 
 
 let stateOfApplication = {};
@@ -51,7 +53,7 @@ const theme = createMuiTheme({
 
 
 
-function App() {
+const App = React.memo(() => {
   const classes = useStyles();
 
   const [formObject, changeFormObject] = useState({
@@ -77,25 +79,39 @@ function App() {
     // count:0
   });
 
-  
 
 
-  const [cars , changeCars] = useState([{}]);
 
-  const [prices , changePrices] = useState([{}])
+  const [cars, changeCars] = useState([{}]);
+
+  const [prices, changePrices] = useState([{}])
 
   // useEffect(() => {
 
   // },[formObject.cars])
 
 
-
-  const carsContainer = memo(props => {
-    return <div>my memoized component</div>;
-  });
+  const carsContainer = useCallback((() => {
 
 
 
+    return <CarsContainer cars={cars} />;
+  }), [cars.length])
+
+
+  const pricesContainer = useCallback((() => {
+
+
+    return <PricesContainer prices={prices} />;
+  }), [prices.length])
+
+
+  
+
+
+
+
+  // cb()
 
 
   function sendForm() {
@@ -143,17 +159,21 @@ function App() {
 
   return (
 
+
+
+
     <MuiThemeProvider theme={theme}>
+
 
       <div className="form">
 
-        <UserProvider value={[formObject, changeFormObject]}>
+        <UserProvider value={{ formObject, changeFormObject, cars, changeCars, prices, changePrices }}>
 
 
 
           <form className={classes.container} autoComplete="off">
 
-            <SectionTitle number={<PeopleIcon />} title={"Գործընկեր"}/>
+            <SectionTitle number={<PeopleIcon />} title={"Գործընկեր"} />
             <Paper>
               <Partner />
             </Paper>
@@ -163,31 +183,25 @@ function App() {
 
             {/* <CarsContainer cars={cars} formObject={formObject} changeFormObject='/> */}
 
+            {carsContainer()}
 
-        
-          <div id='carsContainer'>
+            {/* <CarsContainer cars={cars} /> */}
+
+            {/* <div id='carsContainer'>
               
               {cars.map((car, index)=>{
 
                  return  <div className='carFormContainer'> <Cars key={index + '_car'} formObject={formObject} changeFormObject={changeFormObject} index={index} thisCarForm={car}  cars={cars}   changeCars={changeCars}/></div>
               })}
             
-          </div>
+          </div> */}
 
 
 
 
             <SectionTitle number={<AttachMoneyIcon />} title={"Գներ"} />
 
-            <div id='pricesContainer'>
-            
-              {prices.map((price,index)=>{
-                return < div className='priceFormContainer'><Prices key={index + '_price'}  prices={prices}  changePrices={changePrices}  index={index} thisPriceForm={price} cars={cars} formObject={formObject} changeFormObject={changeFormObject} /></div>
-              })}
-
-
-            
-            </div>
+            {pricesContainer()}
 
             <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText='Ուղարկել' />
 
@@ -198,7 +212,7 @@ function App() {
       </div>
     </MuiThemeProvider>
   );
-}
+})
 
 export const appState = stateOfApplication;
 export default App;
