@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useContext , memo} from 'react';
+import React, { useState, memo,useMemo, useCallback} from 'react';
 import UserContext from '../../contextBigForm';
 
 import Cars from './Cars';
 let someIndex = 0;
 const CarsContainer = memo( ({cars}) => {
     
-    // console.log(123456878)  
+    
 
 
 
+
+    const [carsClone,changeCarsClone] = useState([]) 
 
     return (
       
@@ -16,13 +18,12 @@ const CarsContainer = memo( ({cars}) => {
         <div id='carsContainer'>
 
             {cars.map((car, index) => {
-
-                return  <Cars  key={index + '_car'}  index={index} thisCarForm={car} />
+                    
+                    return  <Cars  key={index + '_car'}  index={index} thisCarForm={car} />
+                
             })}
 
 
-
-            {/* [...CarsArray] */}
         </div>
 
     );

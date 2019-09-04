@@ -106,8 +106,6 @@ const App = React.memo(() => {
   }), [prices.length])
 
 
-  
-
 
 
 
@@ -193,6 +191,8 @@ const App = React.memo(() => {
             {pricesContainer()}
 
             <CustomizedSnackbars type={formObject.notificationType} massage={formObject} click={sendForm} buttonText='Ուղարկել' />
+
+
 
 
 

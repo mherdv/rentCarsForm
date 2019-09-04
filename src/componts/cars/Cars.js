@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, memo } from 'react';
+import React, { useContext, useState, useEffect, memo, useMemo } from 'react';
 
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -107,7 +107,7 @@ function selectChange(event, setFuelType, carForm) {
 }
 
 
-const handleValueChange = (input, changeCars, changeInputs,cars,inputs) => event => {
+const handleValueChange = (input, changeCars, changeInputs, cars, inputs) => event => {
     clearTimeout(inputDetector)
     inputDetector = null;
     inputDetector = setTimeout(() => {
@@ -130,17 +130,15 @@ const handleValueChange = (input, changeCars, changeInputs,cars,inputs) => event
     })
 
     changeInputs([...inputs]);
-
-
-
 };
 
-const Cars = memo(({index}) => {
+const Cars = memo(({ index }) => {
     // let { index, thisCarForm } = props;
     const classes = useStyles();
     const { formObject, cars, changeCars } = useContext(UserContext);
 
-    let carForm = cars[index ];
+    let carForm = cars[index];
+
 
 
 
@@ -276,6 +274,18 @@ const Cars = memo(({index}) => {
                 value: 0,
                 valdators: [isRequirers]
 
+            },
+
+            {
+                title: 'առկա է օդորակիչ ',
+                items: [
+                    { label: "Այո", value: 1 },
+                    { label: "Ոչ", value: 0 }
+                ],
+                name: 'ac',
+                value: 0,
+                valdators: [isRequirers]
+
             }
         ]
     }
@@ -299,11 +309,14 @@ const Cars = memo(({index}) => {
     return (
 
         <div className='carFormContainer' >
+
+           
             {/* {carFormContainer()} */}
             <div className="Cars" style={{ textAlign: "left" }}>
-
-                {index === 0 ? <Add onClick={() => addCar(cars, changeCars)} /> : null}
+               
+                {index === 0 ? <Add  onClick={() => addCar(cars, changeCars)} /> : null}
                 <Paper>
+                    <div className={'absoluteCounter'}>{index+1}</div>
                     <div className="car-component">
                         {
                             cars.length > 1 && index !== 0 ?
@@ -325,11 +338,52 @@ const Cars = memo(({index}) => {
                                             label={input.label}
                                             placeholder={input.label}
 
-                                            onChange={handleValueChange(input, changeCars, changeInputs,cars,inputs)}
+                                            onChange={handleValueChange(input, changeCars, changeInputs, cars, inputs)}
                                             margin="normal" />
                                     </Grid>
                                 )
                             })}
+
+
+                            <Grid item xs={6} className={'w90Ma'}>
+                                <div className={"custom-container " + ((!working_volume.trim() && formObject.isAdded) ? 'invalid' : '')} >
+                                    <TextField
+                                        id="standard-name"
+
+                                        value={working_volume}
+                                        className="custom-container"
+                                        label={"Շարժիչի աշխատանքային ծավալ *"}
+                                        placeholder={"Շարժիչի աշխատանքային ծավալ *"}
+                                        onChange={handleChange(setWorking_volume, carForm)}
+                                        margin="normal" />
+                                </div>
+                            </Grid>
+
+                            <Grid item xs={6} className={'w90Ma selectContainer'} >
+
+
+                                <div className={(!fuelType.isValid && formObject.isAdded) ? 'invalid' : ''} >
+
+                                    <FormControl className={classes.formControl}  >
+
+                                        <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
+                                        <Select
+                                            value={fuelType.value || ''}
+                                            onChange={(event) => selectChange(event, setFuelType, carForm)}
+                                            inputProps={{
+                                                name: 'fuel',
+                                                id: 'fuel',
+                                            }}
+                                        >
+                                            <MenuItem value={1}>Բենզին</MenuItem>
+                                            <MenuItem value={2}>Գազ</MenuItem>
+                                            <MenuItem value={3}>Դիզվառելիք</MenuItem>
+                                        </Select>
+
+                                    </FormControl>
+                                </div>
+                            </Grid>
+
 
                             {seats.map((seat, index) => {
                                 return (
@@ -371,46 +425,7 @@ const Cars = memo(({index}) => {
                                     </Grid>
                                 )
                             })}
-
-
-                            <Grid item xs={12} className={"select-container "} >
-
-
-                                <div className={(!fuelType.isValid && formObject.isAdded) ? 'invalid' : ''} >
-
-                                    <FormControl className={classes.formControl}  >
-
-                                        <InputLabel htmlFor="fuel">Շարժիչի վառելիք</InputLabel>
-                                        <Select
-                                            value={fuelType.value || ''}
-                                            onChange={(event) => selectChange(event, setFuelType, carForm)}
-                                            inputProps={{
-                                                name: 'fuel',
-                                                id: 'fuel',
-                                            }}
-                                        >
-                                            <MenuItem value={1}>Բենզին</MenuItem>
-                                            <MenuItem value={2}>Գազ</MenuItem>
-                                            <MenuItem value={3}>Դիզվառելիք</MenuItem>
-                                        </Select>
-
-                                    </FormControl>
-                                </div>
-                                <div className={"custom-container " + ((!working_volume.trim() && formObject.isAdded) ? 'invalid' : '')} >
-                                    <TextField
-                                        id="standard-name"
-
-                                        value={working_volume}
-                                        className="custom-container"
-                                        label={"Շարժիչի աշխատանքային ծավալ *"}
-                                        placeholder={"Շարժիչի աշխատանքային ծավալ *"}
-                                        onChange={handleChange(setWorking_volume, carForm)}
-                                        margin="normal" />
-                                </div>
-                            </Grid>
-
-
-
+                            
                             <ReactDropzone
                                 accept="image/*"
                                 onDrop={(newFiles) => { onPreviewDrop(newFiles, files, setFiles, carForm) }}
@@ -419,7 +434,7 @@ const Cars = memo(({index}) => {
                                     <section className="dropZone-wrapper">
                                         <div className="dropZone" {...getRootProps()}>
                                             <input {...getInputProps()} />
-                                            <p>Drag 'n' drop some files here, or click to select files</p>
+                                            <p>Ավելացնել նկար</p>
                                             <CloudUploadIcon style={{ fontSize: 30 }}></CloudUploadIcon>
                                         </div>
                                     </section>
@@ -482,8 +497,10 @@ const Cars = memo(({index}) => {
 
         </div>
     )
-}, )
+})
 
 
 
-export default Cars
+
+
+export default Cars;

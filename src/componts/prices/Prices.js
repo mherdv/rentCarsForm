@@ -1,16 +1,16 @@
-import React, { useState, useEffect,useContext ,memo} from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect, useContext, memo } from 'react';
+
 
 
 import PricesInput from './pricesInput';
 
 // import { appState } from '../../App';
 
+
+import PricesCheckbox from './PricesCheckbox';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 import UserContext from '../../contextBigForm';
 
@@ -21,7 +21,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { Add, Delete } from '../addDelete/AddDelete';
 import { Paper } from '@material-ui/core';
 
-import {staticPrices, routsPrices}  from '../../helper/carRantePrices';
+import { staticPrices, routsPrices } from '../../helper/carRantePrices';
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -50,127 +50,153 @@ const useStyles = makeStyles(theme => ({
 
 // let fObj  
 
-export default memo(function Prices(props) {
-
-    // let priceForm = props.thisPriceForm;
-
-    
+let carsLength = 1;
 
 
-    // console.log(staticPrices, routsPrices)
+function addPrice(prices, changePrices) {
+    let priceObj = {}
+    prices.push(priceObj);
 
+    changePrices([...prices]);
 
-    let {prices,changePrices} = useContext(UserContext);
-    // console.log(appState)
+}
 
 
 
-    let carFromeOut = useContext(UserContext).cars;
+
+export default memo(function Prices({ index, thisPriceForm }) {
 
 
-    // let callB = [];
+    let { prices, changePrices, cars: carFromeOut } = useContext(UserContext);
+    // let carFromeOut = useContext(UserContext).cars;
     const classes = useStyles();
 
+    let [thisPrices] = useState(thisPriceForm);
 
 
+    let [cars, changeCars] = useState([]);
 
 
-    let [thisPrices] = useState(props.thisPriceForm);
+    let [checkboxes,changeCheckboxes] = useState([]);
 
-    // let inputs = useContext(UserContext)[0];
-
-
-    let [cars, changeCars] = useState(carFromeOut);
 
 
 
 
     useEffect(() => {
 
-
-
-
         thisPrices.prices = {};
         thisPrices.cars = [];
-        // callBacks = formObject.callBacks;
 
-        // changeCars(carFromeOut);
-
+        changeCars(carFromeOut);
 
     }, [])
 
 
-    // formObject.cars
+    function setCheckboxesState(clear=true){
+        let checkB = carFromeOut.map((car,index)=>{
 
+            let label = '';
+            if(car.inputs[0].value || car.inputs[1].value){
+                if(car.inputs[0]){
+                    label+= car.inputs[0].value;
+                }
+                if(car.inputs[1]){
+                    label+= ' '+ car.inputs[1].value;
+                }
+            }
+            return {
+                label,
+                car,
+                checked:clear &&((checkboxes[index] && checkboxes[index].checked ) || false)
 
+            }
+        })
+        
+
+        changeCheckboxes([...checkB])
+        // console.log(checkboxes,checkB)
+    }
 
     useEffect(() => {
 
-
-
-
-        // thisPrices.prices = {};
-        // thisPrices.cars = [];
-        // callBacks = formObject.callBacks;
-
+        if (carsLength != carFromeOut.length) {
+            carsLength = carFromeOut.length;
+            return
+        }
         changeCars(carFromeOut);
+
+        setCheckboxesState()
+        
 
 
     }, [carFromeOut])
 
 
-    // useEffect(()=>{
 
-    //     formObject          =  App.formObject;
-    //     changeFormObject    =  App.changeFormObject;
-    // },[App.formObject])
 
     const [showPrices, ChangeShowPrices] = useState(false);
 
 
 
-    let [pricesForm, changePricesForm] = useState([...JSON.parse(JSON.stringify(staticPrices))]);
-    let [routes, changeRoutesPrices] = useState( [...JSON.parse(JSON.stringify(routsPrices))]);
+
+    let [pricesForm, changePricesForm] = useState([]);
+
+    let [routes, changeRoutesForm] = useState([]);
+
+
+
+
+
+
+
+
+
+    useEffect(() => {
+        thisPriceForm.pricesForm = thisPriceForm.pricesForm || [...JSON.parse(JSON.stringify(staticPrices))]
+        thisPriceForm.routes = thisPriceForm.routes || [...JSON.parse(JSON.stringify(routsPrices))];
+
+        changePricesForm([...thisPriceForm.pricesForm]);
+        changeRoutesForm([...thisPriceForm.routes]);
+
+        
+        setCheckboxesState();
+
+    }, [prices.length])
+
 
     // let lastValue;
-    const addingCarPrices = (input, pricesState, changePriceState) => event => {
-       
+
+
+    const addingCarPrices = (input, changeValue) => event => {
+
+
+
         let target = event.target;
         let value = target.value.replace(/\,/g, '');
         if (event.target.value.length >= 9) {
 
 
-            target.value =  target.value.slice(0,target.value.length-1);
+            target.value = target.value.slice(0, target.value.length - 1);
             return
         };
 
-            
-            thisPrices.prices[input.index] = event.target.value;
 
-            let newValue = new Intl.NumberFormat('ja-JP').format(value)
+        thisPrices.prices[input.index] = event.target.value;
 
-            if (isNaN(value) || newValue === '0') {
-                newValue = "";
-            }
+        let newValue = new Intl.NumberFormat('ja-JP').format(value)
 
-            event.target.value = newValue;
-            // lastValue = newValue;
-            input.value = event.target.value ;
+        if (isNaN(value) || newValue === '0') {
+            newValue = "";
+        }
 
-            event.target.setAttribute('value', input.value);
+        event.target.value = newValue;
+        // lastValue = newValue;
+        input.value = event.target.value;
 
-            // setTimeout(()=>{
-            //     // console.log(54678)
-            //     target.setAttribute('value',target.value)
-            //     target.value=target.value
-            
-            // },100)
-            
-            changePriceState(pricesState)
-            
+        event.target.setAttribute('value', input.value);
 
-
-
+        changeValue(newValue)
 
         if (!event.target.value) {
             delete thisPrices.prices[input.index];
@@ -188,127 +214,89 @@ export default memo(function Prices(props) {
 
     }
 
+    function deletePrice(prices, changePrices, index) {
 
 
+        prices.splice(index, 1);
 
-    const handleChange = (name, className, carObj, index) => event => {
+
+        changePrices([...prices]);
+
+        setCheckboxesState(false);
+        thisPrices.isValid = false;
+
+        
+    }
+
+
+    const handleChange = (index,className ,callback) => event => {
+
+        
 
         let thisClassElements = [...document.querySelectorAll(className)];
 
-        let carObject = cars[index];
+        // let carObject = cars[index];
 
-        carObject.priceForm = null;
+        cars[index].priceForm = null;
+
+       
 
         thisClassElements.forEach(checkbox => {
             let input = checkbox.querySelector('input')
 
 
 
-            // console.log(App.formObject===formObject)
             if (input !== event.target.closest('input') && input.checked && event.isTrusted) {
 
                 input.click()
 
             }
 
-            // changeFormObject({...lastCarsFormOP})
-            // let carObjj=   fObj || carObj;
-
-
-            // console.log(fObj)
-
-
-
-
-            // if(fObj){
-            //     carObj = fObj.cars[index]
-            // }
-            // changeCars()
-
-
-
-
-            // console.log( App.formObject)
-
             if (input.checked) {
 
-                carObject.priceForm = thisPrices;
+                cars[index].priceForm = thisPrices;
 
 
             }
-            // else {
-
-            //     console.log(456)
-            //     carObject.priceForm = null;
-            //     // formObject.checkedCarsCount--;
-            //     // thisPrices.cars.splice(thisPrices.cars.indexOf(index),1)
-
-
-
-            // }
-
-
-            // changeCars([...fObj.cars])
 
 
         })
 
+        changeCars([...cars]);
 
 
 
-        // event.target.checked = true
-        // setState({ ...state, [name]: event.target.checked });
+        callback()
+        // console.log( )
     };
-    function addPrice() {
-        let priceObj = {}
-        prices.push(priceObj);
-
-        changePrices([...prices]);
-        
-    }
 
 
-    function deletePrice(event) {
-        prices.splice(props.index, 1);
-        
-        
-        changePrices([...prices]);
-    }
 
     return (
-
-        // <UserProvider value={[formObject, changeFormObject]}>
-
-
-        // </UserProvider>
         <Paper>
             <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
-
-                {cars.length > 1 && props.index === 0 ? <Add onClick={addPrice} /> : null}
+                <div className={'absoluteCounter priceCounter'}>{index+1}</div>
+                {cars.length > 1 && index === 0 ? <Add onClick={() => addPrice(prices, changePrices)} /> : null}
                 <div>
-                    {prices.length > 1 && props.index !== 0 ?
-                        <Delete onClick={deletePrice} />
+                    {prices.length > 1 && index !== 0 ?
+                        <Delete onClick={() => deletePrice(prices, changePrices, index)} />
 
                         : null
                     }
 
-                    {cars.map((car, index) => {
+                    {checkboxes.map((checkbox, index) => {
 
+                        // console.log(thisPrices === cars[index].priceForm)
+                        // if(!!car.inputs[0].value ) return null;
                         return (
-                            <div key={props.index + '_' + 'checkBox_' + index } className={classes.marginLeft + ' checkBox_' + index}>
-                                {!car.inputs[0].value == "0" ? <Grid item xs={6} key={index}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
+                            <>
+                                {checkbox.car.inputs[0].value || checkbox.car.inputs[1].value ? 
 
-                                                onChange={handleChange(index, '.checkBox_' + index, car, index)}
-                                                value={car.inputs[0].value}
-                                                color="primary"
-                                            />
-                                        }
-                                        label={car.inputs[0].value + " " + car.inputs[1].value}
-                                    /></Grid> : null}
-                            </div>
+
+                                    <PricesCheckbox index={index} car={checkbox.car} classes={classes} thisPrices={thisPrices} checkbox={checkbox} cars={cars} handleChange={handleChange}/>
+                                
+                                : null}
+                            </>
                         )
 
                     })}
@@ -316,57 +304,23 @@ export default memo(function Prices(props) {
 
                     <div className={classes.container + ' price-inputs'}>
 
+
                         {pricesForm.map((priceInput, index) => {
                             return (
-                                <Grid item xs={6} key={index +' carsInput'+ props.index} >
-                                    <TextField
-                                        key={index}
-
-                                        id="standard-name"
-                                        label="Name"
-                                        value={priceInput.value}
-                                        className={classes.textField}
-                                        label={priceInput.label}
-                                        onChange={addingCarPrices(priceInput, pricesForm, changePricesForm)}
-                                        placeholder={priceInput.label}
-                                        margin="normal"
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
-                                        }}
-                                    />
-                                </Grid>
+                                <PricesInput input={priceInput} inputsArray={pricesForm} index={index} classes={classes} handleChange={addingCarPrices} prices={prices} currentComponent={thisPrices} />
                             )
                         })}
                         <Grid item xs={12} >
 
                             <Button variant="outlined" color="primary" className={classes.button} onClick={() => ChangeShowPrices(!showPrices)}>
                                 Գին ըստ ֆիքսված երթուղու
-                </Button>
+                            </Button>
                         </Grid>
 
 
                         {showPrices ? (routes.map((route, index) => {
                             return (
-                                // <Grid item xs={6} key={index} >
-                                //     <TextField
-                                    
-                                //         id="standard-name"
-
-                                //         label="Name"
-                                //         className={classes.textField}
-                                //         label={route.label}
-                                //         placeholder={route.label}
-                                //         margin="normal"
-                                //         value={route.value}
-                                //         onChange={addingCarPrices(route,routes ,changeRoutesPrices)}
-                                //         InputProps={{
-                                //             startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
-                                //         }}
-                                //     />
-                                // </Grid>
-
-
-                                <PricesInput route={route} routes={routes} index={index} classes={classes} changeRoutesPrices={changeRoutesPrices} thisPrices={thisPrices}/>
+                                <PricesInput input={route} inputsArray={routes} index={index} classes={classes} handleChange={addingCarPrices} prices={prices} currentComponent={thisPrices} />
                             )
                         })) : null}
 
