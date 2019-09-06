@@ -8,7 +8,7 @@ const PricesCheckbox = (props) => {
 
     
 
-    const {classes,handleChange,car,index,thisPrices,cars ,checkbox} = props;
+    const {classes,handleChange,car,index,thisPrices,cars ,changeCars,checkbox} = props;
 
     // console.log(checkbox)
 
@@ -30,13 +30,13 @@ const PricesCheckbox = (props) => {
                     control={
                         <Checkbox
 
-                            onChange={handleChange(index, ('.checkBox_' + index), changeCheckboxState)}
-                            value={car.inputs[0].value}
+                            onChange={handleChange(index, ('.checkBox_' + index), changeCheckboxState,cars,changeCars,thisPrices)}
+                            value={checkbox.label}
                             color="primary"
                             checked={checked}
                         />
                     }
-                    label={car.inputs[0].value + " " + car.inputs[1].value}
+                    label={checkbox.label}
                 /></Grid>
         </div>
     );

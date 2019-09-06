@@ -8,7 +8,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 const PricesInput = (props) => {
 
 
-    const {input , inputsArray,index,classes,handleChange,prices} = props;
+    const {input , inputsArray,index,classes,handleChange,thisPrices} = props;
 
 
     
@@ -53,7 +53,7 @@ const PricesInput = (props) => {
             placeholder={input.label}
             margin="normal"
             value={val}
-            onChange={handleChange(input,changeValue)}
+            onChange={handleChange(input,changeValue,thisPrices)}
             InputProps={{
                 startAdornment: <InputAdornment position="start">AMD</InputAdornment>,
             }}

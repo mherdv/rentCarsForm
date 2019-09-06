@@ -343,12 +343,14 @@ const staticPrices  = [
     {
         label: "Գին 1կմ ի համար",
         name: 'withoudivriver',
+        value:'',
         index: 1
 
     },
     {
         label: "Գին 1կմ ի համար վարորդով",
         name: 'withDriver',
+        value:'',
         index: 2
 
     }
