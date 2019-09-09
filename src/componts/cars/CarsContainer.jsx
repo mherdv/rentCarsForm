@@ -1,32 +1,18 @@
-import React, { useState, memo,useMemo, useCallback} from 'react';
-import UserContext from '../../contextBigForm';
+import React, { useState, memo, useMemo, useCallback } from "react";
+import UserContext from "../../contextBigForm";
 
-import Cars from './Cars';
-let someIndex = 0;
-const CarsContainer = memo( ({cars}) => {
-    
-    
+import Cars from "./Cars";
 
-
-
-
-    const [carsClone,changeCarsClone] = useState([]) 
-
-    return (
-      
-
-        <div id='carsContainer'>
-
-            {cars.map((car, index) => {
-                    
-                    return  <Cars  key={index + '_car'}  index={index} thisCarForm={car} />
-                
-            })}
-
-
-        </div>
-
-    );
+const CarsContainer = memo(({ cars }) => {
+  return (
+    <div id="carsContainer">
+      {cars.map((car, index) => {
+        return !car.isRemoved ? (
+          <Cars key={car.uniqueId + "_car"} index={index} thisCarForm={car} />
+        ) : null;
+      })}
+    </div>
+  );
 });
 
 export default CarsContainer;
