@@ -30,7 +30,6 @@ const PricesInput = props => {
     <Grid xs={6} key={index}>
       <TextField
         id="standard-name"
-        label="Name"
         className={classes.textField}
         label={input.label}
         placeholder={input.label}

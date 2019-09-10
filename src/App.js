@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import blue from "@material-ui/core/colors/blue";
@@ -61,7 +61,7 @@ const App = React.memo(() => {
 
   const [formObject, changeFormObject] = useState({
     partnerInfo: {
-      legal_Name: "",
+      legal_name: "",
       phone_number: "",
       Email: "",
       AVC: "",
@@ -71,16 +71,15 @@ const App = React.memo(() => {
     // todo adding cars checkboxes
     cars: [{ uniqueId: "1_unique" }],
     prices: [{ uniqueId: "1_unique" }],
+
     errorTexts: "",
     successText: "ձեր հայտն ընդունված Է շնորհակալություն",
     infoText: "ձեր հարցումը մշակվում է խնդրում ենք սպասել ",
     isFormValid: true,
     isAdded: false,
     notificationType: "error",
-
     isSended: false,
     callBacks: []
-
     // count:0
   });
 
@@ -124,9 +123,16 @@ const App = React.memo(() => {
     });
 
     if (!hasError) {
+      // console.log(formObject);
+      const FD = new FormData();
+
+      FD.append(formObject.partnerInfo);
+      FD.append(formObject.cars);
+      FD.append(formObject.prices);
+
       axios
         .post("api/save_transportation_data", {
-          formObject: JSON.stringify(formObject)
+          formObject: JSON.stringify(FD)
         })
         .then(function(response) {
           console.log(response);

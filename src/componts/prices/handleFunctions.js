@@ -31,6 +31,13 @@ const addingCarPrices = (input, changeValue, thisPrices) => event => {
   } else {
     thisPrices.isValid = true;
   }
+
+  let assocArray = Object.keys(thisPrices.prices).map(key => {
+    return { [key]: thisPrices.prices[key] };
+  });
+
+  thisPrices.assocPrices = assocArray;
+  // console.log(thisPrices);
 };
 
 let pricesCounter = 2;
