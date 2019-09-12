@@ -1,4 +1,11 @@
-import React, { useContext, useState, useEffect, memo, useMemo } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  memo,
+  useMemo,
+  useCallback
+} from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -22,13 +29,15 @@ import {
   deleteCar,
   handleChange,
   selectChange,
-  handleValueChange
+  handleValueChange,
+  changeComboBoxValue
 } from "./handleFunctions";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import { isRequirers } from "../../helper/valdators";
 
 import UserContext from "../../contextBigForm";
+import ComboBox from "../comboBox/ComboBox";
 
 let filesCounter = 0;
 
@@ -137,12 +146,6 @@ const Cars = memo(({ index }) => {
         name: "Number of passenger seats",
         value: "",
         validators: [isRequirers]
-      },
-      {
-        label: "Սրահի հավաքման որակ *",
-        name: "Salon quality",
-        value: "",
-        validators: [isRequirers]
       }
     ];
   }
@@ -175,8 +178,14 @@ const Cars = memo(({ index }) => {
       }
     ];
   }
+  const getCarModels = useCallback(() => {
+    if (inputs[0].value > 10) {
+      return [{ label: "a" }];
+    }
+  }, [inputs[0]]);
 
   let inputsComponent = useMemo(() => {
+    // console.log(getCarModels);
     return inputs.map((input, index) => {
       return (
         <Grid
@@ -185,26 +194,47 @@ const Cars = memo(({ index }) => {
           key={index + "_inputs_" + index}
           className={!input.isValid && formObject.isAdded ? "invalid" : ""}
         >
-          <TextField
-            // key={index}
-            id="standard-name"
-            value={input.value}
-            className={classes.textField}
-            label={input.label}
-            placeholder={input.label}
-            onChange={handleValueChange(
-              input,
-              changeCars,
-              changeInputs,
-              cars,
-              inputs
-            )}
-            margin="normal"
-          />
+          {index < 2 ? (
+            <ComboBox
+              options={index === 0 ? formObject.carsMake : getCarModels() || []}
+              label={input.label}
+              placeholder={input.label}
+              input={input}
+              index={index}
+              carType={inputs[0]}
+              handleChange={callBack => {
+                return changeComboBoxValue(
+                  input,
+                  changeInputs,
+                  inputs,
+                  callBack,
+                  cars,
+                  changeCars
+                );
+              }}
+            />
+          ) : (
+            <TextField
+              // key={index}
+              id="standard-name"
+              value={input.value}
+              className={classes.textField}
+              label={input.label}
+              placeholder={input.label}
+              onChange={handleValueChange(
+                input,
+                changeCars,
+                changeInputs,
+                cars,
+                inputs
+              )}
+              margin="normal"
+            />
+          )}
         </Grid>
       );
     });
-  }, [inputs, formObject.isAdded]);
+  }, [inputs, formObject.isAdded, formObject.carsMake]);
 
   let setsComponent = useMemo(() => {
     return seats.map((seat, index) => {
@@ -311,7 +341,7 @@ const Cars = memo(({ index }) => {
         </div>
       </Grid>
     );
-  }, [fuelType, formObject.isAdded]);
+  }, [fuelType, formObject.isAdded, formObject.carsMake]);
 
   let showFiles = useMemo(() => {
     return (

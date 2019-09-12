@@ -44,6 +44,15 @@ legend {
   cursor   : context-menu;
 }
 
+.makeStyles-root-230 {
+  height: auto !important;
+}
+
+/* .MuiPaper-root {
+  max-height: 250px;
+  overflow  : auto;
+} */
+
 .car-component {
   padding-bottom: 25px;
   margin-bottom : 5px;

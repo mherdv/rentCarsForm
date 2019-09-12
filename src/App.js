@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 import blue from "@material-ui/core/colors/blue";
@@ -19,7 +19,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 
-import axios from "axios";
+import Axios from "axios";
 
 import {
   removeEmptyPriceForms,
@@ -79,7 +79,8 @@ const App = React.memo(() => {
     isAdded: false,
     notificationType: "error",
     isSended: false,
-    callBacks: []
+    callBacks: [],
+    carsMake: []
     // count:0
   });
 
@@ -87,9 +88,14 @@ const App = React.memo(() => {
 
   const [prices, changePrices] = useState([{}]);
 
-  // useEffect(() => {
-
-  // },[formObject.cars])
+  useEffect(() => {
+    async function getCarsMake() {
+      let res = await Axios.get("carsMake.json");
+      formObject.carsMake = res.data;
+      changeFormObject({ ...formObject });
+    }
+    getCarsMake();
+  }, []);
 
   const carsContainer = useCallback(() => {
     return <CarsContainer cars={cars} />;
@@ -121,26 +127,28 @@ const App = React.memo(() => {
       errorTexts: formObject.errorTexts,
       notificationType: hasError ? "error" : "info"
     });
-
+    let fd = new FormData();
     if (!hasError) {
       // console.log(formObject);
-      const FD = new FormData();
+      formObject.cars.forEach((car, car_index) => {
+        car.files.forEach(file => {
+          console.log(file);
 
-      FD.append(formObject.partnerInfo);
-      FD.append(formObject.cars);
-      FD.append(formObject.prices);
-
-      axios
-        .post("api/save_transportation_data", {
-          formObject: JSON.stringify(FD)
-        })
-        .then(function(response) {
-          console.log(response);
-
-          if (response === 1) {
-            changeFormObject({ ...formObject, notificationType: "success" });
-          }
+          fd.append(`images_${car_index}[]`, file.urlRem);
         });
+      });
+
+      formObject.fd = fd;
+
+      Axios.post("api/save_transportation_data", {
+        formObject: JSON.stringify(formObject)
+      }).then(function(response) {
+        console.log(response);
+
+        if (response === 1) {
+          changeFormObject({ ...formObject, notificationType: "success" });
+        }
+      });
 
       formObject.isSended = true;
 

@@ -62,10 +62,10 @@ function setCheckboxesState(
     let label = "";
     if (car.inputs[0].value || car.inputs[1].value) {
       if (car.inputs[0]) {
-        label += car.inputs[0].value;
+        label += car.inputs[0].checkBoxLabel;
       }
       if (car.inputs[1]) {
-        label += " " + car.inputs[1].value;
+        label += " " + car.inputs[1].checkBoxLabel;
       }
     }
     return {
@@ -77,7 +77,6 @@ function setCheckboxesState(
   });
 
   changeCheckboxes([...checkB]);
-  // console.log(checkboxes,checkB)
 }
 
 function deletePrice(

@@ -46,7 +46,8 @@ const handleValueChange = (
     changeCars([...cars]);
   }, 500);
 
-  input.value = event.target.value;
+  // console.log(event.value);
+  input.value = (event.target && event.target.value) || event.value + "";
 
   input.isValid = true;
 
@@ -59,11 +60,30 @@ const handleValueChange = (
   changeInputs([...inputs]);
 };
 
+const changeComboBoxValue = (
+  input,
+  handleChange,
+  inputArray,
+  callBack,
+  cars,
+  changeCars
+) => event => {
+  input.value = event.value;
+  input.isValid = true;
+  input.checkBoxLabel = event.label;
+  handleChange([...inputArray]);
+
+  changeCars([...cars]);
+
+  callBack(event);
+};
+
 export {
   onPreviewDrop,
   addCar,
   deleteCar,
   handleChange,
   selectChange,
-  handleValueChange
+  handleValueChange,
+  changeComboBoxValue
 };
