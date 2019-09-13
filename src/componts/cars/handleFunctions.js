@@ -47,7 +47,9 @@ const handleValueChange = (
   }, 500);
 
   // console.log(event.value);
-  input.value = (event.target && event.target.value) || event.value + "";
+
+  input.value = (event.target && event.target.value) + "";
+  console.log(input.value);
 
   input.isValid = true;
 
@@ -58,6 +60,16 @@ const handleValueChange = (
   });
 
   changeInputs([...inputs]);
+};
+
+const addService = (service, changeService) => {
+  service.push({ value: "" });
+  changeService([...service]);
+};
+
+const removeService = (service, changeService, index) => {
+  service.splice(index, 1);
+  changeService([...service]);
 };
 
 const changeComboBoxValue = (
@@ -85,5 +97,7 @@ export {
   handleChange,
   selectChange,
   handleValueChange,
-  changeComboBoxValue
+  changeComboBoxValue,
+  addService,
+  removeService
 };

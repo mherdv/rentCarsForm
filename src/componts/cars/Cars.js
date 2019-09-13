@@ -30,7 +30,9 @@ import {
   handleChange,
   selectChange,
   handleValueChange,
-  changeComboBoxValue
+  changeComboBoxValue,
+  addService,
+  removeService
 } from "./handleFunctions";
 import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -40,6 +42,8 @@ import UserContext from "../../contextBigForm";
 import ComboBox from "../comboBox/ComboBox";
 
 let filesCounter = 0;
+
+let servicesKey = 0;
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -84,6 +88,15 @@ const Cars = memo(({ index }) => {
   let [carIsRemoved, changeCarIsRemoved] = useState(false);
 
   const [files, setFiles] = useState([]);
+  const [services, changeServices] = useState([]);
+
+  if (!carForm.services) {
+    carForm.services = [
+      { value: "", key: "unique_service" + 1 + carForm.uniqueId }
+    ];
+  } else {
+    carForm.services = services;
+  }
   useEffect(() => {
     changeInputs(carForm.inputs);
     changeSeats(carForm.seats);
@@ -91,6 +104,7 @@ const Cars = memo(({ index }) => {
     setWorking_volume(carForm.working_volume);
     setFiles(carForm.files);
     carForm.isRemoved ? changeCarIsRemoved(true) : changeCarIsRemoved(false);
+    changeServices(carForm.services);
   }, [carForm]);
   if (!carForm.files) {
     carForm.files = [];
@@ -146,6 +160,13 @@ const Cars = memo(({ index }) => {
         name: "Number of passenger seats",
         value: "",
         validators: [isRequirers]
+      },
+      {
+        label: "Ճամպրուկների տարողունակություն *",
+        name: "baggage count",
+        value: "",
+        validators: [],
+        isValid: true
       }
     ];
   }
@@ -387,12 +408,41 @@ const Cars = memo(({ index }) => {
     );
   }, [files.length]);
 
-  // let removeCarComponent = useMemo(()=>{
-  //     return (cars.length > 1 && index !== 0 ?
-  //                          <Delete onClick={() => deleteCar(cars, changeCars, index)} />
-
-  //                          : null)
-  // },[index])
+  const AdditionalServices = useMemo(() => {
+    return (
+      <div className={"servicesContainer"}>
+        {services.map((service, index) => {
+          return (
+            <div className={"oneServiceContainer"} key={service.key}>
+              <TextField
+                id="standard-name"
+                value={service.value}
+                className="custom-container"
+                label={"հավելյալ ծառայություններ "}
+                placeholder={"հավելյալ ծառայություններ"}
+                onChange={event => {
+                  service.value = event.target.value;
+                  changeServices([...services]);
+                }}
+                margin="normal"
+              />
+              {index > 0 ? (
+                <Delete
+                  className={"deleteServiceButton"}
+                  onClick={() => removeService(services, changeServices, index)}
+                />
+              ) : (
+                <Add
+                  className={"addServiceButton"}
+                  onClick={() => addService(services, changeServices)}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [services]);
 
   const countCars = useMemo(() => {
     return <div className={"absoluteCounter"}>{index + 1}</div>;
@@ -425,6 +475,8 @@ const Cars = memo(({ index }) => {
                   {selectComponent}
 
                   {setsComponent}
+
+                  {AdditionalServices}
 
                   {dropZoneComponent}
 

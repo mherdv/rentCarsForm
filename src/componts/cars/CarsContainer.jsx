@@ -6,9 +6,10 @@ const CarsContainer = memo(({ cars }) => {
   return (
     <div id="carsContainer">
       {cars.map((car, index) => {
-        return !car.isRemoved ? (
+        car.uniqueId || (car.uniqueId = "1_unique");
+        return (
           <Cars key={car.uniqueId + "_car"} index={index} thisCarForm={car} />
-        ) : null;
+        );
       })}
     </div>
   );

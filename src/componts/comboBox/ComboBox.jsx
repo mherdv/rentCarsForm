@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     height: "auto",
-    minWidth: 290
+    padding: "5px 20px"
   },
   input: {
     display: "flex",
@@ -246,9 +246,6 @@ export default function ComboBox(props) {
 
   //   console.log(single);
 
-  useEffect(() => {
-    console.log(input);
-  });
   const selectStyles = {
     input: base => ({
       ...base,
@@ -267,13 +264,13 @@ export default function ComboBox(props) {
           styles={selectStyles}
           inputId="react-select-single"
           TextFieldProps={{
-            label: "Country",
+            label: props.label,
             InputLabelProps: {
               htmlFor: "react-select-single",
               shrink: true
             }
           }}
-          placeholder="Search a country (start with a)"
+          placeholder={props.placeholder}
           options={suggestions}
           components={components}
           value={single}
