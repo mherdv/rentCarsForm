@@ -128,20 +128,24 @@ const App = React.memo(() => {
       notificationType: hasError ? "error" : "info"
     });
     let fd = new FormData();
+
     if (!hasError) {
-      // console.log(formObject);
       formObject.cars.forEach((car, car_index) => {
         car.files.forEach(file => {
-          console.log(file);
-
           fd.append(`images_${car_index}[]`, file.urlRem);
         });
       });
 
       formObject.fd = fd;
 
-      Axios.post("api/save_transportation_data", {
-        formObject: JSON.stringify(formObject)
+      Axios({
+        url: "api/save_transportation_data",
+        method: "POST",
+        data: formObject,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data"
+        }
       }).then(function(response) {
         console.log(response);
 

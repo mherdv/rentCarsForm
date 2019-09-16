@@ -16,9 +16,11 @@ import {
   deletePrice,
   handleChange
 } from "./handleFunctions";
-import { Paper } from "@material-ui/core";
+import { Paper, TextField, InputAdornment } from "@material-ui/core";
 
 import { staticPrices, routsPrices } from "../../helper/carRantePrices";
+import IntegrationAutosuggest from "../autoSuggest/AutoSuggest";
+import RoutePrice from "./RoutePrice";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -44,7 +46,9 @@ const useStyles = makeStyles(theme => ({
 let keyCount = 0;
 
 export default memo(function({ index, thisPriceForm }) {
-  let { prices, changePrices, cars: carFromeOut } = useContext(UserContext);
+  let { prices, changePrices, cars: carFromeOut, formObject } = useContext(
+    UserContext
+  );
 
   const classes = useStyles();
   let [thisPrices] = useState(thisPriceForm);
@@ -54,6 +58,8 @@ export default memo(function({ index, thisPriceForm }) {
   useEffect(() => {
     thisPrices.prices = {};
     thisPrices.cars = [];
+
+    thisPrices.routesArValid = true;
 
     changeCars(carFromeOut);
   }, []);
@@ -74,9 +80,7 @@ export default memo(function({ index, thisPriceForm }) {
     thisPriceForm.pricesForm = thisPriceForm.pricesForm || [
       ...JSON.parse(JSON.stringify(staticPrices))
     ];
-    thisPriceForm.routes = thisPriceForm.routes || [
-      ...JSON.parse(JSON.stringify(routsPrices))
-    ];
+    thisPriceForm.routes = thisPriceForm.routes || [{ value: "" }];
 
     changePricesForm(thisPriceForm.pricesForm);
     changeRoutesForm(thisPriceForm.routes);
@@ -90,20 +94,20 @@ export default memo(function({ index, thisPriceForm }) {
     return routes.map((route, index) => {
       keyCount++;
       return (
-        <PricesInput
-          key={keyCount + "unique_inputRoot"}
-          input={route}
-          inputsArray={routes}
+        <RoutePrice
+          kye={"routePrice" + keyCount}
+          route={route}
+          pricesForm={pricesForm}
           index={index}
-          classes={classes}
           thisPrices={thisPrices}
-          handleChange={addingCarPrices}
-          prices={prices}
-          currentComponent={thisPrices}
+          formObject={formObject}
+          routes={routes}
+          classes={classes}
+          changeRoutesForm={changeRoutesForm}
         />
       );
     });
-  }, [routes]);
+  }, [routes.length, formObject.isAdded]);
 
   let pricesCB = useMemo(() => {
     return pricesForm.map((priceInput, index) => {
@@ -114,11 +118,11 @@ export default memo(function({ index, thisPriceForm }) {
           input={priceInput}
           inputsArray={pricesForm}
           index={index}
-          classes={classes}
           thisPrices={thisPrices}
           handleChange={addingCarPrices}
           prices={prices}
           currentComponent={thisPrices}
+          classes={classes}
         />
       );
     });

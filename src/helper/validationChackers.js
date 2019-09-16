@@ -42,18 +42,28 @@ function carsFormValidationChecking(formObject) {
 function setFormPrices(formObject) {
   if (!formObject.errorTexts.trim()) {
     let c;
+    let eText;
     try {
       formObject.cars.forEach((car, index) => {
         c = car;
-        if (!car.priceForm || !car.priceForm.isValid) throw new Error();
-        else {
+
+        if (!car.priceForm.routesAreValid) {
+          eText = "կա թերի լրացված երթուղի ";
+          throw new Error();
+        } else if (
+          !car.priceForm ||
+          (!car.priceForm.isValid && !car.priceForm.hasRoutePrice)
+        ) {
+          eText = c.inputs[0].checkBoxLabel + " ավտոմեքենայի համար գին նշած չէ";
+          throw new Error();
+        } else {
           car.priceForm.cars.push(index);
         }
       });
     } catch (e) {
       // hasError = true;
-      formObject.errorTexts =
-        c.inputs[0].value + " ավտոմեքենայի համար գին նշած չէ";
+
+      formObject.errorTexts = eText;
 
       formObject.prices.forEach(price => {
         price.cars = [];

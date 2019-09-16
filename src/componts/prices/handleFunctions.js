@@ -8,6 +8,8 @@ const addingCarPrices = (input, changeValue, thisPrices) => event => {
 
   thisPrices.prices[input.index] = event.target.value;
 
+  // console.log(thisPrices.prices);
+
   let newValue = new Intl.NumberFormat("ja-JP").format(value);
 
   if (isNaN(value) || newValue === "0") {
@@ -17,7 +19,6 @@ const addingCarPrices = (input, changeValue, thisPrices) => event => {
   event.target.value = newValue;
   // lastValue = newValue;
   input.value = event.target.value;
-
   event.target.setAttribute("value", input.value);
 
   changeValue(newValue);
@@ -26,7 +27,7 @@ const addingCarPrices = (input, changeValue, thisPrices) => event => {
     delete thisPrices.prices[input.index];
   }
 
-  if (!Object.keys(thisPrices.prices).length) {
+  if (!Object.keys(thisPrices.prices).length && !thisPrices.routes.length) {
     thisPrices.isValid = false;
   } else {
     thisPrices.isValid = true;
