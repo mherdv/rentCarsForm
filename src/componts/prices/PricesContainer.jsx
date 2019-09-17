@@ -4,7 +4,7 @@ import Prices from "./Prices";
 
 const PricesContainer = memo(({ prices }) => {
   return (
-    <div id="pricesContainer" key={"pricesContainer"}>
+    <div id="pricesContainer">
       {prices.map((price, index) => {
         return (
           <div

@@ -45,8 +45,12 @@ legend {
 }
 
 .servicesContainer {
-  width : 90%;
+  width : calc(100% - 30px);
   margin: auto;
+}
+
+.notesInputContainer {
+  padding-right: 15px !important
 }
 
 /* .MuiPaper-root {
@@ -58,8 +62,9 @@ legend {
 }
 
 .car-component {
-  padding-bottom: 25px;
-  margin-bottom : 5px;
+  padding-bottom: 0;
+  margin-bottom : 0;
+  margin-top    : 20px;
   margin-top    : 20px;
 
   position: relative;
@@ -135,7 +140,8 @@ label {
 }
 
 .previewImagesContainer {
-  z-index: 99999;
+  z-index   : 99999;
+  margin-top: 20px;
 }
 
 .addCarFormContainer {
@@ -173,6 +179,10 @@ label {
   margin-top: 100px;
 }
 
+.car-inputs {
+  padding: 15px;
+}
+
 .priceFormContainer:not(:first-child) {
   margin-top: 100px;
 }
@@ -180,7 +190,7 @@ label {
 .dropZone-wrapper {
   width: 100%;
 
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .w-100 {
@@ -198,6 +208,12 @@ label {
 
 }
 
+.MuiInputLabel-animated {
+  font-size: 13px !important;
+}
+
+
+
 .dropZone {
   width           : 300px !important;
   margin          : auto;
@@ -209,7 +225,7 @@ label {
   color           : #0d47a1;
   font-weight     : 500;
   display         : flex;
-  margin-top      : 30px !important;
+  margin-top      : 15px !important;
   align-items     : center;
   justify-content : space-evenly;
 }
@@ -326,8 +342,19 @@ label {
   position  : relative !important;
   top       : 0 !important;
   margin-top: 45px !important;
-  right     : -15px;
+  right     : 0px;
   zoom      : 0.8;
+}
+
+.radio-title {
+  white-space      : nowrap;
+  /* letter-spacing: -0.5px; */
+  font-size        : 14px;
+}
+
+.MuiInputLabel-shrink.MuiInputLabel-animated {
+  font-size  : 18px !important;
+  white-space: nowrap;
 }
 
 /* .car-component{

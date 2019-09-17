@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Grid, TextField, InputAdornment } from "@material-ui/core";
 import IntegrationAutosuggest from "../autoSuggest/AutoSuggest";
 import { Add, Delete } from "../addDelete/AddDelete";
@@ -77,51 +77,74 @@ const RoutePrice = props => {
     changePrice(route.price);
   }, [route]);
 
-  const autoSuggest = (
-    <Grid xs={6}>
-      {/* rout name */}
-      <IntegrationAutosuggest
-        input={route}
-        inputsArray={pricesForm}
-        index={index}
-        thisPrices={thisPrices}
-        formObject={formObject}
-        invalidItems={invalidItems}
-        changeInvalidItems={changeInvalidItems}
-        callBack={checkValidation}
-        routes={routes}
-        currentComponent={thisPrices}
-      />
-    </Grid>
+  const autoSuggest = useMemo(
+    () => (
+      <Grid xs={6}>
+        {/* rout name */}
+        <IntegrationAutosuggest
+          input={route}
+          inputsArray={pricesForm}
+          index={index}
+          thisPrices={thisPrices}
+          formObject={formObject}
+          invalidItems={invalidItems}
+          changeInvalidItems={changeInvalidItems}
+          callBack={checkValidation}
+          routes={routes}
+          currentComponent={thisPrices}
+        />
+      </Grid>
+    ),
+    [route, formObject.isAdded, invalidItems]
   );
-  const routePrice = (
-    <Grid xs={6}>
-      <TextField
-        className={
-          classes.textField + " " + (invalidItems.price ? "invalid" : "")
-        }
-        invalidItems={invalidItems}
-        label={"Գին"}
-        placeholder={"Գին"}
-        margin="normal"
-        value={price}
-        onChange={e => {
-          if (!route.value) return;
-          route.price = e.target.value;
-          changePrice(route.price);
-          checkValidation(
-            route,
-            changeInvalidItems,
-            invalidItems,
-            routes,
-            thisPrices
-          );
-        }}
-        InputProps={{
-          startAdornment: <InputAdornment position="start">AMD</InputAdornment>
-        }}
-      />
-    </Grid>
+  const routePrice = useMemo(
+    () => (
+      <Grid xs={6}>
+        <TextField
+          className={
+            classes.textField +
+            " " +
+            (formObject.isAdded && (invalidItems && invalidItems.price)
+              ? "invalid"
+              : "")
+          }
+          label={"Գին"}
+          placeholder={"Գին"}
+          margin="normal"
+          value={price}
+          onChange={event => {
+            let target = event.target;
+            let value = target.value.replace(/\,/g, "");
+            if (event.target.value.length >= 9) {
+              target.value = target.value.slice(0, target.value.length - 1);
+              return;
+            }
+
+            let newValue = new Intl.NumberFormat("ja-JP").format(value);
+
+            if (isNaN(value) || newValue === "0") {
+              newValue = "";
+            }
+
+            route.price = newValue;
+            changePrice(route.price);
+            checkValidation(
+              route,
+              changeInvalidItems,
+              invalidItems,
+              routes,
+              thisPrices
+            );
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">AMD</InputAdornment>
+            )
+          }}
+        />
+      </Grid>
+    ),
+    [route, formObject.isAdded, invalidItems, price]
   );
 
   return (

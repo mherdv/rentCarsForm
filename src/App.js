@@ -184,17 +184,20 @@ const App = React.memo(() => {
 
             {carsContainer()}
 
-            <SectionTitle number={<AttachMoneyIcon />} title={"Գներ"} />
+            <SectionTitle
+              number={<AttachMoneyIcon />}
+              title={"Գներ"}
+              style={{ marginBottom: "20px" }}
+            />
 
             {pricesContainer()}
 
             <SectionTitle
               number={<MoreHorizIcon />}
               title={"Այլ տեղեկություն "}
+              style={{ marginBottom: "20px" }}
             />
-            <Paper
-              style={{ width: "100%", marginTop: "30px", padding: "30px 10px" }}
-            >
+            <Paper style={{ width: "100%", padding: "30px 10px" }}>
               <TextareaAutosize
                 // placeholder="v"
                 multiline={true}

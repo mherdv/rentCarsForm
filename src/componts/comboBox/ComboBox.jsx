@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     height: "auto",
-    padding: "5px 20px"
+    padding: "5px 13px"
   },
   input: {
     display: "flex",
@@ -219,16 +219,39 @@ export default function ComboBox(props) {
   const theme = useTheme();
   const [single, setSingle] = React.useState(null);
   //   const [multi, setMulti] = React.useState(null);
-  let { handleChange, index, carType, input } = props;
+  let {
+    carType,
+    input,
+    changeInputs,
+    inputs,
+    cars,
+    changeCars,
+    options
+  } = props;
 
-  let suggestions = props.options.map((suggestion, index) => ({
+  let suggestions = options.map((suggestion, index) => ({
     value: suggestion.id || index,
     label: suggestion.label
   }));
 
-  function handleChangeSingle(value) {
-    console.log(value);
-    setSingle(value);
+  useEffect(() => {
+    if (input.selected) setTimeout(() => setSingle(input.selected), 0);
+
+    console.log(input.selected);
+  }, []);
+  function handleChangeSingle(event) {
+    setSingle(event);
+
+    input.value = event.value;
+    input.isValid = true;
+    input.checkBoxLabel = event.label;
+
+    input.selected = event;
+
+    setTimeout(() => {
+      changeCars([...cars]);
+    }, 500);
+    changeInputs([...inputs]);
   }
 
   useEffect(() => {
@@ -240,12 +263,6 @@ export default function ComboBox(props) {
     }
   }, [carType.value]);
 
-  //   function handleChangeMulti(value) {
-  //     setMulti(value);
-  //   }
-
-  //   console.log(single);
-
   const selectStyles = {
     input: base => ({
       ...base,
@@ -256,7 +273,7 @@ export default function ComboBox(props) {
     })
   };
 
-  return (
+  let comboBox = (
     <div className={classes.root}>
       <NoSsr>
         <Select
@@ -274,28 +291,11 @@ export default function ComboBox(props) {
           options={suggestions}
           components={components}
           value={single}
-          onChange={handleChange(handleChangeSingle)}
+          onChange={handleChangeSingle}
         />
-        {/* <div className={classes.divider} />
-        <Select
-          classes={classes}
-          styles={selectStyles}
-          inputId="react-select-multiple"
-          TextFieldProps={{
-            label: 'Countries',
-            InputLabelProps: {
-              htmlFor: 'react-select-multiple',
-              shrink: true,
-            },
-          }}
-          placeholder="Select multiple countries"
-          options={suggestions}
-          components={components}
-          value={multi}
-          onChange={handleChangeMulti}
-          isMulti
-        /> */}
       </NoSsr>
     </div>
   );
+
+  return comboBox;
 }

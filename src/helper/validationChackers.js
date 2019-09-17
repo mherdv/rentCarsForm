@@ -42,19 +42,22 @@ function carsFormValidationChecking(formObject) {
 function setFormPrices(formObject) {
   if (!formObject.errorTexts.trim()) {
     let c;
-    let eText;
+    let eText = "";
     try {
       formObject.cars.forEach((car, index) => {
         c = car;
 
+        if (!car.priceForm || !car.priceForm.isValid) {
+          eText = c.inputs[0].checkBoxLabel + " ավտոմեքենայի համար գին նշած չէ";
+          throw new Error();
+        }
         if (!car.priceForm.routesAreValid) {
           eText = "կա թերի լրացված երթուղի ";
+
           throw new Error();
-        } else if (
-          !car.priceForm ||
-          (!car.priceForm.isValid && !car.priceForm.hasRoutePrice)
-        ) {
+        } else if (!car.priceForm && !car.priceForm.hasRoutePrice) {
           eText = c.inputs[0].checkBoxLabel + " ավտոմեքենայի համար գին նշած չէ";
+
           throw new Error();
         } else {
           car.priceForm.cars.push(index);
@@ -73,7 +76,7 @@ function setFormPrices(formObject) {
 }
 
 function removeEmptyPriceForms(formObject) {
-  if (!!formObject.errorTexts.trim()) return;
+  if (!!formObject.errorTexts && !!formObject.errorTexts.trim()) return;
   for (let i = 0; i < formObject.prices.length; i++) {
     if (!formObject.prices[i].cars.length) formObject.prices.splice(i, 1);
   }
@@ -83,7 +86,6 @@ function partnerValidationChecking(formObject) {
   // if (formObject.errorTexts) return;
 
   try {
-    console.log(formObject.partnerInfo);
     formObject.partnerInfoValidArray.forEach(input => {
       if (!!!input.isValid) {
         formObject.errorTexts =

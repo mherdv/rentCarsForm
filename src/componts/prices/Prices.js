@@ -16,10 +16,9 @@ import {
   deletePrice,
   handleChange
 } from "./handleFunctions";
-import { Paper, TextField, InputAdornment } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 
-import { staticPrices, routsPrices } from "../../helper/carRantePrices";
-import IntegrationAutosuggest from "../autoSuggest/AutoSuggest";
+import { staticPrices } from "../../helper/carRantePrices";
 import RoutePrice from "./RoutePrice";
 
 const useStyles = makeStyles(theme => ({
@@ -59,7 +58,7 @@ export default memo(function({ index, thisPriceForm }) {
     thisPrices.prices = {};
     thisPrices.cars = [];
 
-    thisPrices.routesArValid = true;
+    thisPrices.routesAreValid = true;
 
     changeCars(carFromeOut);
   }, []);

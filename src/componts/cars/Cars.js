@@ -20,6 +20,8 @@ import Select from "@material-ui/core/Select";
 import "react-dropzone-uploader/dist/styles.css";
 import Paper from "@material-ui/core/Paper";
 
+import VisibilitySensor from "react-visibility-sensor";
+
 import ReactDropzone from "react-dropzone";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { Add, Delete } from "../addDelete/AddDelete";
@@ -42,8 +44,6 @@ import UserContext from "../../contextBigForm";
 import ComboBox from "../comboBox/ComboBox";
 
 let filesCounter = 0;
-
-let servicesKey = 0;
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -106,6 +106,7 @@ const Cars = memo(({ index }) => {
     carForm.isRemoved ? changeCarIsRemoved(true) : changeCarIsRemoved(false);
     changeServices(carForm.services);
   }, [carForm]);
+
   if (!carForm.files) {
     carForm.files = [];
   }
@@ -162,7 +163,7 @@ const Cars = memo(({ index }) => {
         validators: [isRequirers]
       },
       {
-        label: "Ճամպրուկների տարողունակություն *",
+        label: "Ճամպրուկների տարողունակություն ",
         name: "baggage count",
         value: "",
         validators: [],
@@ -205,62 +206,97 @@ const Cars = memo(({ index }) => {
     }
   }, [inputs[0]]);
 
+  let carMake = useMemo(() => {
+    let input = inputs[0];
+
+    let index = 0;
+
+    if (!input) return null;
+    return (
+      <Grid
+        item
+        xs={6}
+        className={!input.isValid && formObject.isAdded ? "invalid" : ""}
+      >
+        <ComboBox
+          options={index === 0 ? formObject.carsMake : getCarModels() || []}
+          label={input.label}
+          placeholder={input.label}
+          input={input}
+          index={index}
+          carType={inputs[0]}
+          changeCars={changeCars}
+          inputs={inputs}
+          changeInputs={changeInputs}
+          cars={cars}
+        />
+      </Grid>
+    );
+  }, [inputs, formObject.carsMake, cars]);
+
+  let carModel = useMemo(() => {
+    let input = inputs[1];
+
+    let index = 1;
+    if (!input) return null;
+
+    return (
+      <Grid
+        item
+        xs={6}
+        className={!input.isValid && formObject.isAdded ? "invalid" : ""}
+      >
+        <ComboBox
+          options={index === 0 ? formObject.carsMake : getCarModels() || []}
+          label={input.label}
+          placeholder={input.label}
+          input={input}
+          index={index}
+          carType={inputs[0]}
+          changeCars={changeCars}
+          inputs={inputs}
+          changeInputs={changeInputs}
+          cars={cars}
+        />
+      </Grid>
+    );
+  });
+
   let inputsComponent = useMemo(() => {
-    // console.log(getCarModels);
     return inputs.map((input, index) => {
+      if (index < 2) return null;
       return (
         <Grid
           item
-          xs={6}
+          xs={4}
           key={index + "_inputs_" + index}
           className={!input.isValid && formObject.isAdded ? "invalid" : ""}
         >
-          {index < 2 ? (
-            <ComboBox
-              options={index === 0 ? formObject.carsMake : getCarModels() || []}
-              label={input.label}
-              placeholder={input.label}
-              input={input}
-              index={index}
-              carType={inputs[0]}
-              handleChange={callBack => {
-                return changeComboBoxValue(
-                  input,
-                  changeInputs,
-                  inputs,
-                  callBack,
-                  cars,
-                  changeCars
-                );
-              }}
-            />
-          ) : (
-            <TextField
-              // key={index}
-              id="standard-name"
-              value={input.value}
-              className={classes.textField}
-              label={input.label}
-              placeholder={input.label}
-              onChange={handleValueChange(
-                input,
-                changeCars,
-                changeInputs,
-                cars,
-                inputs
-              )}
-              margin="normal"
-            />
-          )}
+          <TextField
+            // key={index}
+            id="standard-name"
+            value={input.value}
+            className={classes.textField}
+            label={input.label}
+            placeholder={input.label}
+            onChange={handleValueChange(
+              input,
+              changeCars,
+              changeInputs,
+              cars,
+              inputs
+            )}
+            margin="normal"
+          />
         </Grid>
       );
     });
-  }, [inputs, formObject.isAdded, formObject.carsMake]);
+  }, [inputs]);
 
   let setsComponent = useMemo(() => {
     return seats.map((seat, index) => {
       return (
-        <Grid item xs={6} key={index + "_seats_" + index}>
+        <Grid item xs={4} key={index + "_seats_" + index}>
           <div className="radio-container">
             <div className="radio-title">{seat.title}</div>
             <RadioGroup
@@ -317,7 +353,7 @@ const Cars = memo(({ index }) => {
 
   let workingVolumeComponent = useMemo(() => {
     return (
-      <Grid item xs={6} className={"w90Ma"}>
+      <Grid item xs={4} className={"w90Ma"}>
         <div
           className={
             "custom-container " +
@@ -340,7 +376,7 @@ const Cars = memo(({ index }) => {
 
   let selectComponent = useMemo(() => {
     return (
-      <Grid item xs={6} className={"w90Ma selectContainer"}>
+      <Grid item xs={4} className={"w90Ma selectContainer"}>
         <div
           className={!fuelType.isValid && formObject.isAdded ? "invalid" : ""}
         >
@@ -417,9 +453,9 @@ const Cars = memo(({ index }) => {
               <TextField
                 id="standard-name"
                 value={service.value}
-                className="custom-container"
-                label={"հավելյալ ծառայություններ "}
-                placeholder={"հավելյալ ծառայություններ"}
+                className="custom-container notesInputContainer"
+                label={"Հավելյալ ծառայություններ "}
+                placeholder={"Հավելյալ ծառայություններ"}
                 onChange={event => {
                   service.value = event.target.value;
                   changeServices([...services]);
@@ -449,44 +485,58 @@ const Cars = memo(({ index }) => {
   }, [index]);
   return (
     <>
-      {!carIsRemoved ? (
-        <div className="carFormContainer">
-          {/* {carFormContainer()} */}
-          <div className="Cars" style={{ textAlign: "left" }}>
-            {index === 0 ? (
-              <Add onClick={() => addCar(cars, changeCars)} />
-            ) : null}
-            <Paper>
-              {countCars}
-              <div className="car-component">
-                {cars.length > 1 && index !== 0 ? (
-                  <Delete
-                    onClick={() =>
-                      deleteCar(cars, changeCars, index, changeCarIsRemoved)
-                    }
-                  />
-                ) : null}
+      <div className="carFormContainer">
+        {/* {carFormContainer()} */}
+        <div className="Cars" style={{ textAlign: "left" }}>
+          {index === 0 ? (
+            <Add onClick={() => addCar(cars, changeCars)} />
+          ) : null}
+          <Paper>
+            {countCars}
+            <div className="car-component">
+              {cars.length > 1 && index !== 0 ? (
+                <Delete
+                  onClick={() =>
+                    deleteCar(cars, changeCars, index, changeCarIsRemoved)
+                  }
+                />
+              ) : null}
 
-                <div className={classes.container + " car-inputs"}>
-                  {inputsComponent}
+              <div className={classes.container + " car-inputs"}>
+                <VisibilitySensor>
+                  {({ isVisible }) =>
+                    isVisible ? (
+                      [carMake, carModel]
+                    ) : (
+                      <div
+                        style={{
+                          height: "62px",
+                          width: "100%"
+                        }}
+                      >
+                        ...loading
+                      </div>
+                    )
+                  }
+                </VisibilitySensor>
+                {inputsComponent}
 
-                  {workingVolumeComponent}
+                {workingVolumeComponent}
 
-                  {selectComponent}
+                {selectComponent}
 
-                  {setsComponent}
+                {setsComponent}
 
-                  {AdditionalServices}
+                {AdditionalServices}
 
-                  {dropZoneComponent}
+                {dropZoneComponent}
 
-                  {showFiles}
-                </div>
+                {showFiles}
               </div>
-            </Paper>
-          </div>
+            </div>
+          </Paper>
         </div>
-      ) : null}
+      </div>
     </>
   );
 });
