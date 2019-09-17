@@ -108,7 +108,7 @@ const App = React.memo(() => {
   // cb()
 
   function sendForm() {
-    if (formObject.isSended) return;
+    // if (formObject.isSended) return;
     formObject.cars = cars;
     formObject.prices = prices;
     formObject.errorTexts = "";

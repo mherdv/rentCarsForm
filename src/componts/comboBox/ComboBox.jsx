@@ -234,10 +234,16 @@ export default function ComboBox(props) {
     label: suggestion.label
   }));
 
-  useEffect(() => {
-    if (input.selected) setTimeout(() => setSingle(input.selected), 0);
+  let [isUserEvent, changeIsUserEvent] = React.useState(false);
 
-    console.log(input.selected);
+  useEffect(() => {
+    if (input.selected) {
+      input.value = input.selected.value;
+      setTimeout(() => setSingle(input.selected), 0);
+
+      changeInputs([...inputs]);
+      changeIsUserEvent(false);
+    }
   }, []);
   function handleChangeSingle(event) {
     setSingle(event);
@@ -252,10 +258,12 @@ export default function ComboBox(props) {
       changeCars([...cars]);
     }, 500);
     changeInputs([...inputs]);
+
+    changeIsUserEvent(true);
   }
 
   useEffect(() => {
-    if (carType != input) {
+    if (carType.value != input.value && isUserEvent) {
       setSingle(null);
       input.isValid = false;
       input.value = "";

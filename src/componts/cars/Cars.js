@@ -503,7 +503,7 @@ const Cars = memo(({ index }) => {
               ) : null}
 
               <div className={classes.container + " car-inputs"}>
-                <VisibilitySensor>
+                <VisibilitySensor offset={{ top: -62 }}>
                   {({ isVisible }) =>
                     isVisible ? (
                       [carMake, carModel]
@@ -513,17 +513,30 @@ const Cars = memo(({ index }) => {
                           height: "62px",
                           width: "100%"
                         }}
-                      >
-                        ...loading
-                      </div>
+                      ></div>
                     )
                   }
                 </VisibilitySensor>
-                {inputsComponent}
-
-                {workingVolumeComponent}
-
-                {selectComponent}
+                {
+                  <VisibilitySensor offset={{ top: -142 }}>
+                    {obj => {
+                      return obj.isVisible ? (
+                        [
+                          inputsComponent,
+                          workingVolumeComponent,
+                          selectComponent
+                        ]
+                      ) : (
+                        <div
+                          style={{
+                            height: "142px",
+                            width: "100%"
+                          }}
+                        ></div>
+                      );
+                    }}
+                  </VisibilitySensor>
+                }
 
                 {setsComponent}
 

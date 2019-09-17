@@ -47,7 +47,10 @@ function setFormPrices(formObject) {
       formObject.cars.forEach((car, index) => {
         c = car;
 
-        if (!car.priceForm || !car.priceForm.isValid) {
+        if (
+          (!car.priceForm || !car.priceForm.isValid) &&
+          !car.priceForm.hasRoutePrice
+        ) {
           eText = c.inputs[0].checkBoxLabel + " ավտոմեքենայի համար գին նշած չէ";
           throw new Error();
         }

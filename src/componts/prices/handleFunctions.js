@@ -27,7 +27,7 @@ const addingCarPrices = (input, changeValue, thisPrices) => event => {
     delete thisPrices.prices[input.index];
   }
 
-  if (!Object.keys(thisPrices.prices).length && !thisPrices.routes.length) {
+  if (!Object.keys(thisPrices.prices).length) {
     thisPrices.isValid = false;
   } else {
     thisPrices.isValid = true;
