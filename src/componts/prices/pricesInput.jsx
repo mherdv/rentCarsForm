@@ -31,14 +31,16 @@ const PricesInput = props => {
       <TextField
         id="standard-name"
         className={classes.textField}
-        label={input.label}
-        placeholder={input.label}
+        label={input.label + " (AMD)"}
+        placeholder={"AMD " + input.label}
         margin="normal"
         value={val}
         onChange={handleChange(input, changeValue, thisPrices)}
-        InputProps={{
-          startAdornment: <InputAdornment position="start">AMD</InputAdornment>
-        }}
+        // multiline={false}
+        // InputProps={{
+        //   startAdornment: <InputAdornment position="start"></InputAdornment>,
+        //   shrink: true
+        // }}
       />
     </Grid>
   );

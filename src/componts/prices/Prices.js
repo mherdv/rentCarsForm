@@ -127,21 +127,6 @@ export default memo(function({ index, thisPriceForm }) {
     });
   }, [pricesForm]);
 
-  let showRootsButton = useMemo(() => {
-    return (
-      <Grid item xs={12}>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.button}
-          onClick={() => ChangeShowPrices(!showPrices)}
-        >
-          Գին ըստ ֆիքսված երթուղու
-        </Button>
-      </Grid>
-    );
-  }, [showPrices]);
-
   return (
     <Paper>
       <div className="Prices" style={{ textAlign: "left", width: "100%" }}>
@@ -167,34 +152,34 @@ export default memo(function({ index, thisPriceForm }) {
             />
           ) : null}
 
-          {checkboxes.map((checkbox, index) => {
-            // console.log(thisPrices === cars[index].priceForm)
-            // if(!!car.inputs[0].value ) return null;
-            return (
-              <>
-                {checkbox.car.inputs[0].value ||
-                checkbox.car.inputs[1].value ? (
-                  <PricesCheckbox
-                    index={index}
-                    car={checkbox.car}
-                    classes={classes}
-                    thisPrices={thisPrices}
-                    checkbox={checkbox}
-                    changeCars={changeCars}
-                    cars={cars}
-                    handleChange={handleChange}
-                  />
-                ) : null}
-              </>
-            );
-          })}
+          <div className={"checkboxesContainer"}>
+            {checkboxes.map((checkbox, index) => {
+              // console.log(thisPrices === cars[index].priceForm)
+              // if(!!car.inputs[0].value ) return null;
+              return (
+                <>
+                  {checkbox.car.inputs[0].value ||
+                  checkbox.car.inputs[1].value ? (
+                    <PricesCheckbox
+                      index={index}
+                      car={checkbox.car}
+                      classes={classes}
+                      thisPrices={thisPrices}
+                      checkbox={checkbox}
+                      changeCars={changeCars}
+                      cars={cars}
+                      handleChange={handleChange}
+                    />
+                  ) : null}
+                </>
+              );
+            })}
+          </div>
 
           <div className={classes.container + " price-inputs"}>
             {pricesCB}
 
-            {showRootsButton}
-
-            {showPrices ? routesCB : null}
+            {routesCB}
           </div>
         </div>
       </div>

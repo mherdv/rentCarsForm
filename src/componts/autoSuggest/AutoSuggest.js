@@ -216,6 +216,7 @@ export default function IntegrationAutosuggest(props) {
         " " +
         (formObject.isAdded && invalidItems.value ? "invalid" : "")
       }
+      style={{ marginLeft: "20px" }}
     >
       <Autosuggest
         {...autosuggestProps}

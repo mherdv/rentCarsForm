@@ -282,7 +282,7 @@ export default function ComboBox(props) {
   };
 
   let comboBox = (
-    <div className={classes.root}>
+    <div className={classes.root + " comboBoxContainer"}>
       <NoSsr>
         <Select
           classes={classes}
@@ -290,9 +290,10 @@ export default function ComboBox(props) {
           inputId="react-select-single"
           TextFieldProps={{
             label: props.label,
+            placeholder: props.placeholder,
             InputLabelProps: {
               htmlFor: "react-select-single",
-              shrink: true
+              shrink: !!single
             }
           }}
           placeholder={props.placeholder}

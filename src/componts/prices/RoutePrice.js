@@ -99,7 +99,7 @@ const RoutePrice = props => {
   );
   const routePrice = useMemo(
     () => (
-      <Grid xs={6}>
+      <Grid xs={3}>
         <TextField
           className={
             classes.textField +
@@ -108,10 +108,11 @@ const RoutePrice = props => {
               ? "invalid"
               : "")
           }
-          label={"Գին"}
-          placeholder={"Գին"}
+          label={"Գին (AMD)"}
+          placeholder={"AMD Գին"}
           margin="normal"
           value={price}
+          style={{ marginLeft: "20px" }}
           onChange={event => {
             let target = event.target;
             let value = target.value.replace(/\,/g, "");
@@ -136,11 +137,11 @@ const RoutePrice = props => {
               thisPrices
             );
           }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">AMD</InputAdornment>
-            )
-          }}
+          // InputProps={{
+          //   startAdornment: (
+          //     <InputAdornment position="start">AMD</InputAdornment>
+          //   )
+          // }}
         />
       </Grid>
     ),
@@ -153,27 +154,29 @@ const RoutePrice = props => {
 
       {routePrice}
 
-      {index > 0 ? (
-        <Delete
-          onClick={() => {
-            routes.splice(index, 1);
-            changeRoutesForm([...routes]);
+      <div className={"routesButtonsContainer"}>
+        {index > 0 ? (
+          <Delete
+            onClick={() => {
+              routes.splice(index, 1);
+              changeRoutesForm([...routes]);
 
-            thisPrices.routes = routes;
-            checkRoutesValidation(thisPrices, routes);
-          }}
-        />
-      ) : (
-        <Add
-          onClick={() => {
-            routes.push({ value: "", isValid: true });
-            changeRoutesForm([...routes]);
+              thisPrices.routes = routes;
+              checkRoutesValidation(thisPrices, routes);
+            }}
+          />
+        ) : (
+          <Add
+            onClick={() => {
+              routes.push({ value: "", isValid: true });
+              changeRoutesForm([...routes]);
 
-            thisPrices.routes = routes;
-            checkRoutesValidation(thisPrices, routes);
-          }}
-        />
-      )}
+              thisPrices.routes = routes;
+              checkRoutesValidation(thisPrices, routes);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

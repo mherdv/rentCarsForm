@@ -66,7 +66,7 @@ function setCheckboxesState(
         label += car.inputs[0].checkBoxLabel;
       }
       if (car.inputs[1]) {
-        label += " " + car.inputs[1].checkBoxLabel;
+        label += " " + (car.inputs[1].checkBoxLabel || "");
       }
     }
     return {

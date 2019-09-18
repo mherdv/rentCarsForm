@@ -156,7 +156,7 @@ label {
   position  : absolute !important;
   right     : 10px;
   text-align: right;
-  margin-top: -60px !important;
+  margin-top: -75px !important;
 }
 
 .Prices .addCarFormContainer {
@@ -202,10 +202,75 @@ label {
   display: flex;
 }
 
-.Prices .addRoutePriceContainer>button {
+.Cars>button {
+  right: 30px;
+}
+
+.MuiFormLabel-root {
+  font-size: 20px !important
+}
+
+.comboBoxContainer .MuiFormLabel-root:not(.Mui-focused) {
+  font-size     : 16px !important;
+  margin-left   : 2px;
+  margin-top    : 2px;
+  color         : #949494 !important;
+  /* opacity    : 0.2 !important; */
+  transition    : all 0.1s linear;
+}
+
+
+.comboBoxContainer .MuiFormLabel-root:not(.Mui-focused)+div p.MuiTypography-root.MuiTypography-colorTextSecondary {
+  display: none !important;
+}
+
+.comboBoxContainer .MuiFormLabel-root.Mui-focused,
+.comboBoxContainer .MuiFormLabel-root[data-shrink="true"] {
+  transform          : translate(0, 1.5px) scale(0.75);
+  transform-origin   : top left;
+  font-size          : 18px !important;
+  /* left            : -2px !important; */
+}
+
+
+
+/* 
+legend {
+  margin-left: 2px;
+} */
+
+
+textarea {
+  resize: none;
+}
+
+.Prices .addRoutePriceContainer .routesButtonsContainer button {
   position  : relative !important;
   margin-top: 0 !important;
+  left      : 20px;
+  top       : 3px;
 
+  zoom: 0.8;
+
+}
+
+.checkboxesContainer {
+  padding-top  : 15px;
+  margin-bottom: -15px;
+}
+
+.addRoutePriceContainer {
+  margin-top: -8px;
+}
+
+.price-inputs {
+  padding-bottom: 20px;
+}
+
+.Prices .addRoutePriceContainer .routesButtonsContainer {
+  display    : flex;
+  align-items: flex-end;
+  position   : relative;
 }
 
 .MuiInputLabel-animated {
@@ -344,6 +409,7 @@ label {
   margin-top: 45px !important;
   right     : 0px;
   zoom      : 0.8;
+  width     : 56px !important;
 }
 
 .radio-title {

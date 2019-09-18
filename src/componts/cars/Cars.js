@@ -232,7 +232,7 @@ const Cars = memo(({ index }) => {
         />
       </Grid>
     );
-  }, [inputs, formObject.carsMake, cars]);
+  }, [inputs, formObject.carsMake, cars, formObject.isAdded]);
 
   let carModel = useMemo(() => {
     let input = inputs[1];
@@ -291,7 +291,7 @@ const Cars = memo(({ index }) => {
         </Grid>
       );
     });
-  }, [inputs]);
+  }, [inputs, formObject.isAdded]);
 
   let setsComponent = useMemo(() => {
     return seats.map((seat, index) => {
